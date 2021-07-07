@@ -43,7 +43,7 @@ Outlined by FBU App Expectations and Priority
   * User can set up recommendations by choosing favorite genres and current fave shows (P2)
 * **Your app integrates with at least one SDK (e.g. Google Maps SDK, Facebook SDK) or API (that you didn’t learn about in CodePath)**
   * User receives show recommendations on home timeline using [TasteDive](https://tastedive-api-documentation.readthedocs.io/en/latest/index.html) OR [IMDB](https://developers.themoviedb.org/3/tv/get-similar-tv-shows) OR [Trakt](https://trakt.docs.apiary.io/#reference/shows/recommended). (P0) 
-* **Your app uses at least one gesture (e.g. double tap to like, e.g. pinch to scale) **
+* **Your app uses at least one gesture (e.g. double tap to like, e.g. pinch to scale)**
   * User can swipe to dismiss a show rec on home timeline which counts as a dislike rating (P2)
 * **Your app uses at least one animation (e.g. fade in/out, e.g. animating a view growing and shrinking)**
   * In progress
