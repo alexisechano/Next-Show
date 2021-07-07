@@ -94,9 +94,10 @@ A TV show recommender app that uses personal ratings and interests to aggregate 
 
 ## Wireframes
 [Add picture of your hand sketched wireframes in this section]
-<img src="WireframeSketch-12.jpg" width=600>
+<img src="WireframeSketch-12.jpg" width=900>
 
 ### [BONUS] Digital Wireframes & Mockups
+<img src="DigitalSketch-1.png" width=600>
 
 ### [BONUS] Interactive Prototype
 
