@@ -24,30 +24,45 @@ A TV show recommender app that uses personal ratings and interests to aggregate 
 
 ### 1. User Stories (Required and Optional)
 
-**Required Must-have Stories** -> More single user oriented
+**Required Must-have Stories**
 
-* User can scroll through card-views of TV show recommendations
-* User can see top trending TV shows
-* User can search and filter through feed
-* User can sign-in and view their own profile
-* User profile has list of tv shows and favorite genres
-* User can rate shows (not necessarily saved and only like/dislike for now)
+Outlined by FBU App Expectations and Priority
+* **Your app has multiple views**
+  *  User can view their profile, home timeline, and saved shows and ratings in separate views (P0)
+  *  User can view TV show details from home timeline (P0)
+* **Your app interacts with a database (e.g. Parse)**
+  *  User can save rated shows and shows-to-watch (P1)
+  *  User can view more than 10+ shows on home timeline through CardView and RecyclerView (P0)
+  *  User can view TV show details like number of seasons and synopsis (P0)
+  *  User ratings (like or dislike) are also saved within a database (P0)
+* **You can log in/log out of your app as a user**
+  * User lands on log-in screen and the app has user persistence (P0)
+  * User can logout through profile page (P0)
+* **You can sign up with a new user profile** 
+  * User can register with new account (P0)
+  * User can set up recommendations by choosing favorite genres and current fave shows (P2)
+* **Your app integrates with at least one SDK (e.g. Google Maps SDK, Facebook SDK) or API (that you didn’t learn about in CodePath)**
+  * User receives show recommendations on home timeline using [TasteDive](https://tastedive-api-documentation.readthedocs.io/en/latest/index.html) OR [IMDB](https://developers.themoviedb.org/3/tv/get-similar-tv-shows) OR [Trakt](https://trakt.docs.apiary.io/#reference/shows/recommended). (P0) 
+* **Your app uses at least one gesture (e.g. double tap to like, e.g. pinch to scale) **
+  * User can swipe to dismiss a show rec on home timeline which counts as a dislike rating (P2)
+* **Your app uses at least one animation (e.g. fade in/out, e.g. animating a view growing and shrinking)**
+  * In progress
+* **Your app incorporates at least external library to add visual polish**
+  * In progress (P2)
+* **Your app provides opportunities for you to overcome difficult/ambiguous technical problems (more below)**
+  * User can filter through TV shows based on Genre or if they are trending or not (P1)
+  * Use combination of APIs to create own data model that has a recommendation system based on like/dislike ratings (P0)
+  * App might need to do some background fetching and proper data handling to be able to show accurate, fast recommendations (P2)
+
+**Optional Nice-to-have Stories**
+
 * User can broadcast currently watching show on profile
-* User can see a saved list of shows they've watched
-* User can manually add ratings/liked shows in separate view
-* User can create new account
-* User can view TV show details like season count, ratings, ranking (show only for overall show, not per season)
-* User can swipe to dismiss show on feed (counts as a dislike)
-
-**Optional Nice-to-have Stories** -> Adding social network aspect
-
-* More complicated rating system
-* User's news feed has friend's TV shows
+* User has a nice UI experience with modern, clean design
+* Add more complicated rating system like numerical rating out of 5.0
 * Add season breakdown for show details and ability to rate per season
+* User's news feed has friend's TV shows
 * User ratings persist and are shown to friends's feeds
 * User can customize profile and if they haven't watched shows, use movies as a starting point
-* User can share TV shows outside of the app
-* User has a nice UI experience with modern, clean design
 
 
 ### 2. Screen Archetypes
