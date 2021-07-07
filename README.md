@@ -29,17 +29,21 @@ A TV show recommender app that uses personal ratings and interests to aggregate 
 * User can scroll through card-views of TV show recommendations
 * User can see top trending TV shows
 * User can search and filter through feed
-* User can create and access their own profile
+* User can sign-in and view their own profile
 * User profile has list of tv shows and favorite genres
-* User can rate shows (not necessarily saved)
-* User can broadcast currently watching show
+* User can rate shows (not necessarily saved and only like/dislike for now)
+* User can broadcast currently watching show on profile
 * User can see a saved list of shows they've watched
+* User can manually add ratings/liked shows in separate view
 * User can create new account
-* User can view TV show details like season count, ratings, ranking
+* User can view TV show details like season count, ratings, ranking (show only for overall show, not per season)
+* User can swipe to dismiss show on feed (counts as a dislike)
 
 **Optional Nice-to-have Stories** -> Adding social network aspect
 
+* More complicated rating system
 * User's news feed has friend's TV shows
+* Add season breakdown for show details and ability to rate per season
 * User ratings persist and are shown to friends's feeds
 * User can customize profile and if they haven't watched shows, use movies as a starting point
 * User can share TV shows outside of the app
@@ -49,20 +53,23 @@ A TV show recommender app that uses personal ratings and interests to aggregate 
 ### 2. Screen Archetypes
 
 * Login Screen
-   * User can access their account
+   * User can sign-in and view their own profile
 * Registration Screen
-   * User can create new account
+   * User can create new accountUser can sign-in and view their own profile
    * User can create profile with list of shows and favorite genres
 * Timeline/Activity Feed
     * User can scroll through card-views of TV show recommendations
     * User can see top trending TV shows
     * User can search and filter through feed
-    * User can rate shows (not necessarily saved)
+    * User can swipe to dismiss show on feed (counts as a dislike)
 * TV Show Detail Screen
     * User can view TV show details like season count, ratings, ranking
 * Profile Screen
     * User can broadcast currently watching show
+    * User can view their profile and fave genres
+* Rating/Saved shows Screen
     * User can see a saved list of shows they've watched
+    * User can add ratings/liked shows in separate view
 
 ### 3. Navigation
 
@@ -70,21 +77,24 @@ A TV show recommender app that uses personal ratings and interests to aggregate 
 
 * Home/Timeline
 * Profile
-* Search (optional user story)
+* Ratings/Saved Shows
 
 **Flow Navigation** (Screen to Screen)
 
 * Home Activity Feed
    * TV Show details
-   * Profile (maybe we can add to a list)
 * Profile
-   * Broadcast to feed (like compose tweet and publish)
+   * Broadcast current show to feed (like compose tweet and publish) -> optional story
 * Login screen/registration
-    * Home Timeline/Activity Feed
+    * Home Timeline/Activity Feed if signin
+    * Profile if register
+* Rating/Saved shows
+  * Can see TV Show Details page similar to if on feed
+  * Separate rating activity
 
 ## Wireframes
 [Add picture of your hand sketched wireframes in this section]
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src="WireframeSketch-12.jpg" width=600>
 
 ### [BONUS] Digital Wireframes & Mockups
 
