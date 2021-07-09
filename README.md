@@ -158,6 +158,22 @@ Outlined by FBU App Expectations and Priority
 
 
 ### Networking
-- [Add list of network requests by screen ]
-- [Create basic snippets for each Parse network request]
-- [OPTIONAL: List endpoints if using existing API such as Yelp]
+Home/Timeline
+* (Read/GET) Query all recommended and trending shows with details
+
+Login/Register
+* (Read/GET) Get profile information from DB
+* (Create/POST) Create new account
+
+Profile
+* (Read/GET) Query profile information from DB
+* (PUT) Edit profile image, bio and genres
+
+Ratings/Saved Shows
+* (Read/GET) Query show details
+* (Create/POST) Create a new rating and comment
+* (Delete) Delete rating or show
+
+[Create basic snippets for each Parse network request]
+
+[**External API: Trakt**](https://trakt.docs.apiary.io/#reference/shows)
