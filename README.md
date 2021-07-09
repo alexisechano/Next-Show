@@ -12,7 +12,6 @@ NEXT SHOW - Original App Design Project
 A TV show recommender app that uses personal ratings and interests to aggregate a user's next binge!
 
 ### App Evaluation
-[Evaluation of your app across the following attributes]
 - **Category:** Entertainment, social
 - **Mobile:** Mobile first experience
 - **Story:** Allows users to find their next possibly-life changing TV show and share their review with others
@@ -108,7 +107,6 @@ Outlined by FBU App Expectations and Priority
   * Separate rating activity
 
 ## Wireframes
-[Add picture of your hand sketched wireframes in this section]
 <img src="WireframeSketch-12.jpg" width=900>
 
 ### [BONUS] Digital Wireframes & Mockups
@@ -117,9 +115,48 @@ Outlined by FBU App Expectations and Priority
 ### [BONUS] Interactive Prototype
 
 ## Schema 
-[This section will be completed in Unit 9]
+
 ### Models
-[Add table of models]
+
+**Model: Show**
+| Property    | Type.       | Description |
+| ----------- | ----------- | ----------- |
+| objectId    | String      | Unique id for the user post (default field)       |
+| haveWatched   | Array of User Pointers       | List of Users that watched this show   |
+| haveRated   | Array of User Pointers         | List of Users that rated this show   |
+| ratingsList   | Array of Rating Pointers         | List of Rating objects from Users   |
+| avgRating   | Number        |   Average rating (from API) |
+| numSeasons   | Number        |   How many seasons a show has |
+| network   | String        |  What network or streaming service the show is on |
+| genres   | Array of Strings        | List of genres this show falls into |
+| image   | File | Poster image |
+| synopsis   | String | Show summary and tagline |
+
+**Model: Rating** User can only rate if they finished the show or stopped the show
+| Property    | Type.       | Description |
+| ----------- | ----------- | ----------- |
+| objectId    | String      | unique id for the user post (default field)       |
+| rating    | Number      |  Number to track rating (can be 0 or 1 for now)    |
+| author   | User Pointer        | User who made this rating       |
+| comment   | String        | Optional comment User can add to rating |
+| show   | Show Pointers     | Match show to rating |
+
+**Model: User**
+| Property    | Type.       | Description |
+| ----------- | ----------- | ----------- |
+| objectId    | String      | unique id for the user post (default field)       |
+| username  | String | Unique string for user handle |
+| firstName  | String | String for first name |
+| lastName  | String | String for last name |
+| bio  | String | String for bio blurb |
+| ratingsList  | Array of Rating Pointers       | List of this User's ratings |
+| alreadyWatched   | Array of Show Pointers         | Shows that are already watched and rated   |
+| currWatching   | Array of Show Pointers        | Shows not rated and are being watched right now  |
+| ratingsList  | Array of Rating Pointers       | List of this User's ratings |
+| faveGenres  | Array of Strings      | List of this User's favorite TV genres |
+| displayShow  | Show | Currently watching or Fave Show broadcasted on profile |
+
+
 ### Networking
 - [Add list of network requests by screen ]
 - [Create basic snippets for each Parse network request]
