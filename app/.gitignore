@@ -1,1 +1,4 @@
 /build
+
+# ignore the secrets file with keys
+app/src/main/res/values/secrets.xml
