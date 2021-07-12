@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Next-Show</string>
+    <string name="back4app_app_id">uHMbVP3zglbuRFtvoRwclsKMUoiGqXtiNPkZ3sXl</string>
+    <string name="back4app_client_key">bxiIsM7PG2tYPZterzBlFTd0aBUbqBC6SSjJ99r3</string>
+    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
 </resources>
