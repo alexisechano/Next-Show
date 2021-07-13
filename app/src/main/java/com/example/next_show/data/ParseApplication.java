@@ -1,8 +1,10 @@
 package com.example.next_show.data;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.example.next_show.R;
+import com.example.next_show.models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
