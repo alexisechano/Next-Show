@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // temporary logout button
         btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,5 +60,39 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try  {
+                    // try Trakt wrapper
+                    TraktV2 trakt = new TraktV2("4377c98e70a9ac3be06ecde51d34c21bf6e6944964ba1f305d0d2eab5a29b1e5");
+                    Shows traktShows = trakt.shows();
+                    try {
+                        // Get trending shows
+                        Response<List<TrendingShow>> response = traktShows.trending(1, null, Extended.FULL).execute();
+                        if (response.isSuccessful()) {
+                            List<TrendingShow> shows = response.body();
+                            for (TrendingShow trending : shows) {
+                                System.out.println("Title: " + trending.show.title);
+                            }
+                        } else {
+                            if (response.code() == 401) {
+                                // authorization required, supply a valid OAuth access token
+                                Log.e(TAG, "Access token required");
+                            } else {
+                                // the request failed for some other reason
+                                Log.e(TAG, "Look at stack trace, failed" + response.code());
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Did not get to response, failed", e);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 }
