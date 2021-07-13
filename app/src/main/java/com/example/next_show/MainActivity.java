@@ -4,41 +4,36 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
-import com.example.next_show.data.TraktClient;
+import com.example.next_show.data.TraktApplication;
 import com.example.next_show.fragments.FeedFragment;
 import com.example.next_show.fragments.ProfileFragment;
 import com.example.next_show.models.Show;
-import com.example.next_show.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.ParseUser;
 import com.uwetrottmann.trakt5.TraktV2;
 import com.uwetrottmann.trakt5.entities.TrendingShow;
 import com.uwetrottmann.trakt5.enums.Extended;
 import com.uwetrottmann.trakt5.services.Shows;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     // constants
     public static final String TAG = "MainActivity";
-    List<Show> shows;
+    public static final int PAGES_REQUESTED = 1;
+    public static final int UNAUTHORIZED_REQUEST = 401;
+    public static final int FORBIDDEN_REQUEST = 403;
+    public static final int LIMIT = 10;
+
+    public static List<Show> shows;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +70,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // test the API call
 
-        // method to call to API and gret trending shows
-        //grabTraktData();
+        // new application for Trakt Call, pass in the Context
+        Shows showsObj = new TraktApplication(this).getNewShowsInstance();
+
+        // method to ASYNC call to API and grab trending shows
+        fetchTraktData(showsObj);
     }
 
     // methods to toggle between fragments
@@ -93,44 +92,41 @@ public class MainActivity extends AppCompatActivity {
         profileTransact.commit();
     }
 
-    private void grabTraktData() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try  {
-                    // Trakt wrapper
-                    TraktV2 trakt = new TraktV2(getString(R.string.trakt_client_id));
-                    Shows traktShows = trakt.shows();
-                    try {
-                        // Get trending shows
-                        Response<List<TrendingShow>> response = traktShows.trending(1, null, Extended.FULL).execute();
-                        if (response.isSuccessful()) {
-                            List<TrendingShow> repsonseShows = response.body();
-                            for (TrendingShow trending : repsonseShows) {
-                                Log.i(TAG, "Title: " + trending.show.title);
-                                Show currentShow = new Show(trending.show.title);
-                                shows.add(currentShow);
-                            }
-
-                            // show the list
-                            Log.i(TAG, "List of show titles: " + shows.toString());
-                        } else {
-                            if (response.code() == 401) {
-                                // authorization required, supply a valid OAuth access token
-                                Log.e(TAG, "Access token required");
-                            } else {
-                                // the request failed for some other reason
-                                Log.e(TAG, "Look at stack trace, failed" + response.code());
-                            }
+    private void fetchTraktData(Shows traktShows) {
+        try {
+            traktShows.trending(PAGES_REQUESTED, LIMIT, Extended.FULL).enqueue(new Callback<List<TrendingShow>>() {
+                @Override
+                public void onResponse(Call<List<TrendingShow>> call, Response<List<TrendingShow>> response) {
+                    if (response.isSuccessful()) {
+                        List<TrendingShow> repsonseShows = response.body();
+                        for (TrendingShow trending : repsonseShows) {
+                            Log.i(TAG, "Title: " + trending.show.title);
+                            Show currentShow = new Show(trending.show.title);
+                            shows.add(currentShow);
                         }
-                    } catch (Exception e) {
-                        Log.e(TAG, "Did not get to response, failed", e);
+
+                    } else {
+                        if (response.code() == UNAUTHORIZED_REQUEST) {
+                            // authorization required, supply a valid OAuth access token
+                            Log.e(TAG, "Access token required");
+                        } else if(response.code() == FORBIDDEN_REQUEST) {
+                            // invalid API key
+                            Log.e(TAG, "Invalid API key or unapproved app supplied");
+                        } else{
+                            // the request failed for some other reason
+                            Log.e(TAG, "Response code: " + response.code());
+                        }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        });
-        thread.start();
+
+                @Override
+                public void onFailure(Call<List<TrendingShow>> call, Throwable t) {
+                    Log.e(TAG, "OnFailure", t);
+                }
+            });
+
+        } catch (Exception e) {
+            Log.e(TAG, "Call error", e);
+        }
     }
 }
