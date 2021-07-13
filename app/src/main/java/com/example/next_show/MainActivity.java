@@ -33,6 +33,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
@@ -76,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        // method to call to API and gret trending shows
-        //grabTraktData();
+        // method to ASYNC call to API and grab trending shows
+        grabTraktData();
     }
 
     // methods to toggle between fragments
@@ -94,43 +96,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void grabTraktData() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try  {
-                    // Trakt wrapper
-                    TraktV2 trakt = new TraktV2(getString(R.string.trakt_client_id));
-                    Shows traktShows = trakt.shows();
-                    try {
-                        // Get trending shows
-                        Response<List<TrendingShow>> response = traktShows.trending(1, null, Extended.FULL).execute();
-                        if (response.isSuccessful()) {
-                            List<TrendingShow> repsonseShows = response.body();
-                            for (TrendingShow trending : repsonseShows) {
-                                Log.i(TAG, "Title: " + trending.show.title);
-                                Show currentShow = new Show(trending.show.title);
-                                shows.add(currentShow);
-                            }
+        // Trakt wrapper
+        TraktV2 trakt = new TraktV2(getString(R.string.trakt_client_id));
+        Shows traktShows = trakt.shows();
 
-                            // show the list
-                            Log.i(TAG, "List of show titles: " + shows.toString());
-                        } else {
-                            if (response.code() == 401) {
-                                // authorization required, supply a valid OAuth access token
-                                Log.e(TAG, "Access token required");
-                            } else {
-                                // the request failed for some other reason
-                                Log.e(TAG, "Look at stack trace, failed" + response.code());
-                            }
+        try {
+            traktShows.trending(1, null, Extended.FULL).enqueue(new Callback<List<TrendingShow>>() {
+                @Override
+                public void onResponse(Call<List<TrendingShow>> call, Response<List<TrendingShow>> response) {
+                    if (response.isSuccessful()) {
+                        List<TrendingShow> repsonseShows = response.body();
+                        for (TrendingShow trending : repsonseShows) {
+                            Log.i(TAG, "Title: " + trending.show.title);
+                            Show currentShow = new Show(trending.show.title);
+                            shows.add(currentShow);
                         }
-                    } catch (Exception e) {
-                        Log.e(TAG, "Did not get to response, failed", e);
+
+                        // show the list
+                        Log.i(TAG, "List of show titles: " + shows.toString());
+                    } else {
+                        if (response.code() == 401) {
+                            // authorization required, supply a valid OAuth access token
+                            Log.e(TAG, "Access token required");
+                        } else {
+                            // the request failed for some other reason
+                            Log.e(TAG, "Look at stack trace, failed" + response.code());
+                        }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        });
-        thread.start();
+
+                @Override
+                public void onFailure(Call<List<TrendingShow>> call, Throwable t) {
+                    Log.e(TAG, "OnFailure", t);
+                }
+            });
+
+        } catch (Exception e) {
+            Log.e(TAG, "reponse error", e);
+        }
     }
 }
