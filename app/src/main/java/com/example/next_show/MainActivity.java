@@ -2,8 +2,11 @@ package com.example.next_show;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.next_show.data.TraktClient;
 import com.example.next_show.models.Show;
@@ -34,6 +37,9 @@ import okhttp3.Request;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+    // view temp
+    private Button btnLogout;
+
     // constants
     public static final String TAG = "MainActivity";
     List<Show> shows;
@@ -43,13 +49,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // test if Parse user database is working with User subclass
-        getNewUserInfo();
+        btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.logOut();
+                Log.i(TAG, "Logged out user");
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(i);
+            }
+        });
     }
-
-
-    private void getNewUserInfo() {
-        User parseUser = new User(ParseUser.getCurrentUser());
-    }
-
 }
