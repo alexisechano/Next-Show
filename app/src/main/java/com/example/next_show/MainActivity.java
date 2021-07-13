@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import com.example.next_show.data.TraktClient;
 import com.example.next_show.fragments.FeedFragment;
+import com.example.next_show.fragments.ProfileFragment;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -35,9 +36,6 @@ import java.util.List;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    // view temp
-    private Button btnLogout;
-
     // constants
     public static final String TAG = "MainActivity";
     List<Show> shows;
@@ -51,49 +49,48 @@ public class MainActivity extends AppCompatActivity {
         shows = new ArrayList<>();
 
         // Fragment management
-        FeedFragment feedFragment = FeedFragment.newInstance();
-        setFeedFragment(feedFragment);
+        ProfileFragment profileFragment = ProfileFragment.newInstance();
+        setProfileFragment(profileFragment);
 
         // set bottom navigation
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_profile);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.action_profile:
+                        // set profile fragment
+                        setProfileFragment(profileFragment);
+                        break;
                     case R.id.action_home:
+                        FeedFragment feedFragment = FeedFragment.newInstance();
                         setFeedFragment(feedFragment);
                         break;
                     case R.id.action_rating:
                         // set rating fragment
-                        break;
-                    case R.id.action_profile:
-                        // set profile fragment
                         break;
                 }
                 return true;
             }
         });
 
-        // temporary logout button
-        btnLogout = findViewById(R.id.btnLogout);
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseUser.logOut();
-                Log.i(TAG, "Logged out user");
-                Intent i = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(i);
-            }
-        });
 
         // method to call to API and gret trending shows
         //grabTraktData();
     }
 
+    // methods to toggle between fragments
     private void setFeedFragment(FeedFragment feedFragment) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container_view, feedFragment);
-        ft.commit();
+        FragmentTransaction feedTransact = getSupportFragmentManager().beginTransaction();
+        feedTransact.replace(R.id.fragment_container_view, feedFragment);
+        feedTransact.commit();
+    }
+
+    private void setProfileFragment(ProfileFragment profileFragment) {
+        FragmentTransaction profileTransact = getSupportFragmentManager().beginTransaction();
+        profileTransact.replace(R.id.fragment_container_view, profileFragment);
+        profileTransact.commit();
     }
 
     private void grabTraktData() {

@@ -38,7 +38,7 @@ public class User {
     }
 
     public String getLastName() {
-        return user.getString(KEY_FIRSTNAME);
+        return user.getString(KEY_LASTNAME);
     }
 
     public void setName(String fn, String ln) {
