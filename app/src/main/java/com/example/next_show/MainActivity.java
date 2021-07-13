@@ -1,16 +1,21 @@
 package com.example.next_show;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.next_show.data.TraktClient;
+import com.example.next_show.fragments.FeedFragment;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 import com.uwetrottmann.trakt5.TraktV2;
 import com.uwetrottmann.trakt5.entities.TrendingShow;
@@ -24,16 +29,9 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import okhttp3.Headers;
-import okhttp3.Request;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,6 +47,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // init the show list
+        shows = new ArrayList<>();
+
+        // Fragment management
+        FeedFragment feedFragment = FeedFragment.newInstance();
+        setFeedFragment(feedFragment);
+
+        // set bottom navigation
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_home:
+                        setFeedFragment(feedFragment);
+                        break;
+                    case R.id.action_rating:
+                        // set rating fragment
+                        break;
+                    case R.id.action_profile:
+                        // set profile fragment
+                        break;
+                }
+                return true;
+            }
+        });
+
         // temporary logout button
         btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -61,21 +86,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // method to call to API and gret trending shows
+        //grabTraktData();
+    }
+
+    private void setFeedFragment(FeedFragment feedFragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container_view, feedFragment);
+        ft.commit();
+    }
+
+    private void grabTraktData() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try  {
-                    // try Trakt wrapper
-                    TraktV2 trakt = new TraktV2("4377c98e70a9ac3be06ecde51d34c21bf6e6944964ba1f305d0d2eab5a29b1e5");
+                    // Trakt wrapper
+                    TraktV2 trakt = new TraktV2(getString(R.string.trakt_client_id));
                     Shows traktShows = trakt.shows();
                     try {
                         // Get trending shows
                         Response<List<TrendingShow>> response = traktShows.trending(1, null, Extended.FULL).execute();
                         if (response.isSuccessful()) {
-                            List<TrendingShow> shows = response.body();
-                            for (TrendingShow trending : shows) {
-                                System.out.println("Title: " + trending.show.title);
+                            List<TrendingShow> repsonseShows = response.body();
+                            for (TrendingShow trending : repsonseShows) {
+                                Log.i(TAG, "Title: " + trending.show.title);
+                                Show currentShow = new Show(trending.show.title);
+                                shows.add(currentShow);
                             }
+
+                            // show the list
+                            Log.i(TAG, "List of show titles: " + shows.toString());
                         } else {
                             if (response.code() == 401) {
                                 // authorization required, supply a valid OAuth access token
