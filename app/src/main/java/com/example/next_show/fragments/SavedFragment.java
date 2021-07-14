@@ -13,20 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.next_show.R;
 
 // NO API CALLS IN THIS CLASS -> SOLELY PARSE DATABASE DATA!
-public class RatingsFragment extends Fragment {
+public class SavedFragment extends Fragment {
     // view elements
-    private Button btnAdd;
     private TextView tvName;
-    private TextView tvSavedTitle;
     private RecyclerView rvSaved;
 
     // empty constructor
-    public RatingsFragment() {
+    public SavedFragment() {
 
     }
 
-    public static RatingsFragment newInstance() {
-        RatingsFragment fragment = new RatingsFragment();
+    public static SavedFragment newInstance() {
+        SavedFragment fragment = new SavedFragment();
         return fragment;
     }
 
@@ -40,19 +38,10 @@ public class RatingsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View currView = inflater.inflate(R.layout.fragment_ratings, container, false);
+        View currView = inflater.inflate(R.layout.fragment_saved, container, false);
 
         // find Recycler View
         rvSaved = currView.findViewById(R.id.rvSaved);
-
-        // find button and set onclick listener
-        btnAdd = currView.findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: do something on click -> launch ratings on click
-            }
-        });
 
         return currView;
 

@@ -8,24 +8,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.next_show.data.TraktApplication;
 import com.example.next_show.fragments.FeedFragment;
 import com.example.next_show.fragments.ProfileFragment;
-import com.example.next_show.fragments.RatingsFragment;
+import com.example.next_show.fragments.SavedFragment;
 import com.example.next_show.models.Show;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.uwetrottmann.trakt5.TraktV2;
-import com.uwetrottmann.trakt5.entities.Ratings;
-import com.uwetrottmann.trakt5.entities.TrendingShow;
-import com.uwetrottmann.trakt5.enums.Extended;
-import com.uwetrottmann.trakt5.services.Shows;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     // constants
@@ -63,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_rating:
                         // set rating fragment
-                        RatingsFragment ratingsFragment = RatingsFragment.newInstance();
-                        setRatingsFragment(ratingsFragment);
+                        SavedFragment savedFragment = SavedFragment.newInstance();
+                        setRatingsFragment(savedFragment);
                         break;
                 }
                 return true;
@@ -87,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
         profileTransact.commit();
     }
 
-    private void setRatingsFragment(RatingsFragment ratingsFragment) {
-        Log.i(TAG, "Switching to RatingsFragment");
+    private void setRatingsFragment(SavedFragment savedFragment) {
+        Log.i(TAG, "Switching to SavedFragment");
         FragmentTransaction ratingsTransact = getSupportFragmentManager().beginTransaction();
-        ratingsTransact.replace(R.id.fragment_container_view, ratingsFragment);
+        ratingsTransact.replace(R.id.fragment_container_view, savedFragment);
         ratingsTransact.commit();
     }
 }

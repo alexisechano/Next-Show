@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/ratingsTop"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:background="#DCCDCB">
 
         <TextView
@@ -19,17 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginTop="0dp"
-            android:text="Liked/Disliked a show?"
+            android:text="Saved Shows"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-        <Button
-            android:id="@+id/btnAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvName"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="0dp"
-            android:text="Add Rating" />
 
     </RelativeLayout>
 
@@ -39,24 +30,11 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
-        <TextView
-            android:id="@+id/tvSavedTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="10dp"
-            android:text="Saved Shows"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSaved"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tvSavedTitle"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="10dp" />
+            android:layout_margin = "10dp" />
 
     </RelativeLayout>
 
