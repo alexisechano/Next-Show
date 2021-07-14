@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         shows = new ArrayList<>();
 
         // Fragment management
-        ProfileFragment profileFragment = ProfileFragment.newInstance();
-        setProfileFragment(profileFragment);
+        FeedFragment feedFragment = FeedFragment.newInstance();
+        setFeedFragment(feedFragment);
 
         // set bottom navigation
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -54,11 +54,11 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.action_profile:
                         // set profile fragment
+                        ProfileFragment profileFragment = ProfileFragment.newInstance();
                         setProfileFragment(profileFragment);
                         break;
                     case R.id.action_home:
                         // set feed fragment
-                        FeedFragment feedFragment = FeedFragment.newInstance();
                         setFeedFragment(feedFragment);
                         break;
                     case R.id.action_rating:

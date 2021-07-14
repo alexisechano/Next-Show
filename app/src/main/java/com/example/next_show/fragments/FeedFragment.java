@@ -31,7 +31,7 @@ public class FeedFragment extends Fragment {
     public static final int PAGES_REQUESTED = 1;
     public static final int UNAUTHORIZED_REQUEST = 401;
     public static final int FORBIDDEN_REQUEST = 403;
-    public static final int LIMIT = 10;
+    public static final int LIMIT = 5;
 
     // view element variables
     private RecyclerView rvFeed;
@@ -83,6 +83,7 @@ public class FeedFragment extends Fragment {
 
     private void fetchTraktData(Shows traktShows) {
         try {
+
             traktShows.trending(PAGES_REQUESTED, LIMIT, Extended.FULL).enqueue(new Callback<List<TrendingShow>>() {
                 @Override
                 public void onResponse(Call<List<TrendingShow>> call, Response<List<TrendingShow>> response) {

@@ -1,9 +1,6 @@
 package com.example.next_show.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.next_show.R;
 import com.example.next_show.fragments.ShowDetailFragment;
 import com.example.next_show.models.Show;
-import com.parse.ParseFile;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -91,17 +84,16 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             if (position != RecyclerView.NO_POSITION) {
                 Show show = shows.get(position);
 
-                // arg bundle for the show information
-                Bundle bundle = new Bundle();
-                ShowDetailFragment fragment = new ShowDetailFragment();
-                bundle.putParcelable(Show.class.getSimpleName(), show);
-                fragment.setArguments(bundle);
+                // make new instance of the fragment
+                ShowDetailFragment fragment = ShowDetailFragment.newInstance(show);
 
                 // launch the fragment and commit
                 AppCompatActivity currActivity = (AppCompatActivity) context;
                 FragmentTransaction detailTransact = currActivity.getSupportFragmentManager().beginTransaction();
                 detailTransact.replace(R.id.fragment_container_view, fragment);
                 detailTransact.commit();
+
+                // TODO: navigate back to original feed without reloading all of that information again
             }
         }
 
@@ -109,9 +101,9 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             // bind the show data to the view elements
             tvShowTitle.setText(show.getTitle());
             tvShowBody.setText(show.getOverview());
-//            ParseFile image = show.getImage();
-//            if (image != null) {
-//                Glide.with(context).load(image.getUrl()).into(ivImage);
+
+//            if (imgUrl != null) {
+//                Glide.with(context).load(imgUrl).into(ivShowImage);
 //            }
         }
     }

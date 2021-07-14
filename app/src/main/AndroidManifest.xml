@@ -12,8 +12,7 @@
         android:label="Next Show"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.NextShow"
-        android:usesCleartextTraffic="true">
+        android:theme="@style/Theme.NextShow">
         <activity android:name=".SignupActivity"></activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
