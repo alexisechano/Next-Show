@@ -100,7 +100,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         public void bind(Show show) {
             // bind the show data to the view elements
             tvShowTitle.setText(show.getName());
-//            tvUsername.setText(show.getUser().getUsername());
+            tvShowBody.setText(show.getOverview());
 //            ParseFile image = show.getImage();
 //            if (image != null) {
 //                Glide.with(context).load(image.getUrl()).into(ivImage);

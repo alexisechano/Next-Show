@@ -18,18 +18,20 @@ import java.util.List;
 public class Show {
     // private instance variables
     private String name;
+    private String overview;
 
     // empty constructor
     public Show() { }
 
-    public Show(String name) {
+    public Show(String name, String overview) {
         this.name = name;
+        this.overview = overview;
     }
 
     public static List<Show> fromTrendingShows(List<TrendingShow> repsonseShows) {
         List<Show> updated = new ArrayList<>();
         for (TrendingShow trending : repsonseShows) {
-            Show currentShow = new Show(trending.show.title);
+            Show currentShow = new Show(trending.show.title, trending.show.overview);
             updated.add(currentShow);
         }
         return updated;
@@ -43,6 +45,11 @@ public class Show {
         this.name = name;
     }
 
+    public String getOverview() {
+        return overview;
+    }
 
-
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
 }
