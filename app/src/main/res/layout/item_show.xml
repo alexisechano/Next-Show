@@ -21,19 +21,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
 
-
-            <ImageView
-                android:id="@+id/ivShowImage"
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                tools:srcCompat="@tools:sample/avatars" />
-
             <TextView
                 android:id="@+id/tvShowTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/ivShowImage"
                 android:text="Show Name"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -46,7 +38,6 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:layout_toEndOf="@+id/ivShowImage"
                 android:text="Synopsis" />
 
         </RelativeLayout>

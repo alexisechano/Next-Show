@@ -59,7 +59,6 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // view elements
         private TextView tvShowBody;
-        private ImageView ivShowImage;
         private TextView tvShowTitle;
 
         public ViewHolder(@NonNull View itemView) {
@@ -74,7 +73,6 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             // find them in the layout
             tvShowTitle = itemView.findViewById(R.id.tvShowTitle);
             tvShowBody = itemView.findViewById(R.id.tvShowBody);
-            ivShowImage = itemView.findViewById(R.id.ivShowImage);
         }
 
         // when the user clicks on a show, show details
@@ -101,10 +99,6 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             // bind the show data to the view elements
             tvShowTitle.setText(show.getTitle());
             tvShowBody.setText(show.getOverview());
-
-//            if (imgUrl != null) {
-//                Glide.with(context).load(imgUrl).into(ivShowImage);
-//            }
         }
     }
 }
