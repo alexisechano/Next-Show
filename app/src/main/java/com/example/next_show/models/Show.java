@@ -1,8 +1,10 @@
 package com.example.next_show.models;
 
 import android.graphics.Movie;
+import android.util.Log;
 
 import com.parse.ParseClassName;
+import com.uwetrottmann.trakt5.entities.TrendingShow;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,6 +26,15 @@ public class Show {
         this.name = name;
     }
 
+    public static List<Show> fromTrendingShows(List<TrendingShow> repsonseShows) {
+        List<Show> updated = new ArrayList<>();
+        for (TrendingShow trending : repsonseShows) {
+            Show currentShow = new Show(trending.show.title);
+            updated.add(currentShow);
+        }
+        return updated;
+    }
+
     public String getName() {
         return name;
     }
@@ -31,5 +42,7 @@ public class Show {
     public void setName(String name) {
         this.name = name;
     }
+
+
 
 }
