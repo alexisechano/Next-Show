@@ -28,12 +28,17 @@ public class Show extends ParseObject implements Parcelable {
     // private instance variables
     private String title;
     private String overview;
+    private String imageUrl;
     private String id;
 
     // constants to match keys in Parse Database -> Public because used in other classes
     public static final String KEY_TITLE = "title";
     public static final String KEY_OVERVIEW = "overview";
     public static final String KEY_IMAGE = "image";
+
+    // url constant
+    private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
+    private static final String ADD_API_KEY = "?api_key=";
 
     // empty constructor
     public Show() { }
@@ -51,7 +56,42 @@ public class Show extends ParseObject implements Parcelable {
             updated.add(currentShow);
         }
 
+        // for each show, add image url
+        for(Show s: updated){
+            Show.updateShowDetails(s);
+        }
+
         return updated;
+    }
+
+    // might be a temp place to put this -> not sure if it is good to call async from here
+    public static void updateShowDetails(Show currShow) {
+
+        // url to grab the details
+        String apiKey = "11e01d0f4b98d95d68797db14128bb0a";
+        String id = currShow.getId();
+        String url = SHOW_DETAIL_URL + id + ADD_API_KEY + apiKey;
+
+        // create HTTP client
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(url, null /* no params */, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                // get json object
+                JSONObject jsonObj = json.jsonObject;
+                try {
+                    String imgUrl = jsonObj.getString("poster_path");
+                    currShow.setImageUrl(imgUrl);
+                } catch (JSONException e) {
+                    Log.e("ShowJson", "Failed to grab poster path", e);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String errorResponse, Throwable t) {
+                Log.e("ShowObject", "Error Code: " + statusCode, t);
+            }
+        });
     }
 
     // for local instance of Show
@@ -71,8 +111,16 @@ public class Show extends ParseObject implements Parcelable {
         this.overview = overview;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public String getId() {
         return id;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = String.format("https://image.tmdb.org/t/p/w342/%s", imageUrl);
     }
 
     // for Parse instance of Show -> grab saved shows data only
