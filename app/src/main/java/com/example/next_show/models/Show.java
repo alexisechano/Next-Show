@@ -59,6 +59,7 @@ public class Show extends ParseObject implements Parcelable {
         // for each show, add image url
         for(Show s: updated){
             Show.updateShowDetails(s);
+            System.out.println(s.title + " URL: " + s.imageUrl);
         }
 
         return updated;

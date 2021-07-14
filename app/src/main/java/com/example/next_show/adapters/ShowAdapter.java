@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.next_show.R;
 import com.example.next_show.fragments.ShowDetailFragment;
 import com.example.next_show.models.Show;
@@ -101,10 +102,10 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             // bind the show data to the view elements
             tvShowTitle.setText(show.getTitle());
             tvShowBody.setText(show.getOverview());
-
-//            if (imgUrl != null) {
-//                Glide.with(context).load(imgUrl).into(ivShowImage);
-//            }
+            String imgUrl = show.getImageUrl();
+            if (imgUrl != null) {
+                Glide.with(context).load(imgUrl).into(ivShowImage);
+            }
         }
     }
 }
