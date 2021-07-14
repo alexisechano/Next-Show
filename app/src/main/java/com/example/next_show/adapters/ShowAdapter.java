@@ -2,6 +2,8 @@ package com.example.next_show.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.next_show.R;
+import com.example.next_show.fragments.ShowDetailFragment;
 import com.example.next_show.models.Show;
 import com.parse.ParseFile;
 
@@ -86,20 +91,23 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             if (position != RecyclerView.NO_POSITION) {
                 Show show = shows.get(position);
 
-                // create intent for the new activity
-//                Intent intent = new Intent(context, DetailActivity.class);
-//
-//                // serialize the show using parceler, use its short name as a key
-//                intent.putExtra(show.class.getSimpleName(), Parcels.wrap(show));
-//
-//                // show the activity
-//                context.startActivity(intent);
+                // arg bundle for the show information
+                Bundle bundle = new Bundle();
+                ShowDetailFragment fragment = new ShowDetailFragment();
+                bundle.putParcelable(Show.class.getSimpleName(), show);
+                fragment.setArguments(bundle);
+
+                // launch the fragment and commit
+                AppCompatActivity currActivity = (AppCompatActivity) context;
+                FragmentTransaction detailTransact = currActivity.getSupportFragmentManager().beginTransaction();
+                detailTransact.replace(R.id.fragment_container_view, fragment);
+                detailTransact.commit();
             }
         }
 
         public void bind(Show show) {
             // bind the show data to the view elements
-            tvShowTitle.setText(show.getName());
+            tvShowTitle.setText(show.getTitle());
             tvShowBody.setText(show.getOverview());
 //            ParseFile image = show.getImage();
 //            if (image != null) {

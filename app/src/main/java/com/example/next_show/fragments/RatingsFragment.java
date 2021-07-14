@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next_show.R;
 
+// NO API CALLS IN THIS CLASS -> SOLELY PARSE DATABASE DATA!
 public class RatingsFragment extends Fragment {
     // view elements
     private Button btnAdd;

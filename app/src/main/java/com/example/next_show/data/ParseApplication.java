@@ -17,7 +17,7 @@ public class ParseApplication extends Application {
         super.onCreate();
 
         // register Show class
-        //ParseObject.registerSubclass(Show.class);
+        ParseObject.registerSubclass(Show.class);
 
         // use keys in strings.xml to initialize Parse here
         Parse.initialize(new Parse.Configuration.Builder(this)
