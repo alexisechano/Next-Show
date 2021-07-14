@@ -8,15 +8,25 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next_show.R;
+import com.example.next_show.adapters.SavedAdapter;
+import com.example.next_show.adapters.ShowAdapter;
+import com.example.next_show.models.Show;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // NO API CALLS IN THIS CLASS -> SOLELY PARSE DATABASE DATA!
 public class SavedFragment extends Fragment {
     // view elements
     private TextView tvName;
     private RecyclerView rvSaved;
+
+    protected SavedAdapter adapter;
+    protected List<Show> savedShows;
 
     // empty constructor
     public SavedFragment() {
@@ -43,7 +53,26 @@ public class SavedFragment extends Fragment {
         // find Recycler View
         rvSaved = currView.findViewById(R.id.rvSaved);
 
+        // initialize the array that will hold posts and create a PostsAdapter
+        savedShows = new ArrayList<>();
+
+        adapter = new SavedAdapter(getActivity(), savedShows);
+
+        // set the adapter on the recycler view
+        rvSaved.setAdapter(adapter);
+
+        // set the layout manager on the recycler view
+        rvSaved.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        // get Parse data and load into view
+        fetchParseShows();
+
         return currView;
+
+    }
+
+    // get data from Parse Database
+    private void fetchParseShows() {
 
     }
 }

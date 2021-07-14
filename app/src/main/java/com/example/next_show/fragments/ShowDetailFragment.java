@@ -22,6 +22,7 @@ public class ShowDetailFragment extends Fragment {
     // view elements
     private TextView tvDetailTitle;
     private TextView tvDetailOverview;
+    private Button btnSaveShow;
     //private TextView tvDetailRating; // TODO: update show object to include this later (not my rating)
 
     // constants
@@ -66,9 +67,16 @@ public class ShowDetailFragment extends Fragment {
     private void setUpView(View currView) {
         tvDetailTitle = currView.findViewById(R.id.tvDetailTitle);
         tvDetailOverview = currView.findViewById(R.id.tvDetailOverview);
+        btnSaveShow = currView.findViewById(R.id.btnSaveShow);
 
         tvDetailTitle.setText(currShow.getTitle());
         tvDetailOverview.setText(currShow.getOverview());
+        btnSaveShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Save to the SavedFragment
+            }
+        });
 
     }
 
