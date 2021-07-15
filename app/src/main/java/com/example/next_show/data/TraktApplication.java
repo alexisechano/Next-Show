@@ -33,6 +33,10 @@ public class TraktApplication {
         this.context = context;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     public Shows getNewShowsInstance(){
         // Trakt wrapper
         TraktV2 trakt = new TraktV2(context.getString(R.string.trakt_client_id));
@@ -40,5 +44,4 @@ public class TraktApplication {
         Log.i(TAG, "Created new instance for Trakt");
         return traktShows;
     }
-
 }

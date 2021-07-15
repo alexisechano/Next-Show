@@ -68,6 +68,18 @@ public class Show extends ParseObject implements Parcelable {
         return updated;
     }
 
+    // from Recommended Show objects to NextShow Show objects
+    public static List<Show> fromRecShows(List<com.uwetrottmann.trakt5.entities.Show> repsonseShows) {
+        List<Show> updated = new ArrayList<>();
+        for (com.uwetrottmann.trakt5.entities.Show rShow : repsonseShows) {
+            Show currentShow = new Show(rShow.title, rShow.overview,
+                    "" + rShow.ids.tmdb, rShow.network, rShow.first_aired.getYear());
+
+            updated.add(currentShow);
+        }
+        return updated;
+    }
+
     // from Parse Show objects to NextShow Show objects
     public static List<Show> fromParseShows(List<Show> parseShows) {
         List<Show> updated = new ArrayList<>();

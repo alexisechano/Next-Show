@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next_show.R;
 import com.example.next_show.adapters.ShowAdapter;
+import com.example.next_show.data.RecommendationClient;
 import com.example.next_show.data.TraktApplication;
 import com.example.next_show.models.Show;
+import com.example.next_show.models.User;
+import com.parse.ParseUser;
 import com.uwetrottmann.trakt5.entities.TrendingShow;
 import com.uwetrottmann.trakt5.enums.Extended;
 import com.uwetrottmann.trakt5.services.Shows;
@@ -75,7 +78,16 @@ public class FeedFragment extends Fragment {
         // new application for Trakt Call, pass in the Context
         Shows showsObj = new TraktApplication(getContext()).getNewShowsInstance();
 
-        // method to ASYNC call to API and grab trending shows
+        // set up recommendation client to grab more shows
+        RecommendationClient recClient = new RecommendationClient(getContext());
+
+        // get related shows
+        //recClient.fetchRelatedShows(showsObj, new Show(), adapter);
+
+        // get recommended shows
+        //recClient.fetchRecommendedShows(showsObj, adapter, new User(ParseUser.getCurrentUser()));
+
+        // method to ASYNC call to API and grab TRENDING shows
         fetchTraktData(showsObj);
 
         return currView;
