@@ -27,31 +27,31 @@ A TV show recommender app that uses personal ratings and interests to aggregate 
 
 Outlined by FBU App Expectations and Priority
 * **Your app has multiple views**
-  *  User can view their profile, home timeline, and saved shows and ratings in separate views (P0)
-  *  User can view TV show details from home timeline (P0)
+  [x]  User can view their profile, home timeline, and saved shows and ratings in separate views (P0)
+  [x]  User can view TV show details from home timeline (P0)
 * **Your app interacts with a database (e.g. Parse)**
-  *  User can save rated shows and shows-to-watch (P1)
-  *  User can view more than 10+ shows on home timeline through CardView and RecyclerView (P0)
-  *  User can view TV show details like number of seasons and synopsis (P0)
-  *  User ratings (like or dislike) are also saved within a database (P0)
+  [x]  User can save rated shows and shows-to-watch (P1)
+  [x]  User can view more than 10+ shows on home timeline through CardView and RecyclerView (P0)
+  [x]  User can view TV show details like synopsis (P0)
+  [x]  User ratings (like or dislike) are also saved within a database (P0)
 * **You can log in/log out of your app as a user**
-  * User lands on log-in screen and the app has user persistence (P0)
-  * User can logout through profile page (P0)
+  [x] User lands on log-in screen and the app has user persistence (P0)
+  [x] User can logout through profile page (P0)
 * **You can sign up with a new user profile** 
-  * User can register with new account (P0)
+  [x] User can register with new account (P0)
   * User can set up recommendations by choosing favorite genres and current fave shows (P2)
 * **Your app integrates with at least one SDK (e.g. Google Maps SDK, Facebook SDK) or API (that you didn’t learn about in CodePath)**
-  * User receives show recommendations on home timeline using [TasteDive](https://tastedive-api-documentation.readthedocs.io/en/latest/index.html) OR [IMDB](https://developers.themoviedb.org/3/tv/get-similar-tv-shows) OR [Trakt](https://trakt.docs.apiary.io/#reference/shows/recommended). (P0) 
+  * User receives show recommendations on home timeline using [TasteDive](https://tastedive-api-documentation.readthedocs.io/en/latest/index.html) OR [IMDB](https://developers.themoviedb.org/3/tv/get-similar-tv-shows) OR [Trakt](https://trakt.docs.apiary.io/#reference/shows/recommended). (P1) 
 * **Your app uses at least one gesture (e.g. double tap to like, e.g. pinch to scale)**
   * User can swipe to dismiss a show rec on home timeline which counts as a dislike rating (P2)
 * **Your app uses at least one animation (e.g. fade in/out, e.g. animating a view growing and shrinking)**
-  * In progress
+  * In progress (P2)
 * **Your app incorporates at least external library to add visual polish**
   * In progress (P2)
 * **Your app provides opportunities for you to overcome difficult/ambiguous technical problems (more below)**
   * User can filter through TV shows based on Genre or if they are trending or not (P1)
-  * Use combination of APIs to create own data model that has a recommendation system based on like/dislike ratings (P0)
-  * App might need to do some background fetching and proper data handling to be able to show accurate, fast recommendations (P2)
+  * Use combination of APIs to create own data model that has a recommendation system based on like/dislike ratings (P1)
+  * App might need to do some background fetching and proper data handling to be able to show accurate, fast recommendations (P3)
 
 **Optional Nice-to-have Stories**
 
