@@ -32,6 +32,7 @@ public class Show extends ParseObject implements Parcelable {
     private String overview;
     private String id;
     private String network;
+    private String liked;
     private int year_aired;
 
     // constants to match keys in Parse Database -> Public because used in other classes
@@ -41,7 +42,10 @@ public class Show extends ParseObject implements Parcelable {
     public static final String KEY_NETWORK = "network";
     public static final String KEY_YEAR_AIRED = "yearAired";
     public static final String KEY_USER = "user";
+    public static final String KEY_RATING = "userRating";
     public static final String KEY_IMAGE = "image"; // not used yet until API call is fixed
+
+    public static final int UNRATED = -1;
 
     // empty constructor
     public Show() { }
@@ -60,6 +64,7 @@ public class Show extends ParseObject implements Parcelable {
         for (TrendingShow trending : repsonseShows) {
             Show currentShow = new Show(trending.show.title, trending.show.overview,
                     "" + trending.show.ids.tmdb, trending.show.network, trending.show.first_aired.getYear());
+
             updated.add(currentShow);
         }
         return updated;
@@ -73,6 +78,8 @@ public class Show extends ParseObject implements Parcelable {
         for(Show pre: parseShows){
             Show currentShow = new Show(pre.getParseTitle(), pre.getParseOverview(), pre.getParseTVID(),
                     pre.getParseNetwork(), pre.getParseYearAired());
+
+            currentShow.setUserLiked(pre.getParseUserLiked());
             updated.add(currentShow);
         }
         return updated;
@@ -105,7 +112,12 @@ public class Show extends ParseObject implements Parcelable {
         return network;
     }
 
-    public int getYearAired() {return year_aired; }
+    public int getYearAired() { return year_aired; }
+
+    public String getUserLiked() { return liked; }
+
+    public void setUserLiked(String liked) { this.liked = liked; }
+
 
     // **** for Parse instance of Show -> grab saved shows data only ****
     public String getParseTitle() {
@@ -148,6 +160,14 @@ public class Show extends ParseObject implements Parcelable {
         put(KEY_YEAR_AIRED, year);
     }
 
+    public String getParseUserLiked() {
+        return getString(KEY_RATING);
+    }
+
+    public void setParseUserLiked(String liked) {
+        put(KEY_RATING, liked);
+    }
+
     public ParseUser getParseUser() {
         return getParseUser(KEY_USER);
     }
@@ -164,6 +184,9 @@ public class Show extends ParseObject implements Parcelable {
         setParseNetwork(network);
         setParseYearAired(year_aired);
         setParseUser(currUser);
+
+        // might be -1!
+        setParseUserLiked(liked);
     }
 
     // TODO: Add image file for Parse
