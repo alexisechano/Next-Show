@@ -35,6 +35,7 @@ public class SavedFragment extends Fragment {
 
     // constants
     public static final String TAG = "SavedFragment";
+    public static final int QUERY_LIMIT = 10;
 
     // empty constructor
     public SavedFragment() {
@@ -76,7 +77,6 @@ public class SavedFragment extends Fragment {
         fetchParseShows();
 
         return currView;
-
     }
 
     // get data from Parse Database
@@ -86,7 +86,6 @@ public class SavedFragment extends Fragment {
 
         // get list of Shows from Parse
         queryPosts(currUser);
-
     }
 
     private void queryPosts(ParseUser targetUser) {
@@ -96,8 +95,8 @@ public class SavedFragment extends Fragment {
         // include data referred by user key
         query.include(Show.KEY_USER);
 
-        // limit query to latest 20 items
-        query.setLimit(10);
+        // limit query to latest items
+        query.setLimit(QUERY_LIMIT);
 
         // set user specific query
         query.whereEqualTo(Show.KEY_USER, targetUser);

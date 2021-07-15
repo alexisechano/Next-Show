@@ -59,15 +59,7 @@ public class SavedAdapter extends RecyclerView.Adapter<SavedAdapter.ViewHolder> 
     }
 
     public void addAll(List<Show> list) {
-        List<Show> modifiedShows = new ArrayList<>();
-
-        // turn them into my own show objects
-        for(Show pre: list){
-            Show currentShow = new Show(pre.getParseTitle(), pre.getParseOverview(), pre.getParseTVID(),
-                    pre.getParseNetwork(), pre.getParseYearAired());
-            modifiedShows.add(currentShow);
-        }
-
+        List<Show> modifiedShows = Show.fromParseShows(list);
         shows.addAll(modifiedShows);
         notifyDataSetChanged();
     }

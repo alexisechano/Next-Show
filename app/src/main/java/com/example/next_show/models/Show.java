@@ -52,9 +52,9 @@ public class Show extends ParseObject implements Parcelable {
         this.id = id;
         this.network = network;
         this.year_aired = year_aired;
-
     }
 
+    // from Trending Show objects to NextShow Show objects
     public static List<Show> fromTrendingShows(List<TrendingShow> repsonseShows) {
         List<Show> updated = new ArrayList<>();
         for (TrendingShow trending : repsonseShows) {
@@ -62,7 +62,19 @@ public class Show extends ParseObject implements Parcelable {
                     "" + trending.show.ids.tmdb, trending.show.network, trending.show.first_aired.getYear());
             updated.add(currentShow);
         }
+        return updated;
+    }
 
+    // from Parse Show objects to NextShow Show objects
+    public static List<Show> fromParseShows(List<Show> parseShows) {
+        List<Show> updated = new ArrayList<>();
+
+        // turn them into my own Show objects for use later on
+        for(Show pre: parseShows){
+            Show currentShow = new Show(pre.getParseTitle(), pre.getParseOverview(), pre.getParseTVID(),
+                    pre.getParseNetwork(), pre.getParseYearAired());
+            updated.add(currentShow);
+        }
         return updated;
     }
 
@@ -95,8 +107,7 @@ public class Show extends ParseObject implements Parcelable {
 
     public int getYearAired() {return year_aired; }
 
-    // for Parse instance of Show -> grab saved shows data only
-    // TODO: Add image file for Parse
+    // **** for Parse instance of Show -> grab saved shows data only ****
     public String getParseTitle() {
         return getString(KEY_TITLE);
     }
@@ -146,7 +157,7 @@ public class Show extends ParseObject implements Parcelable {
     }
 
     public void setParseFields(ParseUser currUser) {
-        // before saving, save these as parse
+        // before saving, save these as Parse attributes
         setParseTitle(title);
         setParseOverview(overview);
         setParseTVID(id);
@@ -154,4 +165,6 @@ public class Show extends ParseObject implements Parcelable {
         setParseYearAired(year_aired);
         setParseUser(currUser);
     }
+
+    // TODO: Add image file for Parse
 }

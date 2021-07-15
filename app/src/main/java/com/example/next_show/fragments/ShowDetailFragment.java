@@ -85,9 +85,11 @@ public class ShowDetailFragment extends Fragment {
         tvDetailOverview = currView.findViewById(R.id.tvDetailOverview);
         btnSaveShow = currView.findViewById(R.id.btnSaveShow);
 
+        // display show text data
         tvDetailTitle.setText(currShow.getTitle());
         tvDetailOverview.setText(currShow.getOverview());
 
+        // check if previous fragment was the SavedFragment -> disable save feature
         if(alreadySaved){
             Toast.makeText(getActivity(), "Show already saved!", Toast.LENGTH_SHORT).show();
             btnSaveShow.setVisibility(View.GONE);
@@ -97,7 +99,6 @@ public class ShowDetailFragment extends Fragment {
         btnSaveShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // set parse fields like title and overview
                 currShow.setParseFields(parseUser);
 
@@ -112,7 +113,6 @@ public class ShowDetailFragment extends Fragment {
                         // if no error, let log and user know
                         Log.i(TAG, "Saved post successfully");
                         Toast.makeText(getActivity(), "Saved show!", Toast.LENGTH_SHORT).show();
-
                     }
                 });
 
