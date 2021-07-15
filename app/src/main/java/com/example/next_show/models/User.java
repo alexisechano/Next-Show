@@ -1,8 +1,12 @@
 package com.example.next_show.models;
 
+import android.os.Parcelable;
+
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,15 +17,18 @@ public class User {
     private ParseUser user;
 
     // local array to keep track of saved shows
-    private List<Show> savedShows;
-    private boolean saved;
+//    private List<Show> savedShows;
+//    private boolean saved;
 
     // constants to match keys in Parse Database -> Public because used in Main
     public static final String KEY_FIRSTNAME = "firstName";
     public static final String KEY_LASTNAME = "lastName";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_BIO = "bio";
-    public static final String KEY_SAVED = "savedShows"; // this is an array
+    //public static final String KEY_SAVED = "savedShows"; // this is an array
+
+    // empty constructor
+    public User() { }
 
     // to correctly refer to User as a ParseUser
     public User(ParseUser parseUser) {
@@ -69,38 +76,6 @@ public class User {
 
     public void setBio(String bio) {
         user.put(KEY_BIO, bio);
-    }
-
-    public void createSavedList () {
-        savedShows = new ArrayList<>();
-    }
-
-    public void addToLocalSaved(Show show) {
-        savedShows.add(show);
-        saved = false;
-    }
-
-    public void setSaved() {
-        saved = true;
-    }
-
-    public boolean hasSavedShows() {
-        return saved;
-    }
-
-    public List<Show> getLocalSaved() {
-       return savedShows;
-    }
-
-    // TODO: ensure that these are actual show objects being sent back
-    public List<Show> getSavedShows() {
-        return user.getList(KEY_SAVED);
-    }
-
-    public void addToSavedShows(List<Show> shows) {
-        // batch saving
-        user.addAllUnique(KEY_SAVED, shows);
-        user.saveInBackground();
     }
 
     public ParseUser useParseUser(){

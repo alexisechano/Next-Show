@@ -23,6 +23,7 @@ import com.parse.SaveCallback;
 
 public class ShowDetailFragment extends Fragment {
     private Show currShow;
+    private User currUser;
 
     // view elements
     private TextView tvDetailTitle;
@@ -70,6 +71,9 @@ public class ShowDetailFragment extends Fragment {
     }
 
     private void setUpView(View currView) {
+        // grab current User
+        ParseUser parseUser = ParseUser.getCurrentUser();
+
         tvDetailTitle = currView.findViewById(R.id.tvDetailTitle);
         tvDetailOverview = currView.findViewById(R.id.tvDetailOverview);
         btnSaveShow = currView.findViewById(R.id.btnSaveShow);
@@ -79,10 +83,9 @@ public class ShowDetailFragment extends Fragment {
         btnSaveShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Save to the SavedFragment
 
                 // set parse fields like title and overview
-                currShow.setParseFields();
+                currShow.setParseFields(parseUser);
 
                 currShow.saveInBackground(new SaveCallback() {
                     @Override
@@ -96,19 +99,6 @@ public class ShowDetailFragment extends Fragment {
                         Log.i(TAG, "Saved post successfully");
                         Toast.makeText(getActivity(), "Saved show!", Toast.LENGTH_SHORT).show();
 
-                        // grab current User
-                        User currUser = new User(ParseUser.getCurrentUser());
-
-                        // check if user has saved shows
-                        if(currUser.getLocalSaved() == null){
-                            currUser.createSavedList();
-                        }
-
-                        // add to local list of saved shows
-                        currUser.addToLocalSaved(currShow);
-
-                        // ensure it is saved
-                        Log.i(TAG, "User saved list: " + currUser.getLocalSaved().toString());
                     }
                 });
 

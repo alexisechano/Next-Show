@@ -9,8 +9,10 @@ import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.codepath.asynchttpclient.callback.TextHttpResponseHandler;
 import com.example.next_show.R;
+import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.uwetrottmann.trakt5.entities.TrendingShow;
 
 import org.json.JSONArray;
@@ -38,6 +40,7 @@ public class Show extends ParseObject implements Parcelable {
     public static final String KEY_ID = "tmdb";
     public static final String KEY_NETWORK = "network";
     public static final String KEY_YEAR_AIRED = "yearAired";
+    public static final String KEY_USER = "user";
     public static final String KEY_IMAGE = "image"; // not used yet until API call is fixed
 
     // empty constructor
@@ -134,12 +137,21 @@ public class Show extends ParseObject implements Parcelable {
         put(KEY_YEAR_AIRED, year);
     }
 
-    public void setParseFields() {
+    public ParseUser getParseUser() {
+        return getParseUser(KEY_USER);
+    }
+
+    public void setParseUser(ParseUser user) {
+        put(KEY_USER, user);
+    }
+
+    public void setParseFields(ParseUser currUser) {
         // before saving, save these as parse
         setParseTitle(title);
         setParseOverview(overview);
         setParseTVID(id);
         setParseNetwork(network);
         setParseYearAired(year_aired);
+        setParseUser(currUser);
     }
 }
