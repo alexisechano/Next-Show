@@ -43,7 +43,7 @@ public class Show extends ParseObject implements Parcelable {
     public static final String KEY_YEAR_AIRED = "yearAired";
     public static final String KEY_USER = "user";
     public static final String KEY_RATING = "userRating";
-    public static final String KEY_IMAGE = "image"; // not used yet until API call is fixed
+    public static final String KEY_IMAGE = "image"; // TODO: not used yet until API call is fixed
 
     // empty constructor
     public Show() { }
@@ -83,24 +83,14 @@ public class Show extends ParseObject implements Parcelable {
         return updated;
     }
 
-    // for local instance of Show
+    // for local instance of Show -> no setter for these, only constructor can set
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getOverview() {
         return overview;
     }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    // no setter for these, only constructor can set
 
     public String getId() {
         return id;
@@ -175,7 +165,7 @@ public class Show extends ParseObject implements Parcelable {
     }
 
     public void setParseFields(ParseUser currUser) {
-        // before saving, save these as Parse attributes
+        // before saving, set as Parse attributes
         setParseTitle(title);
         setParseOverview(overview);
         setParseTVID(id);

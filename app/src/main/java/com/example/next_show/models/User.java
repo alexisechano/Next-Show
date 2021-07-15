@@ -21,7 +21,6 @@ public class User {
     public static final String KEY_LASTNAME = "lastName";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_BIO = "bio";
-    //public static final String KEY_SAVED = "savedShows"; // this is an array
 
     // empty constructor
     public User() { }

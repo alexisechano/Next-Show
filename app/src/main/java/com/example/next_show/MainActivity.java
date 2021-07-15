@@ -21,15 +21,10 @@ public class MainActivity extends AppCompatActivity {
     // constants
     public static final String TAG = "MainActivity";
 
-    public static List<Show> shows;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // init the show list
-        shows = new ArrayList<>();
 
         // Fragment management
         FeedFragment feedFragment = FeedFragment.newInstance();

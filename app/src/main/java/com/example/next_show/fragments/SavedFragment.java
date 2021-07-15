@@ -65,6 +65,7 @@ public class SavedFragment extends Fragment {
         // initialize the array that will hold posts and create a PostsAdapter
         savedShows = new ArrayList<>();
 
+        // initialize the SAVED adapter
         adapter = new SavedAdapter(getActivity(), savedShows);
 
         // set the adapter on the recycler view

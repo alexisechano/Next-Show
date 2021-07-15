@@ -83,6 +83,7 @@ public class FeedFragment extends Fragment {
 
     private void fetchTraktData(Shows traktShows) {
         try {
+            // enqueue to do asynchronous call and execute to do it synchronously
             traktShows.trending(PAGES_REQUESTED, LIMIT, Extended.FULL).enqueue(new Callback<List<TrendingShow>>() {
                 @Override
                 public void onResponse(Call<List<TrendingShow>> call, Response<List<TrendingShow>> response) {

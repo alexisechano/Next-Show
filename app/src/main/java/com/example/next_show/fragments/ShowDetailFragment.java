@@ -43,10 +43,6 @@ public class ShowDetailFragment extends Fragment {
     private Button btnLiked;
     private Button btnDisliked;
 
-    private RelativeLayout rlRatingBar;
-
-    //private TextView tvDetailRating; // TODO: update show object to include this later (not my rating)
-
     // constants
     public static final String TAG = "ShowDetailFragment";
 
@@ -99,7 +95,6 @@ public class ShowDetailFragment extends Fragment {
         btnSaveShow = currView.findViewById(R.id.btnSaveShow);
         btnLiked = currView.findViewById(R.id.btnLiked);
         btnDisliked = currView.findViewById(R.id.btnDisliked);
-        rlRatingBar = currView.findViewById(R.id.ratingsBar);
 
         // change color to denote difference
         btnDisliked.setBackgroundColor(Color.parseColor("#d6d3d2"));
@@ -115,7 +110,7 @@ public class ShowDetailFragment extends Fragment {
         if(alreadySaved){
             btnSaveShow.setVisibility(View.GONE);
 
-            // check if user already rated it
+            // check if user already rated it, show if user liked it or not
             if (currShow.getUserLiked() != null) {
                 String status = (currShow.getUserLiked().equals("liked")) ? "liked" : "disliked";
                 tvAlreadyRated = currView.findViewById(R.id.tvAlreadyRated);
@@ -129,7 +124,6 @@ public class ShowDetailFragment extends Fragment {
             }
         }
 
-        // set up the buttons for onclicks and saving
         // mark POSITIVE rating
         btnLiked.setOnClickListener(new View.OnClickListener() {
             @Override
