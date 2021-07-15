@@ -29,25 +29,34 @@ public class Show extends ParseObject implements Parcelable {
     private String title;
     private String overview;
     private String id;
+    private String network;
+    private int year_aired;
 
     // constants to match keys in Parse Database -> Public because used in other classes
     public static final String KEY_TITLE = "title";
     public static final String KEY_OVERVIEW = "overview";
-    public static final String KEY_IMAGE = "image";
+    public static final String KEY_ID = "tmdb";
+    public static final String KEY_NETWORK = "network";
+    public static final String KEY_YEAR_AIRED = "yearAired";
+    public static final String KEY_IMAGE = "image"; // not used yet until API call is fixed
 
     // empty constructor
     public Show() { }
 
-    public Show(String title, String overview, String id) {
+    public Show(String title, String overview, String id, String network, int year_aired) {
         this.title = title;
         this.overview = overview;
         this.id = id;
+        this.network = network;
+        this.year_aired = year_aired;
+
     }
 
     public static List<Show> fromTrendingShows(List<TrendingShow> repsonseShows) {
         List<Show> updated = new ArrayList<>();
         for (TrendingShow trending : repsonseShows) {
-            Show currentShow = new Show(trending.show.title, trending.show.overview, "" + trending.show.ids.tmdb);
+            Show currentShow = new Show(trending.show.title, trending.show.overview,
+                    "" + trending.show.ids.tmdb, trending.show.network, trending.show.first_aired.getYear());
             updated.add(currentShow);
         }
 
@@ -71,9 +80,17 @@ public class Show extends ParseObject implements Parcelable {
         this.overview = overview;
     }
 
+    // no setter for these, only constructor can set
+
     public String getId() {
         return id;
     }
+
+    public String getNetwork() {
+        return network;
+    }
+
+    public int getYearAired() {return year_aired; }
 
     // for Parse instance of Show -> grab saved shows data only
     // TODO: Add image file for Parse
@@ -91,5 +108,29 @@ public class Show extends ParseObject implements Parcelable {
 
     public void setParseOverview(String overview) {
         put(KEY_OVERVIEW, overview);
+    }
+
+    public String getParseTVID() {
+        return getString(KEY_ID);
+    }
+
+    public void setParseTVID(String id) {
+        put(KEY_ID, id);
+    }
+
+    public String getParseNetwork() {
+        return getString(KEY_NETWORK);
+    }
+
+    public void setParseNetwork(String network) {
+        put(KEY_NETWORK, network);
+    }
+
+    public int getParseYearAired() {
+        return getInt(KEY_YEAR_AIRED);
+    }
+
+    public void setParseYearAired(int year) {
+        put(KEY_YEAR_AIRED, year);
     }
 }

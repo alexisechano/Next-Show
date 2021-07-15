@@ -4,6 +4,9 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class User {
     // ParseUser object
     private ParseUser user;
@@ -13,6 +16,7 @@ public class User {
     public static final String KEY_LASTNAME = "lastName";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_BIO = "bio";
+    public static final String KEY_SAVED = "savedShows"; // this is an array
 
     // to correctly refer to User as a ParseUser
     public User(ParseUser parseUser) {
@@ -60,6 +64,15 @@ public class User {
 
     public void setBio(String bio) {
         user.put(KEY_BIO, bio);
+    }
+
+    public List<String> getSavedShows() {
+        return user.getList(KEY_SAVED);
+    }
+
+    public void addSavedShows(List<String> saved) {
+        user.addAllUnique(KEY_SAVED, saved);
+        user.saveInBackground();
     }
 
     public ParseUser useParseUser(){
