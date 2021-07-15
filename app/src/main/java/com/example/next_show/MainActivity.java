@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_rating:
                         // set rating fragment
                         SavedFragment savedFragment = SavedFragment.newInstance();
-                        setRatingsFragment(savedFragment);
+                        SavedFragment(savedFragment);
                         break;
                 }
                 return true;
@@ -76,10 +76,10 @@ public class MainActivity extends AppCompatActivity {
         profileTransact.commit();
     }
 
-    private void setRatingsFragment(SavedFragment savedFragment) {
+    private void SavedFragment(SavedFragment savedFragment) {
         Log.i(TAG, "Switching to SavedFragment");
-        FragmentTransaction ratingsTransact = getSupportFragmentManager().beginTransaction();
-        ratingsTransact.replace(R.id.fragment_container_view, savedFragment);
-        ratingsTransact.commit();
+        FragmentTransaction savedTransact = getSupportFragmentManager().beginTransaction();
+        savedTransact.replace(R.id.fragment_container_view, savedFragment);
+        savedTransact.commit();
     }
 }

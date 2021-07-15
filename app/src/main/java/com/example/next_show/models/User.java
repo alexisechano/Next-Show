@@ -16,10 +16,6 @@ public class User {
     // ParseUser object
     private ParseUser user;
 
-    // local array to keep track of saved shows
-//    private List<Show> savedShows;
-//    private boolean saved;
-
     // constants to match keys in Parse Database -> Public because used in Main
     public static final String KEY_FIRSTNAME = "firstName";
     public static final String KEY_LASTNAME = "lastName";

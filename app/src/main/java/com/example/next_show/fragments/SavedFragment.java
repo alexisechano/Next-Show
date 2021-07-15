@@ -1,6 +1,7 @@
 package com.example.next_show.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,10 @@ import com.example.next_show.R;
 import com.example.next_show.adapters.SavedAdapter;
 import com.example.next_show.adapters.ShowAdapter;
 import com.example.next_show.models.Show;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +32,9 @@ public class SavedFragment extends Fragment {
 
     protected SavedAdapter adapter;
     protected List<Show> savedShows;
+
+    // constants
+    public static final String TAG = "SavedFragment";
 
     // empty constructor
     public SavedFragment() {
@@ -49,9 +57,6 @@ public class SavedFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View currView = inflater.inflate(R.layout.fragment_saved, container, false);
-
-        // TODO: CHECK call User.hasSavedShows() and if false then save in background then call setSaved to mark it saved
-        // NEXT: make sure the above is false, save POINTERs of SHOWs to the user's list of saved shows in Parse
 
         // find Recycler View
         rvSaved = currView.findViewById(R.id.rvSaved);
@@ -77,12 +82,42 @@ public class SavedFragment extends Fragment {
     // get data from Parse Database
     private void fetchParseShows() {
         // get current user
-
-        // grab their saved shows
+        ParseUser currUser = ParseUser.getCurrentUser();
 
         // get list of Shows from Parse
+        queryPosts(currUser);
 
-        // use ParseQuery to get Show pointers
+    }
 
+    private void queryPosts(ParseUser targetUser) {
+        // specify what type of data we want to query - Post.class
+        ParseQuery<Show> query = ParseQuery.getQuery(Show.class);
+
+        // include data referred by user key
+        query.include(Show.KEY_USER);
+
+        // limit query to latest 20 items
+        query.setLimit(10);
+
+        // set user specific query
+        query.whereEqualTo(Show.KEY_USER, targetUser);
+
+        // order posts by creation date (newest first)
+        query.addDescendingOrder("createdAt");
+
+        // start an asynchronous call for posts
+        query.findInBackground(new FindCallback<Show>() {
+            @Override
+            public void done(List<Show> shows, ParseException e) {
+                // check for errors
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+
+                // save received posts to list and notify adapter of new data
+                adapter.addAll(shows);
+            }
+        });
     }
 }

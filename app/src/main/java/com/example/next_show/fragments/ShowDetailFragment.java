@@ -13,7 +13,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.example.next_show.MainActivity;
 import com.example.next_show.R;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
@@ -21,9 +23,11 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.List;
+
 public class ShowDetailFragment extends Fragment {
     private Show currShow;
-    private User currUser;
+    private boolean alreadySaved;
 
     // view elements
     private TextView tvDetailTitle;
@@ -37,12 +41,13 @@ public class ShowDetailFragment extends Fragment {
     // empty constructor
     public ShowDetailFragment(){ }
 
-    public static ShowDetailFragment newInstance(Show show) {
+    public static ShowDetailFragment newInstance(Show show, boolean alreadySaved) {
         ShowDetailFragment fragment = new ShowDetailFragment();
 
         // generate bundle for the show
         Bundle bundle = new Bundle();
         bundle.putParcelable(Show.class.getSimpleName(), show);
+        bundle.putBoolean("savedBool", alreadySaved);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -55,6 +60,8 @@ public class ShowDetailFragment extends Fragment {
         // grab from args
         currShow = getArguments().getParcelable(Show.class.getSimpleName());
         Log.i(TAG, "TITLE: " + currShow.getTitle());
+
+        this.alreadySaved = getArguments().getBoolean("savedBool");
     }
 
     @Nullable
@@ -80,6 +87,13 @@ public class ShowDetailFragment extends Fragment {
 
         tvDetailTitle.setText(currShow.getTitle());
         tvDetailOverview.setText(currShow.getOverview());
+
+        if(alreadySaved){
+            Toast.makeText(getActivity(), "Show already saved!", Toast.LENGTH_SHORT).show();
+            btnSaveShow.setVisibility(View.GONE);
+            return;
+        }
+
         btnSaveShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -18,6 +18,7 @@ import com.example.next_show.models.User;
 import com.parse.Parse;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,6 +26,9 @@ public class SavedAdapter extends RecyclerView.Adapter<SavedAdapter.ViewHolder> 
     // instance variables
     private Context context;
     private List<Show> shows;
+
+    // constant boolean to check if already in saved fragment
+    private static final boolean FROM_SAVED_FRAGMENT = true;
 
     public SavedAdapter (Context context, List<Show> shows){
         this.context = context;
@@ -55,7 +59,16 @@ public class SavedAdapter extends RecyclerView.Adapter<SavedAdapter.ViewHolder> 
     }
 
     public void addAll(List<Show> list) {
-        shows.addAll(list);
+        List<Show> modifiedShows = new ArrayList<>();
+
+        // turn them into my own show objects
+        for(Show pre: list){
+            Show currentShow = new Show(pre.getParseTitle(), pre.getParseOverview(), pre.getParseTVID(),
+                    pre.getParseNetwork(), pre.getParseYearAired());
+            modifiedShows.add(currentShow);
+        }
+
+        shows.addAll(modifiedShows);
         notifyDataSetChanged();
     }
 
@@ -86,7 +99,7 @@ public class SavedAdapter extends RecyclerView.Adapter<SavedAdapter.ViewHolder> 
                 Show show = shows.get(position);
 
                 // make new instance of the fragment
-                ShowDetailFragment fragment = ShowDetailFragment.newInstance(show);
+                ShowDetailFragment fragment = ShowDetailFragment.newInstance(show, FROM_SAVED_FRAGMENT);
 
                 // launch the fragment and commit
                 AppCompatActivity currActivity = (AppCompatActivity) context;

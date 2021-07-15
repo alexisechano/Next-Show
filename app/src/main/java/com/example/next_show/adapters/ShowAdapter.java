@@ -25,6 +25,9 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     private Context context;
     private List<Show> shows;
 
+    // constant boolean to check if already in saved fragment
+    private static final boolean FROM_SAVED_FRAGMENT = false;
+
     public ShowAdapter (Context context, List<Show> shows){
         this.context = context;
         this.shows = shows;
@@ -85,7 +88,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
                 Show show = shows.get(position);
 
                 // make new instance of the fragment
-                ShowDetailFragment fragment = ShowDetailFragment.newInstance(show);
+                ShowDetailFragment fragment = ShowDetailFragment.newInstance(show, FROM_SAVED_FRAGMENT /* false */);
 
                 // launch the fragment and commit
                 AppCompatActivity currActivity = (AppCompatActivity) context;
