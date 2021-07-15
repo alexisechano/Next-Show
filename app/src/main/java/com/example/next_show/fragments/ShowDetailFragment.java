@@ -135,9 +135,10 @@ public class ShowDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 currShow.setUserLiked("liked");
-                Toast.makeText(getActivity(), "You liked this show!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "You liked this show!", Toast.LENGTH_SHORT).show();
                 if(alreadySaved){
                     // TODO: update Parse data with new rating
+                    Toast.makeText(getActivity(), "Sorry, you can't update the show rating right now!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -147,9 +148,10 @@ public class ShowDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 currShow.setUserLiked("disliked");
-                Toast.makeText(getActivity(), "You disliked this show!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "You disliked this show!", Toast.LENGTH_SHORT).show();
                 if(alreadySaved){
                     // TODO: update Parse data with new rating
+                    Toast.makeText(getActivity(), "Sorry, you can't update the show rating right now!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

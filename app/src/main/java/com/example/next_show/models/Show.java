@@ -45,8 +45,6 @@ public class Show extends ParseObject implements Parcelable {
     public static final String KEY_RATING = "userRating";
     public static final String KEY_IMAGE = "image"; // not used yet until API call is fixed
 
-    public static final int UNRATED = -1;
-
     // empty constructor
     public Show() { }
 
@@ -184,8 +182,6 @@ public class Show extends ParseObject implements Parcelable {
         setParseNetwork(network);
         setParseYearAired(year_aired);
         setParseUser(currUser);
-
-        // might be -1!
         setParseUserLiked(liked);
     }
 
