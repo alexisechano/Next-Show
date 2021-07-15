@@ -4,12 +4,17 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class User {
     // ParseUser object
     private ParseUser user;
+
+    // local array to keep track of saved shows
+    private List<Show> savedShows;
+    private boolean saved;
 
     // constants to match keys in Parse Database -> Public because used in Main
     public static final String KEY_FIRSTNAME = "firstName";
@@ -66,12 +71,35 @@ public class User {
         user.put(KEY_BIO, bio);
     }
 
-    public List<String> getSavedShows() {
+    public void createSavedList () {
+        savedShows = new ArrayList<>();
+    }
+
+    public void addToLocalSaved(Show show) {
+        savedShows.add(show);
+        saved = false;
+    }
+
+    public void setSaved() {
+        saved = true;
+    }
+
+    public boolean hasSavedShows() {
+        return saved;
+    }
+
+    public List<Show> getLocalSaved() {
+       return savedShows;
+    }
+
+    // TODO: ensure that these are actual show objects being sent back
+    public List<Show> getSavedShows() {
         return user.getList(KEY_SAVED);
     }
 
-    public void addSavedShows(List<String> saved) {
-        user.addAllUnique(KEY_SAVED, saved);
+    public void addToSavedShows(List<Show> shows) {
+        // batch saving
+        user.addAllUnique(KEY_SAVED, shows);
         user.saveInBackground();
     }
 

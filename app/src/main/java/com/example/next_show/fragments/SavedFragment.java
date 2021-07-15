@@ -50,6 +50,9 @@ public class SavedFragment extends Fragment {
         // Inflate the layout for this fragment
         View currView = inflater.inflate(R.layout.fragment_saved, container, false);
 
+        // TODO: CHECK call User.hasSavedShows() and if false then save in background then call setSaved to mark it saved
+        // NEXT: make sure the above is false, save POINTERs of SHOWs to the user's list of saved shows in Parse
+
         // find Recycler View
         rvSaved = currView.findViewById(R.id.rvSaved);
 
@@ -73,6 +76,13 @@ public class SavedFragment extends Fragment {
 
     // get data from Parse Database
     private void fetchParseShows() {
+        // get current user
+
+        // grab their saved shows
+
+        // get list of Shows from Parse
+
+        // use ParseQuery to get Show pointers
 
     }
 }

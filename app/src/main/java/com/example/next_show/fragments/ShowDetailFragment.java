@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.next_show.R;
 import com.example.next_show.models.Show;
+import com.example.next_show.models.User;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class ShowDetailFragment extends Fragment {
     private Show currShow;
@@ -75,6 +80,38 @@ public class ShowDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // TODO: Save to the SavedFragment
+
+                // set parse fields like title and overview
+                currShow.setParseFields();
+
+                currShow.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e != null){
+                            Log.e(TAG, "Error while saving", e);
+                            Toast.makeText(getActivity(), "Cannot save show!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        // if no error, let log and user know
+                        Log.i(TAG, "Saved post successfully");
+                        Toast.makeText(getActivity(), "Saved show!", Toast.LENGTH_SHORT).show();
+
+                        // grab current User
+                        User currUser = new User(ParseUser.getCurrentUser());
+
+                        // check if user has saved shows
+                        if(currUser.getLocalSaved() == null){
+                            currUser.createSavedList();
+                        }
+
+                        // add to local list of saved shows
+                        currUser.addToLocalSaved(currShow);
+
+                        // ensure it is saved
+                        Log.i(TAG, "User saved list: " + currUser.getLocalSaved().toString());
+                    }
+                });
+
             }
         });
 

@@ -133,4 +133,13 @@ public class Show extends ParseObject implements Parcelable {
     public void setParseYearAired(int year) {
         put(KEY_YEAR_AIRED, year);
     }
+
+    public void setParseFields() {
+        // before saving, save these as parse
+        setParseTitle(title);
+        setParseOverview(overview);
+        setParseTVID(id);
+        setParseNetwork(network);
+        setParseYearAired(year_aired);
+    }
 }
