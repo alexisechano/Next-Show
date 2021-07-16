@@ -27,18 +27,18 @@ A TV show recommender app that uses personal ratings and interests to aggregate 
 
 Outlined by FBU App Expectations and Priority
 * **Your app has multiple views**
-  [x]  User can view their profile, home timeline, and saved shows and ratings in separate views (P0)
-  [x]  User can view TV show details from home timeline (P0)
+  * User can view their profile, home timeline, and saved shows and ratings in separate views (P0)
+  * User can view TV show details from home timeline (P0)
 * **Your app interacts with a database (e.g. Parse)**
-  [x]  User can save rated shows and shows-to-watch (P1)
-  [x]  User can view more than 10+ shows on home timeline through CardView and RecyclerView (P0)
-  [x]  User can view TV show details like synopsis (P0)
-  [x]  User ratings (like or dislike) are also saved within a database (P0)
+  * User can save rated shows and shows-to-watch (P1)
+  * User can view more than 10+ shows on home timeline through CardView and RecyclerView (P0)
+  * User can view TV show details like synopsis (P0)
+  * User ratings (like or dislike) are also saved within a database (P0)
 * **You can log in/log out of your app as a user**
-  [x] User lands on log-in screen and the app has user persistence (P0)
-  [x] User can logout through profile page (P0)
+  * User lands on log-in screen and the app has user persistence (P0)
+  * User can logout through profile page (P0)
 * **You can sign up with a new user profile** 
-  [x] User can register with new account (P0)
+  * User can register with new account (P0)
   * User can set up recommendations by choosing favorite genres and current fave shows (P2)
 * **Your app integrates with at least one SDK (e.g. Google Maps SDK, Facebook SDK) or API (that you didn’t learn about in CodePath)**
   * User receives show recommendations on home timeline using [TasteDive](https://tastedive-api-documentation.readthedocs.io/en/latest/index.html) OR [IMDB](https://developers.themoviedb.org/3/tv/get-similar-tv-shows) OR [Trakt](https://trakt.docs.apiary.io/#reference/shows/recommended). (P1) 
