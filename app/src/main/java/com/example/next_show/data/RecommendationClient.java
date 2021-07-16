@@ -97,12 +97,10 @@ public class RecommendationClient {
         // init return list
         List<Show> genreMatched = new ArrayList<>();
 
-        // TODO: save genres of the shows within database and the Show obj to access here
-
         for(Show s: shows){
             List<String> showGenres = s.getGenres();
 
-            // if any genre(s) match the faves
+            // if any genre(s) match the favorite ones
             if (!Collections.disjoint(showGenres, favoriteGenres)){
                 genreMatched.add(s);
             }

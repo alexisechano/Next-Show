@@ -74,12 +74,12 @@ public class User extends ParseUser {
         return getList(KEY_LIKED_SAVED_SHOWS);
     }
 
-    public void setLikedSavedShows(List<String> shows){
+    public void setLikedShows(List<String> shows){
         addAllUnique(KEY_LIKED_SAVED_SHOWS, shows);
         saveInBackground();
     }
 
-    public void addToLikedSavedShows(String s){
+    public void addToLikedShows(String s){
         add(KEY_LIKED_SAVED_SHOWS, s);
         saveInBackground();
     }

@@ -166,7 +166,7 @@ public class ShowDetailFragment extends Fragment {
                         User currentUser = (User) ParseUser.getCurrentUser();
 
                         if(currShow.getUserLiked().equals("liked")) {
-                            currentUser.addToLikedSavedShows(currShow.getId());
+                            currentUser.addToLikedShows(currShow.getId());
                         }
 
                         // if no error, let log and user know
