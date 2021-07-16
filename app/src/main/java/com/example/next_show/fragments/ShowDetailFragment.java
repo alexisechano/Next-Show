@@ -96,9 +96,6 @@ public class ShowDetailFragment extends Fragment {
         btnLiked = currView.findViewById(R.id.btnLiked);
         btnDisliked = currView.findViewById(R.id.btnDisliked);
 
-        // change color to denote difference
-        btnDisliked.setBackgroundColor(Color.parseColor("#d6d3d2"));
-
         // display show text data
         tvDetailTitle.setText(currShow.getTitle());
         tvDetailOverview.setText(currShow.getOverview());
