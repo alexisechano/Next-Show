@@ -86,12 +86,12 @@ public class SavedFragment extends Fragment {
         // get current user
         User currUser = (User) ParseUser.getCurrentUser();
 
-        // get list of Shows from Parse
+        // get list of Shows from Parse -> I don't really need query if I user User list!
         queryPosts(currUser);
     }
 
     private void queryPosts(User targetUser) {
-        // specify what type of data we want to query - Post.class
+        // specify what type of data we want to query - Show.class
         ParseQuery<Show> query = ParseQuery.getQuery(Show.class);
 
         // include data referred by user key
@@ -106,7 +106,7 @@ public class SavedFragment extends Fragment {
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
 
-        // start an asynchronous call for posts
+        // start an asynchronous call for shows
         query.findInBackground(new FindCallback<Show>() {
             @Override
             public void done(List<Show> shows, ParseException e) {

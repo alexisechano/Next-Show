@@ -21,6 +21,7 @@ public class User extends ParseUser {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_BIO = "bio";
     public static final String KEY_FAVE_GENRES = "faveGenres";
+    public static final String KEY_SAVED_SHOWS = "savedShows";
 
     // empty constructor
     public User() { }
@@ -66,6 +67,20 @@ public class User extends ParseUser {
 
     public void addToFaveGenres(String g){
         add(KEY_FAVE_GENRES, g);
+        saveInBackground();
+    }
+
+    public List<String> getSavedShows() {
+        return getList(KEY_SAVED_SHOWS);
+    }
+
+    public void setSavedShows(List<String> shows){
+        addAllUnique(KEY_SAVED_SHOWS, shows);
+        saveInBackground();
+    }
+
+    public void addToSavedShows(String s){
+        add(KEY_SAVED_SHOWS, s);
         saveInBackground();
     }
 

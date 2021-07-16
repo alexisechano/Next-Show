@@ -162,6 +162,10 @@ public class ShowDetailFragment extends Fragment {
                             Toast.makeText(getActivity(), "Cannot save show!", Toast.LENGTH_SHORT).show();
                         }
 
+                        // add show ID to User list
+                        User currentUser = (User) ParseUser.getCurrentUser();
+                        currentUser.addToSavedShows(currShow.getId());
+
                         // if no error, let log and user know
                         Log.i(TAG, "Saved post successfully");
                         Toast.makeText(getActivity(), "Saved show!", Toast.LENGTH_SHORT).show();
