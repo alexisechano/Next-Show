@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.FeedFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvFeed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:padding="8dp" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/filterMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        app:itemBackground="@color/white"
+        app:itemIconTint="@color/black"
+        app:menu="@menu/filter_menu" />
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFeed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/filterMenu"
+        android:layout_marginTop="0dp"
+        android:padding="8dp" />
+
+</RelativeLayout>

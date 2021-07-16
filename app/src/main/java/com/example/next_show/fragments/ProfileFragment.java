@@ -88,6 +88,10 @@ public class ProfileFragment extends Fragment {
 
         String bio = currUser.getBio();
         tvBio.setText(bio);
+
+        // add temp image
+        Glide.with(getContext()).load(R.drawable.ic_baseline_account_box_24).into(ivProfileImage);
+
     }
 
     private void logout(){

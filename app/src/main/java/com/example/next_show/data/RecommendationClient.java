@@ -2,6 +2,7 @@ package com.example.next_show.data;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.next_show.adapters.ShowAdapter;
 import com.example.next_show.models.Show;
@@ -35,8 +36,10 @@ public class RecommendationClient {
     }
 
     public RecommendationClient(Context context) {
-        this.context = context; }
+        this.context = context;
+    }
 
+    // TODO: will need to use User's liked saved shows for this one unless -> random choice?
     public void fetchRelatedShows(Shows traktShows, Show compShow, ShowAdapter adapter) {
         // use given show ID to generate related, recommended shows
         String searchID = compShow.getId();
@@ -119,12 +122,13 @@ public class RecommendationClient {
                         List<Show> genreMatchedShows = getGenreMatch(updatedShows, user);
 
                         if(genreMatchedShows.isEmpty()){
+                            Toast.makeText(context, "No shows available right now :(", Toast.LENGTH_LONG).show();
                             Log.i(TAG, "No shows match this user's preferences");
                             return;
                         }
 
                         // send to adapter to update
-                        //adapter.addAll(genreMatchedShows);
+                        adapter.addAll(genreMatchedShows);
 
                         // log to see if it works
                         for (Show s : genreMatchedShows){

@@ -3,9 +3,11 @@ package com.example.next_show.fragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,7 @@ import com.example.next_show.data.RecommendationClient;
 import com.example.next_show.data.TraktApplication;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 import com.uwetrottmann.trakt5.entities.TrendingShow;
 import com.uwetrottmann.trakt5.enums.Extended;
@@ -78,17 +81,42 @@ public class FeedFragment extends Fragment {
         // new application for Trakt Call, pass in the Context
         Shows showsObj = new TraktApplication(getContext()).getNewShowsInstance();
 
-        // set up recommendation client to grab more shows
-        RecommendationClient recClient = new RecommendationClient(getContext());
+        // determine whether to show trending or recommended
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
 
-        // get related shows based on saved shows
-        //recClient.fetchRelatedShows(showsObj, new Show(), adapter);
+        // default to trending
+        bottomNavigationView.setSelectedItemId(R.id.action_trending);
 
-        // get recommended shows
-        // recClient.fetchRecommendedShows(showsObj, adapter, User.getCurrentUser());
-
-        // method to ASYNC call to API and grab TRENDING shows
+        // get trending shows
         fetchTraktData(showsObj);
+
+        // set selector
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_trending:
+                        // get trending shows
+                        fetchTraktData(showsObj);
+                        break;
+                    case R.id.action_recommend:
+                        // clear adapter to be able to make room for new recommendations
+                        adapter.clear();
+
+                        // set up recommendation client to grab more shows
+                        RecommendationClient recClient = new RecommendationClient(getContext());
+
+                        // get related shows based on saved LIKED shows
+                        //recClient.fetchRelatedShows(showsObj, new Show(), adapter);
+
+                        // get recommended shows based on User preferences
+                        recClient.fetchRecommendedShows(showsObj, adapter, (User) ParseUser.getCurrentUser());
+
+                        break;
+                }
+                return true;
+            }
+        });
 
         return currView;
     }
