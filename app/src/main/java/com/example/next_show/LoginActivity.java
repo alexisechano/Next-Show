@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if(e != null){
                     Log.e(TAG, "Unable to login with Parse", e);
-                    Toast.makeText(LoginActivity.this, "Error with username/password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Invalid username/password", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // navigate to main activity if success

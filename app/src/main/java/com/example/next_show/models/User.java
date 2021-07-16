@@ -78,6 +78,11 @@ public class User {
         return user.getList(KEY_FAVE_GENRES);
     }
 
+    public void setFaveGenres(List<String> genres){
+        user.addAllUnique(KEY_FAVE_GENRES, genres);
+        user.saveInBackground();
+    }
+
     public void addToFaveGenres(String g){
         user.add(KEY_FAVE_GENRES, g);
         user.saveInBackground();

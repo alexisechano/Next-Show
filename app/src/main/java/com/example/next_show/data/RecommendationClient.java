@@ -118,6 +118,11 @@ public class RecommendationClient {
                         // do logic to get only fave genre ones
                         List<Show> genreMatchedShows = getGenreMatch(updatedShows, user);
 
+                        if(genreMatchedShows.isEmpty()){
+                            Log.i(TAG, "No shows match this user's preferences");
+                            return;
+                        }
+
                         // send to adapter to update
                         //adapter.addAll(genreMatchedShows);
 

@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     tools:context=".SignupActivity"
-    android:orientation="vertical"
-    android:layout_gravity="center_vertical">
+    android:orientation="vertical">
 
     <EditText
         android:layout_weight="1"
@@ -54,6 +53,14 @@
         android:ems="10"
         android:hint="bio about you"
         android:id="@+id/etBio"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <EditText
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="favorite genres (separated by commas)"
+        android:id="@+id/etGenres"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

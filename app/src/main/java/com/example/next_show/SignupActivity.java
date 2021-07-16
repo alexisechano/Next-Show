@@ -17,6 +17,10 @@ import com.parse.SignUpCallback;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class SignupActivity extends AppCompatActivity {
     // view elements
     private EditText etUsername;
@@ -25,6 +29,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText etFirstName;
     private EditText etLastName;
     private EditText etBio;
+    private EditText etGenres;
     private Button btnSignup;
 
     // constants
@@ -54,6 +59,7 @@ public class SignupActivity extends AppCompatActivity {
         etFirstName = findViewById(R.id.etFirstName);
         etLastName = findViewById(R.id.etLastName);
         etBio = findViewById(R.id.etBio);
+        etGenres = findViewById(R.id.etGenres);
         btnSignup = findViewById(R.id.btnSignup);
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +75,11 @@ public class SignupActivity extends AppCompatActivity {
                 String email = etEmail.getText().toString();
                 String bio = etBio.getText().toString();
 
+                // process the genre inputs
+                String preGenres = etGenres.getText().toString().replaceAll("\\s+","");
+                String[] arrayGenres = preGenres.split(",");
+                List<String> genreList = Arrays.asList(arrayGenres);
+
                 // Create the new User
                 User user = new User(new ParseUser());
 
@@ -78,6 +89,9 @@ public class SignupActivity extends AppCompatActivity {
                 user.setEmail(email);
                 user.setName(firstName, lastName);
                 user.setBio(bio);
+
+                // add all of the genres to list
+                user.setFaveGenres(genreList);
 
                 // Invoke signUpInBackground
                 user.useParseUser().signUpInBackground(new SignUpCallback() {
