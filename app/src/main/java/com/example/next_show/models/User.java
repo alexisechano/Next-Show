@@ -21,6 +21,7 @@ public class User {
     public static final String KEY_LASTNAME = "lastName";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_BIO = "bio";
+    public static final String KEY_FAVE_GENRES = "faveGenres";
 
     // empty constructor
     public User() { }
@@ -71,6 +72,15 @@ public class User {
 
     public void setBio(String bio) {
         user.put(KEY_BIO, bio);
+    }
+
+    public List<String> getFaveGenres() {
+        return user.getList(KEY_FAVE_GENRES);
+    }
+
+    public void addToFaveGenres(String g){
+        user.add(KEY_FAVE_GENRES, g);
+        user.saveInBackground();
     }
 
     public ParseUser useParseUser(){

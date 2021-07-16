@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.Headers;
@@ -34,6 +35,7 @@ public class Show extends ParseObject implements Parcelable {
     private String network;
     private String liked;
     private int year_aired;
+    private List<String> genres;
 
     // constants to match keys in Parse Database -> Public because used in other classes
     public static final String KEY_TITLE = "title";
@@ -43,17 +45,19 @@ public class Show extends ParseObject implements Parcelable {
     public static final String KEY_YEAR_AIRED = "yearAired";
     public static final String KEY_USER = "user";
     public static final String KEY_RATING = "userRating";
+    public static final String KEY_GENRES = "genres"; // list
     public static final String KEY_IMAGE = "image"; // TODO: not used yet until API call is fixed
 
     // empty constructor
     public Show() { }
 
-    public Show(String title, String overview, String id, String network, int year_aired) {
+    public Show(String title, String overview, String id, String network, int year_aired, List<String> genres) {
         this.title = title;
         this.overview = overview;
         this.id = id;
         this.network = network;
         this.year_aired = year_aired;
+        this.genres = genres;
     }
 
     // from Trending Show objects to NextShow Show objects
@@ -61,7 +65,7 @@ public class Show extends ParseObject implements Parcelable {
         List<Show> updated = new ArrayList<>();
         for (TrendingShow trending : repsonseShows) {
             Show currentShow = new Show(trending.show.title, trending.show.overview,
-                    "" + trending.show.ids.tmdb, trending.show.network, trending.show.first_aired.getYear());
+                    "" + trending.show.ids.tmdb, trending.show.network, trending.show.first_aired.getYear(), trending.show.genres);
 
             updated.add(currentShow);
         }
@@ -73,7 +77,7 @@ public class Show extends ParseObject implements Parcelable {
         List<Show> updated = new ArrayList<>();
         for (com.uwetrottmann.trakt5.entities.Show rShow : repsonseShows) {
             Show currentShow = new Show(rShow.title, rShow.overview,
-                    "" + rShow.ids.tmdb, rShow.network, rShow.first_aired.getYear());
+                    "" + rShow.ids.tmdb, rShow.network, rShow.first_aired.getYear(), rShow.genres);
 
             updated.add(currentShow);
         }
@@ -87,7 +91,7 @@ public class Show extends ParseObject implements Parcelable {
         // turn them into my own Show objects for use later on
         for(Show pre: parseShows){
             Show currentShow = new Show(pre.getParseTitle(), pre.getParseOverview(), pre.getParseTVID(),
-                    pre.getParseNetwork(), pre.getParseYearAired());
+                    pre.getParseNetwork(), pre.getParseYearAired(), pre.getParseGenres());
 
             currentShow.setUserLiked(pre.getParseUserLiked());
             updated.add(currentShow);
@@ -117,6 +121,10 @@ public class Show extends ParseObject implements Parcelable {
     public String getUserLiked() { return liked; }
 
     public void setUserLiked(String liked) { this.liked = liked; }
+
+    public List<String> getGenres() {
+        return genres;
+    }
 
 
     // **** for Parse instance of Show -> grab saved shows data only ****
@@ -168,6 +176,15 @@ public class Show extends ParseObject implements Parcelable {
         put(KEY_RATING, liked);
     }
 
+    public List<String> getParseGenres() {
+        return getList(KEY_GENRES);
+    }
+
+    public void setParseGenres(List<String> genres) {
+        addAllUnique(KEY_GENRES, genres);
+        saveInBackground();
+    }
+
     public ParseUser getParseUser() {
         return getParseUser(KEY_USER);
     }
@@ -185,6 +202,7 @@ public class Show extends ParseObject implements Parcelable {
         setParseYearAired(year_aired);
         setParseUser(currUser);
         setParseUserLiked(liked);
+        setParseGenres(genres);
     }
 
     // TODO: Add image file for Parse

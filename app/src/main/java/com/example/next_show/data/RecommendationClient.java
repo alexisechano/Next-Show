@@ -82,13 +82,13 @@ public class RecommendationClient {
 
     public List<Show> getGenreMatch(List<Show> shows, User user){
         // get proper user
-        List<String> favoriteGenres = user.useParseUser().getList("faveGenres");
+        List<String> favoriteGenres = user.getFaveGenres();
 
         // init return list
         List<Show> genreMatched = new ArrayList<>();
 
         // TODO: save genres of the shows within database and the Show obj to access here
-        /*
+
         for(Show s: shows){
             List<String> showGenres = s.getGenres();
 
@@ -97,7 +97,6 @@ public class RecommendationClient {
                 genreMatched.add(s);
             }
         }
-        */
 
         return genreMatched;
     }
@@ -120,7 +119,12 @@ public class RecommendationClient {
                         List<Show> genreMatchedShows = getGenreMatch(updatedShows, user);
 
                         // send to adapter to update
-                        adapter.addAll(genreMatchedShows);
+                        //adapter.addAll(genreMatchedShows);
+
+                        // log to see if it works
+                        for (Show s : genreMatchedShows){
+                            Log.i(TAG, "REC SHOW: " + s.getTitle());
+                        }
 
                     } else {
                         if (response.code() == UNAUTHORIZED_REQUEST) {
