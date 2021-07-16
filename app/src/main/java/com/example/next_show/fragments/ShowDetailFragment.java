@@ -108,7 +108,7 @@ public class ShowDetailFragment extends Fragment {
             btnSaveShow.setVisibility(View.GONE);
 
             // check if user already rated it, show if user liked it or not
-            if (currShow.getUserLiked() != null) {
+            if (currShow.getUserLiked().equals("liked") || currShow.getUserLiked().equals("disliked")) {
                 String status = (currShow.getUserLiked().equals("liked")) ? "liked" : "disliked";
                 tvAlreadyRated = currView.findViewById(R.id.tvAlreadyRated);
 
@@ -128,24 +128,27 @@ public class ShowDetailFragment extends Fragment {
                 currShow.setUserLiked("liked");
                 Toast.makeText(getActivity(), "You liked this show!", Toast.LENGTH_SHORT).show();
                 if(alreadySaved){
-                    // TODO: update Parse data with new rating
-                    Toast.makeText(getActivity(), "Sorry, you can't update the show rating right now!", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
 
         // mark NEGATIVE rating
+
         btnDisliked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 currShow.setUserLiked("disliked");
                 Toast.makeText(getActivity(), "You disliked this show!", Toast.LENGTH_SHORT).show();
                 if(alreadySaved){
-                    // TODO: update Parse data with new rating
-                    Toast.makeText(getActivity(), "Sorry, you can't update the show rating right now!", Toast.LENGTH_SHORT).show();
+
+
                 }
             }
         });
+
+
+
 
         // save the show on button click
         btnSaveShow.setOnClickListener(new View.OnClickListener() {

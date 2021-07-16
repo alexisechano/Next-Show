@@ -66,6 +66,7 @@ public class RecommendationClient {
                         // set the adapter to update
                         adapter.addAll(updatedShows);
                     } else {
+                        Toast.makeText(context, "No shows available right now :(", Toast.LENGTH_LONG).show();
                         if (response.code() == UNAUTHORIZED_REQUEST) {
                             // authorization required, supply a valid OAuth access token
                             Log.e(TAG, "Access token required");
@@ -141,6 +142,7 @@ public class RecommendationClient {
                         }
 
                     } else {
+                        Toast.makeText(context, "No shows available right now :(", Toast.LENGTH_LONG).show();
                         if (response.code() == UNAUTHORIZED_REQUEST) {
                             // authorization required, supply a valid OAuth access token
                             Log.e(TAG, "Access token required");

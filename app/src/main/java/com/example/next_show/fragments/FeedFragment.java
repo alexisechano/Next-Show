@@ -84,9 +84,6 @@ public class FeedFragment extends Fragment {
         // determine whether to show trending or recommended
         BottomNavigationView bottomNavigationView = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
 
-        // default to trending
-        bottomNavigationView.setSelectedItemId(R.id.action_trending);
-
         // get trending shows
         fetchTraktData(showsObj);
 
