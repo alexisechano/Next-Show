@@ -21,7 +21,7 @@ public class User extends ParseUser {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_BIO = "bio";
     public static final String KEY_FAVE_GENRES = "faveGenres";
-    public static final String KEY_SAVED_SHOWS = "savedShows";
+    public static final String KEY_LIKED_SAVED_SHOWS = "savedShows"; // holds TMDB IDs for LIKED savedShows
 
     // empty constructor
     public User() { }
@@ -70,17 +70,17 @@ public class User extends ParseUser {
         saveInBackground();
     }
 
-    public List<String> getSavedShows() {
-        return getList(KEY_SAVED_SHOWS);
+    public List<String> getLikedSavedShows() {
+        return getList(KEY_LIKED_SAVED_SHOWS);
     }
 
-    public void setSavedShows(List<String> shows){
-        addAllUnique(KEY_SAVED_SHOWS, shows);
+    public void setLikedSavedShows(List<String> shows){
+        addAllUnique(KEY_LIKED_SAVED_SHOWS, shows);
         saveInBackground();
     }
 
-    public void addToSavedShows(String s){
-        add(KEY_SAVED_SHOWS, s);
+    public void addToLikedSavedShows(String s){
+        add(KEY_LIKED_SAVED_SHOWS, s);
         saveInBackground();
     }
 

@@ -104,13 +104,13 @@ public class FeedFragment extends Fragment {
                         adapter.clear();
 
                         // set up recommendation client to grab more shows
-                        RecommendationClient recClient = new RecommendationClient(getContext());
+                        RecommendationClient recClient = new RecommendationClient(getContext(), (User) ParseUser.getCurrentUser());
 
                         // get related shows based on saved LIKED shows
-                        //recClient.fetchRelatedShows(showsObj, new Show(), adapter);
+                        recClient.fetchRelatedShows(showsObj, adapter);
 
                         // get recommended shows based on User preferences
-                        recClient.fetchRecommendedShows(showsObj, adapter, (User) ParseUser.getCurrentUser());
+                        // recClient.fetchRecommendedShows(showsObj, adapter);
 
                         break;
                 }

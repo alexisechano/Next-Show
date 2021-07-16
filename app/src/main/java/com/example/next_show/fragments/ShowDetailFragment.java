@@ -164,7 +164,10 @@ public class ShowDetailFragment extends Fragment {
 
                         // add show ID to User list
                         User currentUser = (User) ParseUser.getCurrentUser();
-                        currentUser.addToSavedShows(currShow.getId());
+
+                        if(currShow.getUserLiked().equals("liked")) {
+                            currentUser.addToLikedSavedShows(currShow.getId());
+                        }
 
                         // if no error, let log and user know
                         Log.i(TAG, "Saved post successfully");
