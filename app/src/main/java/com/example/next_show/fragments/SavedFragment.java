@@ -16,6 +16,7 @@ import com.example.next_show.R;
 import com.example.next_show.adapters.SavedAdapter;
 import com.example.next_show.adapters.ShowAdapter;
 import com.example.next_show.models.Show;
+import com.example.next_show.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -83,13 +84,13 @@ public class SavedFragment extends Fragment {
     // get data from Parse Database
     private void fetchParseShows() {
         // get current user
-        ParseUser currUser = ParseUser.getCurrentUser();
+        User currUser = (User) ParseUser.getCurrentUser();
 
         // get list of Shows from Parse
         queryPosts(currUser);
     }
 
-    private void queryPosts(ParseUser targetUser) {
+    private void queryPosts(User targetUser) {
         // specify what type of data we want to query - Post.class
         ParseQuery<Show> query = ParseQuery.getQuery(Show.class);
 

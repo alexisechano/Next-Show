@@ -19,6 +19,9 @@ public class ParseApplication extends Application {
         // register Show class
         ParseObject.registerSubclass(Show.class);
 
+        // register User subclass
+        ParseObject.registerSubclass(User.class);
+
         // use keys in strings.xml to initialize Parse here
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.back4app_app_id))

@@ -12,9 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class User {
-    // ParseUser object
-    private ParseUser user;
+@ParseClassName("_User")
+public class User extends ParseUser {
 
     // constants to match keys in Parse Database -> Public because used in Main
     public static final String KEY_FIRSTNAME = "firstName";
@@ -26,69 +25,48 @@ public class User {
     // empty constructor
     public User() { }
 
-    // to correctly refer to User as a ParseUser
-    public User(ParseUser parseUser) {
-        user = parseUser;
-    }
-
     // Parse User items
-    public void setUsername(String username) {
-        user.setUsername(username);
-    }
-
-    public String getUsername() {
-        return user.getUsername();
-    }
-
-    public void setPassword(String pw) {
-        // no getter method for security reasons
-        user.setPassword(pw);
-    }
-
     public String getFirstName() {
-        return user.getString(KEY_FIRSTNAME);
+        return getString(KEY_FIRSTNAME);
     }
 
     public String getLastName() {
-        return user.getString(KEY_LASTNAME);
+        return getString(KEY_LASTNAME);
     }
 
     public void setName(String fn, String ln) {
-        user.put(KEY_FIRSTNAME, fn);
-        user.put(KEY_LASTNAME, ln);
+        put(KEY_FIRSTNAME, fn);
+        put(KEY_LASTNAME, ln);
     }
 
     public String getEmail() {
-        return user.getString(KEY_EMAIL);
+        return getString(KEY_EMAIL);
     }
 
     public void setEmail(String email) {
-        user.put(KEY_EMAIL, email);
+        put(KEY_EMAIL, email);
     }
 
     public String getBio() {
-        return user.getString(KEY_BIO);
+        return getString(KEY_BIO);
     }
 
     public void setBio(String bio) {
-        user.put(KEY_BIO, bio);
+        put(KEY_BIO, bio);
     }
 
     public List<String> getFaveGenres() {
-        return user.getList(KEY_FAVE_GENRES);
+        return getList(KEY_FAVE_GENRES);
     }
 
     public void setFaveGenres(List<String> genres){
-        user.addAllUnique(KEY_FAVE_GENRES, genres);
-        user.saveInBackground();
+        addAllUnique(KEY_FAVE_GENRES, genres);
+        saveInBackground();
     }
 
     public void addToFaveGenres(String g){
-        user.add(KEY_FAVE_GENRES, g);
-        user.saveInBackground();
+        add(KEY_FAVE_GENRES, g);
+        saveInBackground();
     }
 
-    public ParseUser useParseUser(){
-        return user;
-    }
 }

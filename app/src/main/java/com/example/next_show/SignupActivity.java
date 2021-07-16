@@ -81,7 +81,7 @@ public class SignupActivity extends AppCompatActivity {
                 List<String> genreList = Arrays.asList(arrayGenres);
 
                 // Create the new User
-                User user = new User(new ParseUser());
+                User user = new User();
 
                 // set core properties
                 user.setUsername(username);
@@ -94,7 +94,7 @@ public class SignupActivity extends AppCompatActivity {
                 user.setFaveGenres(genreList);
 
                 // Invoke signUpInBackground
-                user.useParseUser().signUpInBackground(new SignUpCallback() {
+                user.signUpInBackground(new SignUpCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
                             openMainActivity();

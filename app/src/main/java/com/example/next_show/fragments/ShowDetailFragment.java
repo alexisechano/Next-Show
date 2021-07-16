@@ -87,7 +87,7 @@ public class ShowDetailFragment extends Fragment {
 
     private void setUpView(View currView) {
         // grab current User
-        ParseUser parseUser = ParseUser.getCurrentUser();
+        User parseUser = (User) ParseUser.getCurrentUser();
 
         tvDetailTitle = currView.findViewById(R.id.tvDetailTitle);
         tvDetailOverview = currView.findViewById(R.id.tvDetailOverview);

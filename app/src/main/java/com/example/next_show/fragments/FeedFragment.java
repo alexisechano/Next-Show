@@ -85,7 +85,7 @@ public class FeedFragment extends Fragment {
         //recClient.fetchRelatedShows(showsObj, new Show(), adapter);
 
         // get recommended shows
-        // recClient.fetchRecommendedShows(showsObj, adapter, new User(ParseUser.getCurrentUser()));
+        // recClient.fetchRecommendedShows(showsObj, adapter, User.getCurrentUser());
 
         // method to ASYNC call to API and grab TRENDING shows
         fetchTraktData(showsObj);

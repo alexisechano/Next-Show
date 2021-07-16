@@ -77,7 +77,7 @@ public class ProfileFragment extends Fragment {
         });
 
         // load the Parse data for User
-        User currUser = new User(ParseUser.getCurrentUser());
+        User currUser = (User) ParseUser.getCurrentUser();
 
         // bind to the Profile views
         String fullName = currUser.getFirstName() + " " + currUser.getLastName();

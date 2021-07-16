@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // go to main activity if already signed in
-        if(ParseUser.getCurrentUser() != null){
+        if(User.getCurrentUser() != null){
             openMainActivity();
         }
 
