@@ -14,6 +14,7 @@ import com.uwetrottmann.trakt5.services.Shows;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,20 +30,26 @@ public class RecommendationClient {
 
     // instance vars
     private Context context;
+    private User currentUser;
 
     // empty constructor
     public RecommendationClient() {
 
     }
 
-    public RecommendationClient(Context context) {
+    public RecommendationClient(Context context, User currentUser) {
         this.context = context;
+        this.currentUser = currentUser;
     }
 
     // TODO: will need to use User's liked saved shows for this one unless -> random choice?
-    public void fetchRelatedShows(Shows traktShows, Show compShow, ShowAdapter adapter) {
-        // use given show ID to generate related, recommended shows
-        String searchID = compShow.getId();
+    public void fetchRelatedShows(Shows traktShows, ShowAdapter adapter) {
+        // log statement
+        Log.i(TAG, "Fetching related shows from Trakt!");
+
+        // use given show ID to generate related, recommended shows -> randomize it!
+        List<String> savedShows = currentUser.getLikedSavedShows();
+        String searchID = savedShows.get(new Random().nextInt(savedShows.size()));;
 
         // from trakt wrapper -> call to get related shows and send to adapter
         try {
@@ -59,6 +66,7 @@ public class RecommendationClient {
                         // set the adapter to update
                         adapter.addAll(updatedShows);
                     } else {
+                        Toast.makeText(context, "No shows available right now :(", Toast.LENGTH_LONG).show();
                         if (response.code() == UNAUTHORIZED_REQUEST) {
                             // authorization required, supply a valid OAuth access token
                             Log.e(TAG, "Access token required");
@@ -90,12 +98,10 @@ public class RecommendationClient {
         // init return list
         List<Show> genreMatched = new ArrayList<>();
 
-        // TODO: save genres of the shows within database and the Show obj to access here
-
         for(Show s: shows){
             List<String> showGenres = s.getGenres();
 
-            // if any genre(s) match the faves
+            // if any genre(s) match the favorite ones
             if (!Collections.disjoint(showGenres, favoriteGenres)){
                 genreMatched.add(s);
             }
@@ -105,7 +111,7 @@ public class RecommendationClient {
     }
 
     // get it by genre from recommended shows call
-    public void fetchRecommendedShows(Shows traktShows, ShowAdapter adapter, User user) {
+    public void fetchRecommendedShows(Shows traktShows, ShowAdapter adapter) {
         // from trakt wrapper -> call to get related shows and send to adapter
         try {
             // enqueue to do asynchronous call and execute to do it synchronously
@@ -119,7 +125,7 @@ public class RecommendationClient {
                         List<Show> updatedShows = Show.fromRecShows(repsonseShows);
 
                         // do logic to get only fave genre ones
-                        List<Show> genreMatchedShows = getGenreMatch(updatedShows, user);
+                        List<Show> genreMatchedShows = getGenreMatch(updatedShows, currentUser);
 
                         if(genreMatchedShows.isEmpty()){
                             Toast.makeText(context, "No shows available right now :(", Toast.LENGTH_LONG).show();
@@ -136,6 +142,7 @@ public class RecommendationClient {
                         }
 
                     } else {
+                        Toast.makeText(context, "No shows available right now :(", Toast.LENGTH_LONG).show();
                         if (response.code() == UNAUTHORIZED_REQUEST) {
                             // authorization required, supply a valid OAuth access token
                             Log.e(TAG, "Access token required");

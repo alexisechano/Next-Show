@@ -84,9 +84,6 @@ public class FeedFragment extends Fragment {
         // determine whether to show trending or recommended
         BottomNavigationView bottomNavigationView = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
 
-        // default to trending
-        bottomNavigationView.setSelectedItemId(R.id.action_trending);
-
         // get trending shows
         fetchTraktData(showsObj);
 
@@ -104,13 +101,13 @@ public class FeedFragment extends Fragment {
                         adapter.clear();
 
                         // set up recommendation client to grab more shows
-                        RecommendationClient recClient = new RecommendationClient(getContext());
+                        RecommendationClient recClient = new RecommendationClient(getContext(), (User) ParseUser.getCurrentUser());
 
                         // get related shows based on saved LIKED shows
-                        //recClient.fetchRelatedShows(showsObj, new Show(), adapter);
+                        recClient.fetchRelatedShows(showsObj, adapter);
 
                         // get recommended shows based on User preferences
-                        recClient.fetchRecommendedShows(showsObj, adapter, (User) ParseUser.getCurrentUser());
+                        // recClient.fetchRecommendedShows(showsObj, adapter);
 
                         break;
                 }

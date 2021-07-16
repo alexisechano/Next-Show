@@ -201,6 +201,12 @@ public class Show extends ParseObject implements Parcelable {
         setParseNetwork(network);
         setParseYearAired(year_aired);
         setParseUser(currUser);
+
+        // null check before adding to Parse
+        if(liked == null){
+            Log.i("Show Object", "No rating!");
+            liked = "";
+        }
         setParseUserLiked(liked);
         setParseGenres(genres);
     }
