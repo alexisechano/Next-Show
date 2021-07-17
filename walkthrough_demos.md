@@ -15,3 +15,11 @@ Home Feed and Saved Shows page with basic ratings
 <img src="wt2.gif" width=300>
 
 ---
+
+**7/16 - Week 1**
+
+Recommendations on feed
+
+<img src="wt3.gif" width=300>
+
+---
