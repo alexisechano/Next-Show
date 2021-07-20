@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -35,8 +36,6 @@ public class FeedFragment extends Fragment {
     // constants
     private static final String TAG = "FeedFragment";
     public static final int PAGES_REQUESTED = 1;
-    public static final int UNAUTHORIZED_REQUEST = 401;
-    public static final int FORBIDDEN_REQUEST = 403;
     public static final int LIMIT = 5;
 
     // view element variables
@@ -133,16 +132,8 @@ public class FeedFragment extends Fragment {
                         // set the adapter to update
                         adapter.addAll(updatedShows);
                     } else {
-                        if (response.code() == UNAUTHORIZED_REQUEST) {
-                            // authorization required, supply a valid OAuth access token
-                            Log.e(TAG, "Access token required");
-                        } else if(response.code() == FORBIDDEN_REQUEST) {
-                            // invalid API key
-                            Log.e(TAG, "Invalid API key or unapproved app supplied");
-                        } else{
-                            // the request failed for some other reason
-                            Log.e(TAG, "Response code: " + response.code());
-                        }
+                        Toast.makeText(getContext(), "No shows available right now :(", Toast.LENGTH_LONG).show();
+                        RecommendationClient.determineError(response.code());
                     }
                 }
 

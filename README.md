@@ -112,8 +112,6 @@ Outlined by FBU App Expectations and Priority
 ### [BONUS] Digital Wireframes & Mockups
 <img src="DigitalSketch-1.png" width=600>
 
-### [BONUS] Interactive Prototype
-
 ## Schema 
 
 ### Models
@@ -132,15 +130,6 @@ Outlined by FBU App Expectations and Priority
 | image   | File | Poster image |
 | synopsis   | String | Show summary and tagline |
 
-**Model: Rating** User can only rate if they finished the show or stopped the show
-| Property    | Type.       | Description |
-| ----------- | ----------- | ----------- |
-| objectId    | String      | unique id for the user post (default field)       |
-| rating    | Number      |  Number to track rating (can be 0 or 1 for now)    |
-| author   | User Pointer        | User who made this rating       |
-| comment   | String        | Optional comment User can add to rating |
-| show   | Show Pointers     | Match show to rating |
-
 **Model: User**
 | Property    | Type.       | Description |
 | ----------- | ----------- | ----------- |
@@ -149,10 +138,7 @@ Outlined by FBU App Expectations and Priority
 | firstName  | String | String for first name |
 | lastName  | String | String for last name |
 | bio  | String | String for bio blurb |
-| ratingsList  | Array of Rating Pointers       | List of this User's ratings |
-| alreadyWatched   | Array of Show Pointers         | Shows that are already watched and rated   |
-| currWatching   | Array of Show Pointers        | Shows not rated and are being watched right now  |
-| ratingsList  | Array of Rating Pointers       | List of this User's ratings |
+| savedShows   | Array of Show Pointers         | Shows that are already watched and rated   |
 | faveGenres  | Array of Strings      | List of this User's favorite TV genres |
 | displayShow  | Show | Currently watching or Fave Show broadcasted on profile |
 
@@ -173,7 +159,5 @@ Ratings/Saved Shows
 * (Read/GET) Query show details
 * (Create/POST) Create a new rating and comment
 * (Delete) Delete rating or show
-
-[Create basic snippets for each Parse network request]
 
 [**External API: Trakt**](https://trakt.docs.apiary.io/#reference/shows)

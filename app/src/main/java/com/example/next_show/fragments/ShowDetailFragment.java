@@ -104,7 +104,7 @@ public class ShowDetailFragment extends Fragment {
         tvYearAndNetwork.setText(yearAndNetwork);
 
         // check if previous fragment was the SavedFragment -> disable save feature
-        if(alreadySaved){
+        if (alreadySaved){
             btnSaveShow.setVisibility(View.GONE);
 
             // check if user already rated it, show if user liked it or not
@@ -127,8 +127,8 @@ public class ShowDetailFragment extends Fragment {
             public void onClick(View v) {
                 currShow.setUserLiked("liked");
                 Toast.makeText(getActivity(), "You liked this show!", Toast.LENGTH_SHORT).show();
-                if(alreadySaved){
-
+                if (alreadySaved){
+                    // TODO: grab rating data and save it async to Parse with matching show ID
                 }
             }
         });
@@ -140,15 +140,11 @@ public class ShowDetailFragment extends Fragment {
             public void onClick(View v) {
                 currShow.setUserLiked("disliked");
                 Toast.makeText(getActivity(), "You disliked this show!", Toast.LENGTH_SHORT).show();
-                if(alreadySaved){
-
-
+                if (alreadySaved){
+                    // TODO: grab rating data and save it async to Parse with matching show ID
                 }
             }
         });
-
-
-
 
         // save the show on button click
         btnSaveShow.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +156,7 @@ public class ShowDetailFragment extends Fragment {
                 currShow.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        if(e != null){
+                        if (e != null){
                             Log.e(TAG, "Error while saving", e);
                             Toast.makeText(getActivity(), "Cannot save show!", Toast.LENGTH_SHORT).show();
                         }
@@ -168,7 +164,7 @@ public class ShowDetailFragment extends Fragment {
                         // add show ID to User list
                         User currentUser = (User) ParseUser.getCurrentUser();
 
-                        if(currShow.getUserLiked().equals("liked")) {
+                        if (currShow.getUserLiked().equals("liked")) {
                             currentUser.addToLikedShows(currShow.getId());
                         }
 
