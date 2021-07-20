@@ -47,7 +47,7 @@ public class ShowDetailFragment extends Fragment {
     public static final String TAG = "ShowDetailFragment";
 
     // empty constructor
-    public ShowDetailFragment(){ }
+    public ShowDetailFragment() { }
 
     public static ShowDetailFragment newInstance(Show show, boolean alreadySaved) {
         ShowDetailFragment fragment = new ShowDetailFragment();
@@ -103,7 +103,7 @@ public class ShowDetailFragment extends Fragment {
         tvYearAndNetwork.setText(yearAndNetwork);
 
         // check if previous fragment was the SavedFragment -> disable save feature
-        if (alreadySaved){
+        if (alreadySaved) {
             btnSaveShow.setVisibility(View.GONE);
 
             // check if user already rated it, show if user liked it or not
@@ -126,7 +126,7 @@ public class ShowDetailFragment extends Fragment {
             public void onClick(View v) {
                 currShow.setUserLiked("liked");
                 Toast.makeText(getActivity(), "You liked this show!", Toast.LENGTH_SHORT).show();
-                if (alreadySaved){
+                if (alreadySaved) {
                     // if in Saved Shows, just update the rating in Parse here
                     User currentUser = (User) ParseUser.getCurrentUser();
                     updateRating("liked", currentUser);
@@ -140,7 +140,7 @@ public class ShowDetailFragment extends Fragment {
             public void onClick(View v) {
                 currShow.setUserLiked("disliked");
                 Toast.makeText(getActivity(), "You disliked this show!", Toast.LENGTH_SHORT).show();
-                if (alreadySaved){
+                if (alreadySaved) {
                     // if in Saved Shows, just update the rating in Parse here
                     User currentUser = (User) ParseUser.getCurrentUser();
                     updateRating("disliked", currentUser);
@@ -158,7 +158,7 @@ public class ShowDetailFragment extends Fragment {
                 currShow.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        if (e != null){
+                        if (e != null) {
                             Log.e(TAG, "Error while saving", e);
                             Toast.makeText(getActivity(), "Cannot save show!", Toast.LENGTH_SHORT).show();
                         }

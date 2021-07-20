@@ -96,7 +96,7 @@ public class RecommendationClient {
                         List<Show> genreMatchedShows = getGenreMatch(updatedShows, currentUser);
 
                         // no matches, let user know and don't add to adapter
-                        if(genreMatchedShows.isEmpty()){
+                        if (genreMatchedShows.isEmpty()) {
                             Toast.makeText(context, "No shows available right now :(", Toast.LENGTH_LONG).show();
                             return;
                         }
@@ -128,11 +128,11 @@ public class RecommendationClient {
         // init return list
         List<Show> genreMatched = new ArrayList<>();
 
-        for(Show s: shows){
+        for (Show s: shows) {
             List<String> showGenres = s.getGenres();
 
             // if any genre(s) match the favorite ones
-            if (!Collections.disjoint(showGenres, favoriteGenres)){
+            if (!Collections.disjoint(showGenres, favoriteGenres)) {
                 genreMatched.add(s);
             }
         }
