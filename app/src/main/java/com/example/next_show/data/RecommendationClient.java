@@ -7,7 +7,6 @@ import android.widget.Toast;
 import com.example.next_show.adapters.ShowAdapter;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
-import com.uwetrottmann.trakt5.entities.TrendingShow;
 import com.uwetrottmann.trakt5.enums.Extended;
 import com.uwetrottmann.trakt5.services.Shows;
 
@@ -43,11 +42,11 @@ public class RecommendationClient {
     }
 
     public void fetchRelatedShows(Shows traktShows, ShowAdapter adapter) {
-        // use given show ID to generate related, recommended shows -> randomize it!
+        // use randomly picked show ID to generate related, recommended shows
         List<String> savedShows = currentUser.getLikedSavedShows();
-        String searchID = savedShows.get(new Random().nextInt(savedShows.size()));;
+        final int randomShowIndex = new Random().nextInt(savedShows.size());
+        String searchID = savedShows.get(randomShowIndex);
 
-        // from trakt wrapper -> call to get related shows and send to adapter
         try {
             // enqueue to do asynchronous call and execute to do it synchronously
             traktShows.related(searchID, PAGES_REQUESTED, LIMIT, Extended.FULL).enqueue(new Callback<List<com.uwetrottmann.trakt5.entities.Show>>() {
@@ -97,7 +96,7 @@ public class RecommendationClient {
                         List<Show> genreMatchedShows = getGenreMatch(updatedShows, currentUser);
 
                         // no matches, let user know and don't add to adapter
-                        if(genreMatchedShows.isEmpty()){
+                        if (genreMatchedShows.isEmpty()) {
                             Toast.makeText(context, "No shows available right now :(", Toast.LENGTH_LONG).show();
                             return;
                         }
@@ -123,17 +122,17 @@ public class RecommendationClient {
     }
 
     private List<Show> getGenreMatch(List<Show> shows, User user){
-        // get proper user
+        // get proper user genres
         List<String> favoriteGenres = user.getFaveGenres();
 
         // init return list
         List<Show> genreMatched = new ArrayList<>();
 
-        for(Show s: shows){
+        for (Show s: shows) {
             List<String> showGenres = s.getGenres();
 
             // if any genre(s) match the favorite ones
-            if (!Collections.disjoint(showGenres, favoriteGenres)){
+            if (!Collections.disjoint(showGenres, favoriteGenres)) {
                 genreMatched.add(s);
             }
         }

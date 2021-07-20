@@ -1,30 +1,14 @@
 package com.example.next_show.models;
 
-import android.graphics.Movie;
 import android.os.Parcelable;
 import android.util.Log;
 
-import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.RequestParams;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.codepath.asynchttpclient.callback.TextHttpResponseHandler;
-import com.example.next_show.R;
-import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.uwetrottmann.trakt5.entities.TrendingShow;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.parceler.Parcel;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import okhttp3.Headers;
 
 @ParseClassName("Show")
 public class Show extends ParseObject implements Parcelable {
@@ -32,6 +16,7 @@ public class Show extends ParseObject implements Parcelable {
     private String title;
     private String overview;
     private String id;
+    private String objectId;
     private String network;
     private String liked;
     private int year_aired;
@@ -61,42 +46,42 @@ public class Show extends ParseObject implements Parcelable {
     }
 
     // from Trending Show objects to NextShow Show objects
-    public static List<Show> fromTrendingShows(List<TrendingShow> repsonseShows) {
-        List<Show> updated = new ArrayList<>();
-        for (TrendingShow trending : repsonseShows) {
-            Show currentShow = new Show(trending.show.title, trending.show.overview,
-                    "" + trending.show.ids.tmdb, trending.show.network, trending.show.first_aired.getYear(), trending.show.genres);
-
-            updated.add(currentShow);
+    public static List<Show> fromTrendingShows(List<TrendingShow> response) {
+        List<Show> updatedShows = new ArrayList<>();
+        for (TrendingShow trendingShow : response) {
+            Show currentShow = new Show(trendingShow.show.title, trendingShow.show.overview,
+                    "" + trendingShow.show.ids.tmdb, trendingShow.show.network, trendingShow.show.first_aired.getYear(), trendingShow.show.genres);
+            updatedShows.add(currentShow);
         }
-        return updated;
+        return updatedShows;
     }
 
     // from Recommended Show objects to NextShow Show objects
     public static List<Show> fromRecShows(List<com.uwetrottmann.trakt5.entities.Show> repsonseShows) {
-        List<Show> updated = new ArrayList<>();
-        for (com.uwetrottmann.trakt5.entities.Show rShow : repsonseShows) {
-            Show currentShow = new Show(rShow.title, rShow.overview,
-                    "" + rShow.ids.tmdb, rShow.network, rShow.first_aired.getYear(), rShow.genres);
-
-            updated.add(currentShow);
+        List<Show> updatedShows = new ArrayList<>();
+        for (com.uwetrottmann.trakt5.entities.Show show : repsonseShows) {
+            Show currentShow = new Show(show.title, show.overview,
+                    "" + show.ids.tmdb, show.network, show.first_aired.getYear(), show.genres);
+            updatedShows.add(currentShow);
         }
-        return updated;
+        return updatedShows;
     }
 
     // from Parse Show objects to NextShow Show objects
     public static List<Show> fromParseShows(List<Show> parseShows) {
-        List<Show> updated = new ArrayList<>();
+        List<Show> updatedShows = new ArrayList<>();
 
         // turn them into my own Show objects for use later on
-        for(Show pre: parseShows){
-            Show currentShow = new Show(pre.getParseTitle(), pre.getParseOverview(), pre.getParseTVID(),
-                    pre.getParseNetwork(), pre.getParseYearAired(), pre.getParseGenres());
+        for(Show parseShow: parseShows){
+            Show currentShow = new Show(parseShow.getParseTitle(), parseShow.getParseOverview(), parseShow.getParseTVID(),
+                    parseShow.getParseNetwork(), parseShow.getParseYearAired(), parseShow.getParseGenres());
 
-            currentShow.setUserLiked(pre.getParseUserLiked());
-            updated.add(currentShow);
+            // for ratings and updating them later
+            currentShow.setObjectID(parseShow.getObjectId());
+            currentShow.setUserLiked(parseShow.getParseUserLiked());
+            updatedShows.add(currentShow);
         }
-        return updated;
+        return updatedShows;
     }
 
     // for local instance of Show -> no setter for these, only constructor can set
@@ -126,6 +111,11 @@ public class Show extends ParseObject implements Parcelable {
         return genres;
     }
 
+    public String getObjectID() { return objectId; }
+
+    public void setObjectID(String i) {
+        this.objectId = i;
+    }
 
     // **** for Parse instance of Show -> grab saved shows data only ****
     public String getParseTitle() {

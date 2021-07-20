@@ -1,1 +1,10 @@
 **/*/res/values/secrets.xml
+
+# Generated files
+bin/
+gen/
+out/
+
+# Gradle files
+.gradle/
+build/

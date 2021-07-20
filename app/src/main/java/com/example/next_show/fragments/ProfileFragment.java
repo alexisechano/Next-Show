@@ -1,7 +1,6 @@
 package com.example.next_show.fragments;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.next_show.LoginActivity;
-import com.example.next_show.MainActivity;
 import com.example.next_show.R;
 import com.example.next_show.models.User;
 import com.parse.ParseUser;

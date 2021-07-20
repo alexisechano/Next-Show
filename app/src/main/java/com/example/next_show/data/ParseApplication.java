@@ -1,7 +1,6 @@
 package com.example.next_show.data;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.example.next_show.R;
 import com.example.next_show.models.Show;

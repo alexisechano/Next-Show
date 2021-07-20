@@ -1,23 +1,11 @@
 package com.example.next_show.data;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
 
 import com.example.next_show.R;
-import com.example.next_show.models.Show;
 import com.uwetrottmann.trakt5.TraktV2;
-import com.uwetrottmann.trakt5.entities.TrendingShow;
-import com.uwetrottmann.trakt5.enums.Extended;
 import com.uwetrottmann.trakt5.services.Shows;
-
-import java.net.ConnectException;
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class TraktApplication {
     // constants
