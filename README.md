@@ -9,7 +9,7 @@ NEXT SHOW - Original App Design Project
 
 ## Overview
 ### Description
-A TV show recommender app that uses personal ratings and interests to aggregate a user's next binge!
+A TV show recommender app that uses personal ratings and interests to find the user's next binge!
 
 ### App Evaluation
 - **Category:** Entertainment, social
@@ -31,7 +31,7 @@ Outlined by FBU App Expectations and Priority
   * User can view TV show details from home timeline (P0)
 * **Your app interacts with a database (e.g. Parse)**
   * User can save rated shows and shows-to-watch (P1)
-  * User can view more than 10+ shows on home timeline through CardView and RecyclerView (P0)
+  * User can view more than 5+ shows on home timeline through CardView and RecyclerView (P0)
   * User can view TV show details like synopsis (P0)
   * User ratings (like or dislike) are also saved within a database (P0)
 * **You can log in/log out of your app as a user**
@@ -41,9 +41,9 @@ Outlined by FBU App Expectations and Priority
   * User can register with new account (P0)
   * User can set up recommendations by choosing favorite genres and current fave shows (P2)
 * **Your app integrates with at least one SDK (e.g. Google Maps SDK, Facebook SDK) or API (that you didn’t learn about in CodePath)**
-  * User receives show recommendations on home timeline using [TasteDive](https://tastedive-api-documentation.readthedocs.io/en/latest/index.html) OR [IMDB](https://developers.themoviedb.org/3/tv/get-similar-tv-shows) OR [Trakt](https://trakt.docs.apiary.io/#reference/shows/recommended). (P1) 
+  * User receives show recommendations on home timeline using [Trakt](https://trakt.docs.apiary.io/#reference/shows/recommended) (P1) 
 * **Your app uses at least one gesture (e.g. double tap to like, e.g. pinch to scale)**
-  * User can swipe to dismiss a show rec on home timeline which counts as a dislike rating (P2)
+  * User can swipe to dismiss a show rec on home timeline which counts as a dislike rating but not a save (P2)
 * **Your app uses at least one animation (e.g. fade in/out, e.g. animating a view growing and shrinking)**
   * In progress (P2)
 * **Your app incorporates at least external library to add visual polish**
@@ -120,9 +120,7 @@ Outlined by FBU App Expectations and Priority
 | Property    | Type.       | Description |
 | ----------- | ----------- | ----------- |
 | objectId    | String      | Unique id for the user post (default field)       |
-| haveWatched   | Array of User Pointers       | List of Users that watched this show   |
-| haveRated   | Array of User Pointers         | List of Users that rated this show   |
-| ratingsList   | Array of Rating Pointers         | List of Rating objects from Users   |
+| user   | User Pointer    | User that saved/rated this show   |
 | avgRating   | Number        |   Average rating (from API) |
 | numSeasons   | Number        |   How many seasons a show has |
 | network   | String        |  What network or streaming service the show is on |
@@ -138,7 +136,8 @@ Outlined by FBU App Expectations and Priority
 | firstName  | String | String for first name |
 | lastName  | String | String for last name |
 | bio  | String | String for bio blurb |
-| savedShows   | Array of Show Pointers         | Shows that are already watched and rated   |
+| savedShows   | Array of TMDB IDs      | Shows that are already watched and rated   |
+| forbiddenShows   | Array of TMDB IDs      | Shows that are disliked but not saved (gesture)  |
 | faveGenres  | Array of Strings      | List of this User's favorite TV genres |
 | displayShow  | Show | Currently watching or Fave Show broadcasted on profile |
 
