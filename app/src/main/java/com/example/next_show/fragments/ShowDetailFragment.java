@@ -75,7 +75,6 @@ public class ShowDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
         View currView = inflater.inflate(R.layout.fragment_details, container, false);
 
@@ -128,20 +127,23 @@ public class ShowDetailFragment extends Fragment {
                 currShow.setUserLiked("liked");
                 Toast.makeText(getActivity(), "You liked this show!", Toast.LENGTH_SHORT).show();
                 if (alreadySaved){
-                    // TODO: grab rating data and save it async to Parse with matching show ID
+                    // if in Saved Shows, just update the rating in Parse here
+                    User currentUser = (User) ParseUser.getCurrentUser();
+                    updateRating("liked", currentUser);
                 }
             }
         });
 
         // mark NEGATIVE rating
-
         btnDisliked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 currShow.setUserLiked("disliked");
                 Toast.makeText(getActivity(), "You disliked this show!", Toast.LENGTH_SHORT).show();
                 if (alreadySaved){
-                    // TODO: grab rating data and save it async to Parse with matching show ID
+                    // if in Saved Shows, just update the rating in Parse here
+                    User currentUser = (User) ParseUser.getCurrentUser();
+                    updateRating("disliked", currentUser);
                 }
             }
         });
@@ -175,7 +177,36 @@ public class ShowDetailFragment extends Fragment {
                 });
             }
         });
-
     }
 
+    private void updateRating(String r, User currentUser) {
+        // grab current show's unique Parse object ID
+        String objId = currShow.getObjectID();
+
+        Log.i(TAG, "Attempting to update rating for saved show: " + objId);
+
+        // use Parse query
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Show");
+
+        // Retrieve the object by id
+        query.getInBackground(objId, new GetCallback<ParseObject>() {
+            public void done(ParseObject show, ParseException e) {
+                if (e == null) {
+                    // log that retrieve in background is done
+                    Log.i(TAG, "Updating show rating...");
+
+                    // save rating
+                    show.put("userRating", r);
+                    show.saveInBackground();
+
+                    // update matching user's saved show list
+                    if (r.equals("liked")) {
+                        currentUser.addToLikedShows(currShow.getId());
+                    }
+
+                    Log.i(TAG, "Saved new rating!");
+                }
+            }
+        });
+    }
 }

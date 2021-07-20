@@ -32,6 +32,7 @@ public class Show extends ParseObject implements Parcelable {
     private String title;
     private String overview;
     private String id;
+    private String objectId;
     private String network;
     private String liked;
     private int year_aired;
@@ -66,7 +67,6 @@ public class Show extends ParseObject implements Parcelable {
         for (TrendingShow trending : repsonseShows) {
             Show currentShow = new Show(trending.show.title, trending.show.overview,
                     "" + trending.show.ids.tmdb, trending.show.network, trending.show.first_aired.getYear(), trending.show.genres);
-
             updated.add(currentShow);
         }
         return updated;
@@ -78,7 +78,6 @@ public class Show extends ParseObject implements Parcelable {
         for (com.uwetrottmann.trakt5.entities.Show rShow : repsonseShows) {
             Show currentShow = new Show(rShow.title, rShow.overview,
                     "" + rShow.ids.tmdb, rShow.network, rShow.first_aired.getYear(), rShow.genres);
-
             updated.add(currentShow);
         }
         return updated;
@@ -89,11 +88,13 @@ public class Show extends ParseObject implements Parcelable {
         List<Show> updated = new ArrayList<>();
 
         // turn them into my own Show objects for use later on
-        for(Show pre: parseShows){
-            Show currentShow = new Show(pre.getParseTitle(), pre.getParseOverview(), pre.getParseTVID(),
-                    pre.getParseNetwork(), pre.getParseYearAired(), pre.getParseGenres());
+        for(Show pShow: parseShows){
+            Show currentShow = new Show(pShow.getParseTitle(), pShow.getParseOverview(), pShow.getParseTVID(),
+                    pShow.getParseNetwork(), pShow.getParseYearAired(), pShow.getParseGenres());
 
-            currentShow.setUserLiked(pre.getParseUserLiked());
+            // for ratings and updating them later
+            currentShow.setObjectID(pShow.getObjectId());
+            currentShow.setUserLiked(pShow.getParseUserLiked());
             updated.add(currentShow);
         }
         return updated;
@@ -126,6 +127,11 @@ public class Show extends ParseObject implements Parcelable {
         return genres;
     }
 
+    public String getObjectID() { return objectId; }
+
+    public void setObjectID(String i) {
+        this.objectId = i;
+    }
 
     // **** for Parse instance of Show -> grab saved shows data only ****
     public String getParseTitle() {

@@ -1,6 +1,7 @@
 package com.example.next_show.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +90,9 @@ public class SavedAdapter extends RecyclerView.Adapter<SavedAdapter.ViewHolder> 
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
                 Show show = shows.get(position);
+
+                // check matching Parse Object ID
+                Log.i("Adapter", "Current Show Object ID: " + show.getObjectID());
 
                 // make new instance of the fragment
                 ShowDetailFragment fragment = ShowDetailFragment.newInstance(show, FROM_SAVED_FRAGMENT);

@@ -43,11 +43,10 @@ public class RecommendationClient {
     }
 
     public void fetchRelatedShows(Shows traktShows, ShowAdapter adapter) {
-        // use given show ID to generate related, recommended shows -> randomize it!
+        // use randomly picked show ID to generate related, recommended shows
         List<String> savedShows = currentUser.getLikedSavedShows();
         String searchID = savedShows.get(new Random().nextInt(savedShows.size()));;
 
-        // from trakt wrapper -> call to get related shows and send to adapter
         try {
             // enqueue to do asynchronous call and execute to do it synchronously
             traktShows.related(searchID, PAGES_REQUESTED, LIMIT, Extended.FULL).enqueue(new Callback<List<com.uwetrottmann.trakt5.entities.Show>>() {
@@ -123,7 +122,7 @@ public class RecommendationClient {
     }
 
     private List<Show> getGenreMatch(List<Show> shows, User user){
-        // get proper user
+        // get proper user genres
         List<String> favoriteGenres = user.getFaveGenres();
 
         // init return list
