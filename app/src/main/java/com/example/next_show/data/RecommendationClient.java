@@ -7,7 +7,6 @@ import android.widget.Toast;
 import com.example.next_show.adapters.ShowAdapter;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
-import com.uwetrottmann.trakt5.entities.TrendingShow;
 import com.uwetrottmann.trakt5.enums.Extended;
 import com.uwetrottmann.trakt5.services.Shows;
 
@@ -45,7 +44,8 @@ public class RecommendationClient {
     public void fetchRelatedShows(Shows traktShows, ShowAdapter adapter) {
         // use randomly picked show ID to generate related, recommended shows
         List<String> savedShows = currentUser.getLikedSavedShows();
-        String searchID = savedShows.get(new Random().nextInt(savedShows.size()));;
+        final int randomShowIndex = new Random().nextInt(savedShows.size());
+        String searchID = savedShows.get(randomShowIndex);
 
         try {
             // enqueue to do asynchronous call and execute to do it synchronously

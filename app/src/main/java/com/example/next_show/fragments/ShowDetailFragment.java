@@ -1,14 +1,11 @@
 package com.example.next_show.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.next_show.MainActivity;
 import com.example.next_show.R;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
@@ -27,8 +23,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import java.util.List;
 
 public class ShowDetailFragment extends Fragment {
     private Show currShow;
@@ -45,6 +39,9 @@ public class ShowDetailFragment extends Fragment {
 
     // constants
     public static final String TAG = "ShowDetailFragment";
+    public static final String LIKED = "liked";
+    public static final String DISLIKED = "disliked";
+    public static final String KEY_SHOW = "Show";
 
     // empty constructor
     public ShowDetailFragment() { }
@@ -107,8 +104,8 @@ public class ShowDetailFragment extends Fragment {
             btnSaveShow.setVisibility(View.GONE);
 
             // check if user already rated it, show if user liked it or not
-            if (currShow.getUserLiked().equals("liked") || currShow.getUserLiked().equals("disliked")) {
-                String status = (currShow.getUserLiked().equals("liked")) ? "liked" : "disliked";
+            if (currShow.getUserLiked().equals(LIKED) || currShow.getUserLiked().equals(DISLIKED)) {
+                String status = (currShow.getUserLiked().equals(LIKED)) ? LIKED : DISLIKED;
                 tvAlreadyRated = currView.findViewById(R.id.tvAlreadyRated);
 
                 // toggle view
@@ -124,12 +121,12 @@ public class ShowDetailFragment extends Fragment {
         btnLiked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currShow.setUserLiked("liked");
+                currShow.setUserLiked(LIKED);
                 Toast.makeText(getActivity(), "You liked this show!", Toast.LENGTH_SHORT).show();
                 if (alreadySaved) {
                     // if in Saved Shows, just update the rating in Parse here
                     User currentUser = (User) ParseUser.getCurrentUser();
-                    updateRating("liked", currentUser);
+                    updateRating(LIKED, currentUser);
                 }
             }
         });
@@ -138,12 +135,12 @@ public class ShowDetailFragment extends Fragment {
         btnDisliked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currShow.setUserLiked("disliked");
+                currShow.setUserLiked(DISLIKED);
                 Toast.makeText(getActivity(), "You disliked this show!", Toast.LENGTH_SHORT).show();
                 if (alreadySaved) {
                     // if in Saved Shows, just update the rating in Parse here
                     User currentUser = (User) ParseUser.getCurrentUser();
-                    updateRating("disliked", currentUser);
+                    updateRating(DISLIKED, currentUser);
                 }
             }
         });
@@ -166,7 +163,7 @@ public class ShowDetailFragment extends Fragment {
                         // add show ID to User list
                         User currentUser = (User) ParseUser.getCurrentUser();
 
-                        if (currShow.getUserLiked().equals("liked")) {
+                        if (currShow.getUserLiked().equals(LIKED)) {
                             currentUser.addToLikedShows(currShow.getId());
                         }
 
@@ -186,7 +183,7 @@ public class ShowDetailFragment extends Fragment {
         Log.i(TAG, "Attempting to update rating for saved show: " + objId);
 
         // use Parse query
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Show");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(KEY_SHOW);
 
         // Retrieve the object by id
         query.getInBackground(objId, new GetCallback<ParseObject>() {
@@ -200,7 +197,7 @@ public class ShowDetailFragment extends Fragment {
                     show.saveInBackground();
 
                     // update matching user's saved show list
-                    if (r.equals("liked")) {
+                    if (r.equals(LIKED)) {
                         currentUser.addToLikedShows(currShow.getId());
                     }
 

@@ -15,11 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.next_show.R;
 import com.example.next_show.fragments.ShowDetailFragment;
 import com.example.next_show.models.Show;
-import com.example.next_show.models.User;
-import com.parse.Parse;
-import com.parse.ParseUser;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
