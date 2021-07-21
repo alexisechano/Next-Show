@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
+    <ImageView
+        android:id="@+id/ivShowPoster"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        tools:srcCompat="@tools:sample/avatars" />
+
     <TextView
         android:paddingTop="30dp"
         android:id="@+id/tvDetailTitle"
+        android:layout_below="@+id/ivShowPoster"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:gravity="center"
@@ -63,7 +73,7 @@
             android:layout_gravity="center_horizontal"
             android:padding="10dp"
             android:text="Watched it already? Add your rating!"
-            android:textSize="12sp"/>
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/tvAlreadyRated"
@@ -72,7 +82,7 @@
             android:layout_gravity="center_horizontal"
             android:padding="10dp"
             android:text="Already rated!"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:visibility="gone"/>
 
         <RelativeLayout
@@ -113,6 +123,5 @@
         android:layout_marginTop="0dp"
         android:layout_marginBottom="20dp"
         android:text="Save show" />
-
 
 </RelativeLayout>

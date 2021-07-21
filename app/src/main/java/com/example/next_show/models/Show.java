@@ -19,6 +19,7 @@ public class Show extends ParseObject implements Parcelable {
     private String objectId;
     private String network;
     private String liked;
+    private String imageUrl;
     private int year_aired;
     private boolean isSaved;
     private List<String> genres;
@@ -124,6 +125,12 @@ public class Show extends ParseObject implements Parcelable {
 
     public void setSavedStatus(Boolean b) {
         this.isSaved = b;
+    }
+
+    public String getImageUrl() { return imageUrl; }
+
+    public void setImageUrl(String p) {
+        this.imageUrl = String.format("https://image.tmdb.org/t/p/w342/%s", p);;
     }
 
     // **** for Parse instance of Show -> grab saved shows data only ****

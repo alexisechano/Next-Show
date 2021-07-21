@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.bumptech.glide.Glide;
+import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.next_show.R;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
@@ -23,6 +27,12 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.Headers;
 
 public class ShowDetailFragment extends Fragment {
     private Show currShow;
@@ -35,12 +45,16 @@ public class ShowDetailFragment extends Fragment {
     private Button btnSaveShow;
     private Button btnLiked;
     private Button btnDisliked;
+    private ImageView ivShowPoster;
 
     // constants
     public static final String TAG = "ShowDetailFragment";
     public static final String LIKED = "liked";
     public static final String DISLIKED = "disliked";
     public static final String KEY_SHOW = "Show";
+
+    private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
+    private static final String ADD_API_KEY = "?api_key=";
 
     // empty constructor
     public ShowDetailFragment() { }
@@ -76,6 +90,7 @@ public class ShowDetailFragment extends Fragment {
         btnSaveShow = currView.findViewById(R.id.btnSaveShow);
         btnLiked = currView.findViewById(R.id.btnLiked);
         btnDisliked = currView.findViewById(R.id.btnDisliked);
+        ivShowPoster = currView.findViewById(R.id.ivShowPoster);
 
         // display show text data
         tvDetailTitle.setText(currShow.getTitle());
@@ -83,6 +98,9 @@ public class ShowDetailFragment extends Fragment {
 
         String yearAndNetwork = currShow.getYearAired() + " | " + currShow.getNetwork();
         tvYearAndNetwork.setText(yearAndNetwork);
+
+        // grab image from API and load into image view
+        fetchShowPoster(ivShowPoster);
 
         // check if previous fragment was the SavedFragment -> disable save feature
         if (currShow.isSaved()) {
@@ -149,7 +167,41 @@ public class ShowDetailFragment extends Fragment {
         });
     }
 
-    // update rating
+    private void fetchShowPoster(ImageView iv) {
+        // create HTTP client
+        AsyncHttpClient client = new AsyncHttpClient();
+        String id = currShow.getId();
+        String getUrl = SHOW_DETAIL_URL + id + ADD_API_KEY + getContext().getString(R.string.movie_api_key);
+
+        // call URL and parse through JSON
+        client.get(getUrl, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Headers headers, JSON json) {
+                Log.d(TAG, "onSuccess");
+
+                // get json object
+                JSONObject jsonObj = json.jsonObject;
+
+                // get results and save to show object
+                try {
+                    String path = jsonObj.getString("backdrop_path");
+                    currShow.setImageUrl(path);
+
+                    // display backdrop poster here
+                    Glide.with(getContext()).load(currShow.getImageUrl()).into(iv);
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "Hit JSON Exception");
+                }
+            }
+
+            @Override
+            public void onFailure(int i, Headers headers, String s, Throwable throwable) {
+                Log.e(TAG, "Error Code: " + i, throwable);
+            }
+        });
+    }
+
     private void updateRating(String rating) {
         currShow.setUserLiked(rating);
         Toast.makeText(getActivity(), "You " + rating + " this show!", Toast.LENGTH_SHORT).show();
