@@ -12,7 +12,10 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next_show.R;
+import com.example.next_show.navigators.NavigationInterface;
 import com.example.next_show.models.Show;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -20,19 +23,19 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     // instance variables
     private Context context;
     private List<Show> shows;
-    private boolean fromSavedFragment;
+    private NavigationInterface nav;
 
-    public ShowAdapter (Context context, List<Show> shows, Boolean fromSavedFragment){
+    public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav){
         this.context = context;
         this.shows = shows;
-        this.fromSavedFragment = fromSavedFragment;
+        this.nav = nav;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_show, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, nav);
     }
 
     @Override
@@ -52,11 +55,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     }
 
     public void addAll(List<Show> list) {
-        List<Show> modifiedShows = list;
-        if(fromSavedFragment){
-            modifiedShows = Show.fromParseShows(list);
-        }
-        shows.addAll(modifiedShows);
+        shows.addAll(list);
         notifyDataSetChanged();
     }
 
@@ -64,13 +63,17 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         // view elements
         private TextView tvShowBody;
         private TextView tvShowTitle;
+        private NavigationInterface navigator;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, NavigationInterface navigator) {
             super(itemView);
             setUpView();
 
             // add this as click listener
             itemView.setOnClickListener(this);
+
+            // set navigator
+            this.navigator = navigator;
         }
 
         private void setUpView() {
@@ -88,17 +91,10 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
                 // create new bundle of arguments to pass into Navigation
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("Show", show);
-                bundle.putBoolean("savedBool", fromSavedFragment);
+                bundle.putParcelable(Show.class.getSimpleName(), show);
 
-                if(fromSavedFragment){
-                    // from saved to details
-                    Navigation.findNavController(v).navigate(R.id.action_savedFragment_to_showDetailFragment, bundle);
-                    return;
-                }
-
-                // from feed to details
-                Navigation.findNavController(v).navigate(R.id.action_feedFragment_to_showDetailFragment, bundle);
+                // navigate to next fragment
+                navigator.navigate(v, bundle);
             }
         }
 

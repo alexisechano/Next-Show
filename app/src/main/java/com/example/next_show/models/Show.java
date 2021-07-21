@@ -20,6 +20,7 @@ public class Show extends ParseObject implements Parcelable {
     private String network;
     private String liked;
     private int year_aired;
+    private boolean isSaved;
     private List<String> genres;
 
     // constants to match keys in Parse Database -> Public because used in other classes
@@ -43,6 +44,7 @@ public class Show extends ParseObject implements Parcelable {
         this.network = network;
         this.year_aired = year_aired;
         this.genres = genres;
+        this.isSaved = false; // default is that this new Show object is not saved in Parse
     }
 
     // from Trending Show objects to NextShow Show objects
@@ -79,6 +81,7 @@ public class Show extends ParseObject implements Parcelable {
             // for ratings and updating them later
             currentShow.setObjectID(parseShow.getObjectId());
             currentShow.setUserLiked(parseShow.getParseUserLiked());
+            currentShow.setSavedStatus(true);
             updatedShows.add(currentShow);
         }
         return updatedShows;
@@ -115,6 +118,12 @@ public class Show extends ParseObject implements Parcelable {
 
     public void setObjectID(String i) {
         this.objectId = i;
+    }
+
+    public boolean isSaved() { return isSaved; }
+
+    public void setSavedStatus(Boolean b) {
+        this.isSaved = b;
     }
 
     // **** for Parse instance of Show -> grab saved shows data only ****
