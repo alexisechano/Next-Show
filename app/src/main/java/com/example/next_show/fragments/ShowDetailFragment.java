@@ -26,7 +26,6 @@ import com.parse.SaveCallback;
 
 public class ShowDetailFragment extends Fragment {
     private Show currShow;
-    private boolean alreadySaved;
 
     // view elements
     private TextView tvDetailTitle;
@@ -51,10 +50,8 @@ public class ShowDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // grab from args
-        currShow = getArguments().getParcelable("Show");
+        currShow = getArguments().getParcelable(Show.class.getSimpleName());
         Log.i(TAG, "TITLE: " + currShow.getTitle());
-
-        this.alreadySaved = getArguments().getBoolean("savedBool");
     }
 
     @Nullable
@@ -88,7 +85,7 @@ public class ShowDetailFragment extends Fragment {
         tvYearAndNetwork.setText(yearAndNetwork);
 
         // check if previous fragment was the SavedFragment -> disable save feature
-        if (alreadySaved) {
+        if (currShow.isSaved()) {
             btnSaveShow.setVisibility(View.GONE);
 
             // check if user already rated it, show if user liked it or not
@@ -109,13 +106,7 @@ public class ShowDetailFragment extends Fragment {
         btnLiked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currShow.setUserLiked(LIKED);
-                Toast.makeText(getActivity(), "You liked this show!", Toast.LENGTH_SHORT).show();
-                if (alreadySaved) {
-                    // if in Saved Shows, just update the rating in Parse here
-                    User currentUser = (User) ParseUser.getCurrentUser();
-                    updateRating(LIKED, currentUser);
-                }
+                updateRating(LIKED);
             }
         });
 
@@ -123,13 +114,7 @@ public class ShowDetailFragment extends Fragment {
         btnDisliked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currShow.setUserLiked(DISLIKED);
-                Toast.makeText(getActivity(), "You disliked this show!", Toast.LENGTH_SHORT).show();
-                if (alreadySaved) {
-                    // if in Saved Shows, just update the rating in Parse here
-                    User currentUser = (User) ParseUser.getCurrentUser();
-                    updateRating(DISLIKED, currentUser);
-                }
+                updateRating(DISLIKED);
             }
         });
 
@@ -164,7 +149,17 @@ public class ShowDetailFragment extends Fragment {
         });
     }
 
-    private void updateRating(String r, User currentUser) {
+    // update rating
+    private void updateRating(String rating) {
+        currShow.setUserLiked(rating);
+        Toast.makeText(getActivity(), "You " + rating + " this show!", Toast.LENGTH_SHORT).show();
+        if (currShow.isSaved()) {
+            User currentUser = (User) ParseUser.getCurrentUser();
+            updateParseRating(rating, currentUser);
+        }
+    }
+
+    private void updateParseRating(String r, User currentUser) {
         // grab current show's unique Parse object ID
         String objId = currShow.getObjectID();
 

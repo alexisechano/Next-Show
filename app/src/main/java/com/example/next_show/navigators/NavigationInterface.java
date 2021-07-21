@@ -5,5 +5,4 @@ import android.view.View;
 
 public interface NavigationInterface {
     public void navigate(View v, Bundle b);
-    public String getSource();
 }

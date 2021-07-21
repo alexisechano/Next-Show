@@ -25,9 +25,6 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     private List<Show> shows;
     private NavigationInterface nav;
 
-    // constant to track if adapter is being called from saved
-    public static final String SAVED_FRAGMENT = "SavedFragment";
-
     public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav){
         this.context = context;
         this.shows = shows;
@@ -58,11 +55,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     }
 
     public void addAll(List<Show> list) {
-        List<Show> modifiedShows = list;
-        if(nav.getSource().equals(SAVED_FRAGMENT)){
-            modifiedShows = Show.fromParseShows(list);
-        }
-        shows.addAll(modifiedShows);
+        shows.addAll(list);
         notifyDataSetChanged();
     }
 
@@ -98,9 +91,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
                 // create new bundle of arguments to pass into Navigation
                 Bundle bundle = new Bundle();
-                Boolean fromSavedFragment = navigator.getSource().equals(SAVED_FRAGMENT);
-                bundle.putBoolean("savedBool", fromSavedFragment);
-                bundle.putParcelable("Show", show);
+                bundle.putParcelable(Show.class.getSimpleName(), show);
 
                 // navigate to next fragment
                 navigator.navigate(v, bundle);

@@ -109,8 +109,11 @@ public class SavedFragment extends Fragment {
                     return;
                 }
 
+                // turn these Parse Show into NextShow Show objects
+                List<Show> modifiedShows = Show.fromParseShows(shows);
+
                 // save received posts to list and notify adapter of new data
-                adapter.addAll(shows);
+                adapter.addAll(modifiedShows);
             }
         });
     }
@@ -118,10 +121,6 @@ public class SavedFragment extends Fragment {
     class NavigateSavedToDetail implements NavigationInterface {
         public void navigate(View v, Bundle b){
             Navigation.findNavController(v).navigate(R.id.action_savedFragment_to_showDetailFragment, b);
-        }
-
-        public String getSource(){
-            return TAG;
         }
     }
 }

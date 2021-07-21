@@ -156,9 +156,5 @@ public class FeedFragment extends Fragment {
         public void navigate(View v, Bundle b){
             Navigation.findNavController(v).navigate(R.id.action_feedFragment_to_showDetailFragment, b);
         }
-
-        public String getSource(){
-            return TAG;
-        }
     }
 }
