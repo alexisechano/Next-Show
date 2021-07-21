@@ -41,6 +41,7 @@ public class FeedFragment extends Fragment {
     // view element variables
     private RecyclerView rvFeed;
     private View currView;
+    private Shows showsObj;
 
     protected ShowAdapter adapter;
     protected List<Show> showsList;
@@ -51,6 +52,12 @@ public class FeedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // new application for Trakt Call, pass in the Context
+        showsObj = new TraktApplication(getContext()).getNewShowsInstance();
+
+        // get trending shows
+        fetchTraktData(showsObj);
     }
 
     @Override
@@ -74,14 +81,8 @@ public class FeedFragment extends Fragment {
             // set the layout manager on the recycler view
             rvFeed.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-            // new application for Trakt Call, pass in the Context
-            Shows showsObj = new TraktApplication(getContext()).getNewShowsInstance();
-
             // determine whether to show trending or recommended
             BottomNavigationView bottomNavigationView = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
-
-            // get trending shows
-            fetchTraktData(showsObj);
 
             // set selector
             bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

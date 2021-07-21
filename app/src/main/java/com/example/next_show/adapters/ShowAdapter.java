@@ -12,6 +12,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next_show.R;
+import com.example.next_show.data.NavigationInterface;
 import com.example.next_show.models.Show;
 
 import java.util.List;
@@ -60,6 +61,18 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    class NavigateFeedToDetail implements NavigationInterface {
+        public void navigate(View v, Bundle b){
+            Navigation.findNavController(v).navigate(R.id.action_feedFragment_to_showDetailFragment, b);
+        }
+    }
+
+    class NavigateSavedToDetail implements NavigationInterface {
+        public void navigate(View v, Bundle b){
+            Navigation.findNavController(v).navigate(R.id.action_savedFragment_to_showDetailFragment, b);
+        }
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // view elements
         private TextView tvShowBody;
@@ -91,14 +104,13 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
                 bundle.putParcelable("Show", show);
                 bundle.putBoolean("savedBool", fromSavedFragment);
 
-                if(fromSavedFragment){
-                    // from saved to details
-                    Navigation.findNavController(v).navigate(R.id.action_savedFragment_to_showDetailFragment, bundle);
-                    return;
+                NavigationInterface navigator;
+                if (fromSavedFragment) {
+                    navigator = new NavigateSavedToDetail();
+                } else {
+                    navigator = new NavigateFeedToDetail();
                 }
-
-                // from feed to details
-                Navigation.findNavController(v).navigate(R.id.action_feedFragment_to_showDetailFragment, bundle);
+                navigator.navigate(v, bundle);
             }
         }
 
