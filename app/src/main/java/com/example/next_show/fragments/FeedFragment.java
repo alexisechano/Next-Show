@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +20,7 @@ import com.example.next_show.data.RecommendationClient;
 import com.example.next_show.data.TraktApplication;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
+import com.example.next_show.navigators.NavigationInterface;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 import com.uwetrottmann.trakt5.entities.TrendingShow;
@@ -73,7 +75,7 @@ public class FeedFragment extends Fragment {
 
             // initialize the array that will hold posts and create a ShowAdapter
             showsList = new ArrayList<>();
-            adapter = new ShowAdapter(getActivity(), showsList, false);
+            adapter = new ShowAdapter(getActivity(), showsList, new NavigateFeedToDetail());
 
             // set the adapter on the recycler view
             rvFeed.setAdapter(adapter);
@@ -147,6 +149,16 @@ public class FeedFragment extends Fragment {
 
         } catch (Exception e) {
             Log.e(TAG, "Call error", e);
+        }
+    }
+
+    class NavigateFeedToDetail implements NavigationInterface {
+        public void navigate(View v, Bundle b){
+            Navigation.findNavController(v).navigate(R.id.action_feedFragment_to_showDetailFragment, b);
+        }
+
+        public String getSource(){
+            return TAG;
         }
     }
 }

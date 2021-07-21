@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import com.example.next_show.R;
 import com.example.next_show.adapters.ShowAdapter;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
+import com.example.next_show.navigators.NavigationInterface;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -58,7 +60,7 @@ public class SavedFragment extends Fragment {
         savedShows = new ArrayList<>();
 
         // initialize the adapter
-        adapter = new ShowAdapter(getActivity(), savedShows, true);
+        adapter = new ShowAdapter(getActivity(), savedShows, new NavigateSavedToDetail());
 
         // set the adapter on the recycler view
         rvSaved.setAdapter(adapter);
@@ -111,5 +113,15 @@ public class SavedFragment extends Fragment {
                 adapter.addAll(shows);
             }
         });
+    }
+
+    class NavigateSavedToDetail implements NavigationInterface {
+        public void navigate(View v, Bundle b){
+            Navigation.findNavController(v).navigate(R.id.action_savedFragment_to_showDetailFragment, b);
+        }
+
+        public String getSource(){
+            return TAG;
+        }
     }
 }
