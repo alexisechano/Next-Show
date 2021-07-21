@@ -46,24 +46,12 @@ public class ShowDetailFragment extends Fragment {
     // empty constructor
     public ShowDetailFragment() { }
 
-    public static ShowDetailFragment newInstance(Show show, boolean alreadySaved) {
-        ShowDetailFragment fragment = new ShowDetailFragment();
-
-        // generate bundle for the show
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(Show.class.getSimpleName(), show);
-        bundle.putBoolean("savedBool", alreadySaved);
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // grab from args
-        currShow = getArguments().getParcelable(Show.class.getSimpleName());
+        currShow = getArguments().getParcelable("Show");
         Log.i(TAG, "TITLE: " + currShow.getTitle());
 
         this.alreadySaved = getArguments().getBoolean("savedBool");

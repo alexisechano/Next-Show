@@ -12,12 +12,8 @@ import android.widget.Toast;
 
 import com.example.next_show.models.User;
 import com.parse.ParseException;
-import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-import org.parceler.Parcels;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

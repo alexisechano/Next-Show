@@ -33,14 +33,8 @@ public class ProfileFragment extends Fragment {
     private TextView tvBio;
     private ImageView ivProfileImage;
 
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
-
-    public static ProfileFragment newInstance() {
-        ProfileFragment fragment = new ProfileFragment();
-        return fragment;
-    }
+    // empty constructor
+    public ProfileFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

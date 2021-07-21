@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next_show.R;
-import com.example.next_show.adapters.SavedAdapter;
+import com.example.next_show.adapters.ShowAdapter;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
 import com.parse.FindCallback;
@@ -29,7 +29,7 @@ public class SavedFragment extends Fragment {
     private TextView tvName;
     private RecyclerView rvSaved;
 
-    protected SavedAdapter adapter;
+    protected ShowAdapter adapter;
     protected List<Show> savedShows;
 
     // constants
@@ -37,14 +37,7 @@ public class SavedFragment extends Fragment {
     public static final int QUERY_LIMIT = 10;
 
     // empty constructor
-    public SavedFragment() {
-
-    }
-
-    public static SavedFragment newInstance() {
-        SavedFragment fragment = new SavedFragment();
-        return fragment;
-    }
+    public SavedFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,8 +57,8 @@ public class SavedFragment extends Fragment {
         // initialize the array that will hold posts and create a PostsAdapter
         savedShows = new ArrayList<>();
 
-        // initialize the SAVED adapter
-        adapter = new SavedAdapter(getActivity(), savedShows);
+        // initialize the adapter
+        adapter = new ShowAdapter(getActivity(), savedShows, true);
 
         // set the adapter on the recycler view
         rvSaved.setAdapter(adapter);

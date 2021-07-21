@@ -40,18 +40,13 @@ public class FeedFragment extends Fragment {
 
     // view element variables
     private RecyclerView rvFeed;
+    private View currView;
 
     protected ShowAdapter adapter;
     protected List<Show> showsList;
 
-    public FeedFragment() {
-        // Required empty public constructor
-    }
-
-    public static FeedFragment newInstance() {
-        FeedFragment fragment = new FeedFragment();
-        return fragment;
-    }
+    // empty constructor
+    public FeedFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,59 +56,65 @@ public class FeedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View currView = inflater.inflate(R.layout.fragment_feed, container, false);
+        // prevent reloading if not necessary
+        if(currView == null) {
+            // Inflate the layout for this fragment
+            currView = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        // find Recycler View
-        rvFeed = currView.findViewById(R.id.rvFeed);
+            // find Recycler View
+            rvFeed = currView.findViewById(R.id.rvFeed);
 
-        // initialize the array that will hold posts and create a PostsAdapter
-        showsList = new ArrayList<>();
-        adapter = new ShowAdapter(getActivity(), showsList);
+            // initialize the array that will hold posts and create a ShowAdapter
+            showsList = new ArrayList<>();
+            adapter = new ShowAdapter(getActivity(), showsList, false);
 
-        // set the adapter on the recycler view
-        rvFeed.setAdapter(adapter);
+            // set the adapter on the recycler view
+            rvFeed.setAdapter(adapter);
 
-        // set the layout manager on the recycler view
-        rvFeed.setLayoutManager(new LinearLayoutManager(getActivity()));
+            // set the layout manager on the recycler view
+            rvFeed.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        // new application for Trakt Call, pass in the Context
-        Shows showsObj = new TraktApplication(getContext()).getNewShowsInstance();
+            // new application for Trakt Call, pass in the Context
+            Shows showsObj = new TraktApplication(getContext()).getNewShowsInstance();
 
-        // determine whether to show trending or recommended
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
+            // determine whether to show trending or recommended
+            BottomNavigationView bottomNavigationView = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
 
-        // get trending shows
-        fetchTraktData(showsObj);
+            // get trending shows
+            fetchTraktData(showsObj);
 
-        // set selector
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_trending:
-                        // get trending shows
-                        fetchTraktData(showsObj);
-                        break;
-                    case R.id.action_recommend:
-                        // clear adapter to be able to make room for new recommendations
-                        adapter.clear();
+            // set selector
+            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.action_trending:
+                            // clear recycler view for new shows
+                            adapter.clear();
 
-                        // set up recommendation client to grab more shows
-                        RecommendationClient recClient = new RecommendationClient(getContext(), (User) ParseUser.getCurrentUser());
+                            // get trending shows
+                            fetchTraktData(showsObj);
 
-                        // get related shows based on saved LIKED shows
-                        recClient.fetchRelatedShows(showsObj, adapter);
+                            break;
+                        case R.id.action_recommend:
+                            // clear adapter to be able to make room for new recommendations
+                            adapter.clear();
 
-                        // get recommended shows based on User preferences
-                        // recClient.fetchRecommendedShows(showsObj, adapter);
+                            // set up recommendation client to grab more shows
+                            RecommendationClient recClient = new RecommendationClient(getContext(), (User) ParseUser.getCurrentUser());
 
-                        break;
+                            // get related shows based on saved LIKED shows
+                            //recClient.fetchRelatedShows(showsObj, adapter);
+
+                            // get recommended shows based on User preferences
+                            recClient.fetchRecommendedShows(showsObj, adapter);
+
+                            break;
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
-
+            });
+        }
         return currView;
     }
 

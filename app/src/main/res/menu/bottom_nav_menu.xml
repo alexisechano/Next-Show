@@ -2,21 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_home"
+        android:id="@+id/feedFragment"
         android:enabled="true"
         android:icon="@drawable/ic_outline_home_24"
         android:title="Home"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_rating"
+        android:id="@+id/savedFragment"
         android:enabled="true"
         android:icon="@drawable/baseline_star_border_24"
         android:title="Saved"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_profile"
+        android:id="@+id/profileFragment"
         android:enabled="true"
         android:icon="@drawable/ic_outline_account_circle_24"
         android:title="Profile"
