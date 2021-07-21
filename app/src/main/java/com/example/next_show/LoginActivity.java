@@ -3,7 +3,6 @@ package com.example.next_show;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,13 +13,8 @@ import android.widget.Toast;
 
 import com.example.next_show.models.User;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
-
-import org.parceler.Parcel;
-import org.parceler.Parcels;
 
 public class LoginActivity extends AppCompatActivity {
     // view element variables

@@ -1,18 +1,17 @@
 package com.example.next_show.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next_show.R;
-import com.example.next_show.fragments.ShowDetailFragment;
 import com.example.next_show.models.Show;
 
 import java.util.List;
@@ -21,13 +20,12 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     // instance variables
     private Context context;
     private List<Show> shows;
+    private boolean fromSavedFragment;
 
-    // constant boolean to check if already in saved fragment
-    private static final boolean FROM_SAVED_FRAGMENT = false;
-
-    public ShowAdapter (Context context, List<Show> shows){
+    public ShowAdapter (Context context, List<Show> shows, Boolean fromSavedFragment){
         this.context = context;
         this.shows = shows;
+        this.fromSavedFragment = fromSavedFragment;
     }
 
     @NonNull
@@ -54,7 +52,11 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     }
 
     public void addAll(List<Show> list) {
-        shows.addAll(list);
+        List<Show> modifiedShows = list;
+        if(fromSavedFragment){
+            modifiedShows = Show.fromParseShows(list);
+        }
+        shows.addAll(modifiedShows);
         notifyDataSetChanged();
     }
 
@@ -84,16 +86,19 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             if (position != RecyclerView.NO_POSITION) {
                 Show show = shows.get(position);
 
-                // make new instance of the fragment
-                ShowDetailFragment fragment = ShowDetailFragment.newInstance(show, FROM_SAVED_FRAGMENT /* false */);
+                // create new bundle of arguments to pass into Navigation
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("Show", show);
+                bundle.putBoolean("savedBool", fromSavedFragment);
 
-                // launch the fragment and commit
-                AppCompatActivity currActivity = (AppCompatActivity) context;
-                FragmentTransaction detailTransact = currActivity.getSupportFragmentManager().beginTransaction();
-                detailTransact.replace(R.id.fragment_container_view, fragment);
-                detailTransact.commit();
+                if(fromSavedFragment){
+                    // from saved to details
+                    Navigation.findNavController(v).navigate(R.id.action_savedFragment_to_showDetailFragment, bundle);
+                    return;
+                }
 
-                // TODO: navigate back to original feed without reloading all of that information again
+                // from feed to details
+                Navigation.findNavController(v).navigate(R.id.action_feedFragment_to_showDetailFragment, bundle);
             }
         }
 

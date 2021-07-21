@@ -1,21 +1,13 @@
 package com.example.next_show;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
-
-import com.example.next_show.fragments.FeedFragment;
-import com.example.next_show.fragments.ProfileFragment;
-import com.example.next_show.fragments.SavedFragment;
-import com.example.next_show.models.Show;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     // constants
@@ -26,55 +18,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Fragment management
-        FeedFragment feedFragment = FeedFragment.newInstance();
-        setFeedFragment(feedFragment);
+        // set up navigation controller
+        setUpNavigation();
+    }
 
-        // set bottom navigation
+    private void setUpNavigation() {
+        Log.i(TAG, "Setting up Navigation Controller and Navbar");
+
+        // declare a new Host fragment connected to XML
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+
+        // find attached navigation controller
+        NavController navController = navHostFragment.getNavController();
+
+        // set up bottom nav view
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_profile:
-                        // set profile fragment
-                        ProfileFragment profileFragment = ProfileFragment.newInstance();
-                        setProfileFragment(profileFragment);
-                        break;
-                    case R.id.action_home:
-                        // set feed fragment
-                        setFeedFragment(feedFragment);
-                        break;
-                    case R.id.action_rating:
-                        // set rating fragment
-                        SavedFragment savedFragment = SavedFragment.newInstance();
-                        SavedFragment(savedFragment);
-                        break;
-                }
-                return true;
-            }
-        });
-    }
 
-    // methods to toggle between fragments
-    private void setFeedFragment(FeedFragment feedFragment) {
-        Log.i(TAG, "Switching to FeedFragment");
-        FragmentTransaction feedTransact = getSupportFragmentManager().beginTransaction();
-        feedTransact.replace(R.id.fragment_container_view, feedFragment);
-        feedTransact.commit();
-    }
-
-    private void setProfileFragment(ProfileFragment profileFragment) {
-        Log.i(TAG, "Switching to ProfileFragment");
-        FragmentTransaction profileTransact = getSupportFragmentManager().beginTransaction();
-        profileTransact.replace(R.id.fragment_container_view, profileFragment);
-        profileTransact.commit();
-    }
-
-    private void SavedFragment(SavedFragment savedFragment) {
-        Log.i(TAG, "Switching to SavedFragment");
-        FragmentTransaction savedTransact = getSupportFragmentManager().beginTransaction();
-        savedTransact.replace(R.id.fragment_container_view, savedFragment);
-        savedTransact.commit();
+        // connect the bottom view with the controller
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 }
