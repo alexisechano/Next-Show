@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -63,6 +64,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         // view elements
         private TextView tvShowBody;
         private TextView tvShowTitle;
+        private ImageView ivCardImage;
         private NavigationInterface navigator;
 
         public ViewHolder(@NonNull View itemView, NavigationInterface navigator) {
@@ -80,6 +82,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             // find them in the layout
             tvShowTitle = itemView.findViewById(R.id.tvShowTitle);
             tvShowBody = itemView.findViewById(R.id.tvShowBody);
+            ivCardImage = itemView.findViewById(R.id.ivCardImage);
         }
 
         // when the user clicks on a show, show details
@@ -102,6 +105,8 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             // bind the show data to the view elements
             tvShowTitle.setText(show.getTitle());
             tvShowBody.setText(show.getOverview());
+
+            // Glide.with(getContext()).load(show.getImageUrl()).into(ivCardImage);
         }
     }
 }

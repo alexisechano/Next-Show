@@ -33,7 +33,7 @@ public class Show extends ParseObject implements Parcelable {
     public static final String KEY_USER = "user";
     public static final String KEY_RATING = "userRating";
     public static final String KEY_GENRES = "genres"; // list
-    public static final String KEY_IMAGE = "image"; // TODO: not used yet until API call is fixed
+    public static final String KEY_IMAGE = "imageUrl"; // TODO: not used yet until API call is fixed
 
     // empty constructor
     public Show() { }
@@ -191,6 +191,14 @@ public class Show extends ParseObject implements Parcelable {
         saveInBackground();
     }
 
+    public String getParseImage() {
+        return getString(KEY_IMAGE);
+    }
+
+    public void setParseImage(String img) {
+        put(KEY_IMAGE, img);
+    }
+
     public ParseUser getParseUser() {
         return getParseUser(KEY_USER);
     }
@@ -206,6 +214,7 @@ public class Show extends ParseObject implements Parcelable {
         setParseTVID(id);
         setParseNetwork(network);
         setParseYearAired(year_aired);
+        setParseImage(imageUrl); // make sure this is not null
         setParseUser(currUser);
 
         // null check before adding to Parse since Parse does not accept null strings
@@ -216,6 +225,4 @@ public class Show extends ParseObject implements Parcelable {
         setParseUserLiked(liked);
         setParseGenres(genres);
     }
-
-    // TODO: Add image file for Parse
 }
