@@ -1,10 +1,8 @@
 package com.example.next_show.data;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.next_show.adapters.ShowAdapter;
+import com.example.next_show.callbacks.ResponseCallback;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
 import com.uwetrottmann.trakt5.enums.Extended;
@@ -27,23 +25,11 @@ public class RecommendationClient {
     public static final int FORBIDDEN_REQUEST = 403;
     public static final int LIMIT = 5;
 
-    // instance vars
-    private Context context;
-    private User currentUser;
-
     // empty constructor
-    public RecommendationClient() {
+    public RecommendationClient() { }
 
-    }
-
-    public RecommendationClient(Context context, User currentUser) {
-        this.context = context;
-        this.currentUser = currentUser;
-    }
-
-    public void fetchRelatedShows(Shows traktShows, ShowAdapter adapter) {
+    public void fetchRelatedShows(Shows traktShows, List<String> savedShows, ResponseCallback callback) {
         // use randomly picked show ID to generate related, recommended shows
-        List<String> savedShows = currentUser.getLikedSavedShows();
         final int randomShowIndex = new Random().nextInt(savedShows.size());
         String searchID = savedShows.get(randomShowIndex);
 
@@ -53,17 +39,9 @@ public class RecommendationClient {
                 @Override
                 public void onResponse(Call<List<com.uwetrottmann.trakt5.entities.Show>> call, Response<List<com.uwetrottmann.trakt5.entities.Show>> response) {
                     if (response.isSuccessful()) {
-                        // grab List of TraktShow objects from response
-                        List<com.uwetrottmann.trakt5.entities.Show> repsonseShows = response.body();
-
-                        // turn all of these into usable Show objects
-                        List<Show> updatedShows = Show.fromRecShows(repsonseShows);
-
-                        // set the adapter to update
-                        adapter.addAll(updatedShows);
+                        callback.onSuccess(response.body());
                     } else {
-                        Toast.makeText(context, "No shows available right now :(", Toast.LENGTH_LONG).show();
-                        determineError(response.code());
+                        callback.onFailure(response.code());
                     }
                 }
 
@@ -79,34 +57,16 @@ public class RecommendationClient {
     }
 
     // get it by genre from recommended shows call
-    public void fetchRecommendedShows(Shows traktShows, ShowAdapter adapter) {
+    public void fetchGenreMatchedShows(Shows traktShows, ResponseCallback callback) {
         try {
             // enqueue to do asynchronous call and execute to do it synchronously
             traktShows.popular(PAGES_REQUESTED, LIMIT, Extended.FULL).enqueue(new Callback<List<com.uwetrottmann.trakt5.entities.Show>>() {
                 @Override
                 public void onResponse(Call<List<com.uwetrottmann.trakt5.entities.Show>> call, Response<List<com.uwetrottmann.trakt5.entities.Show>> response) {
                     if (response.isSuccessful()) {
-                        // grab List of TraktShow objects from response
-                        List<com.uwetrottmann.trakt5.entities.Show> repsonseShows = response.body();
-
-                        // turn all of these into usable Show objects
-                        List<Show> updatedShows = Show.fromRecShows(repsonseShows);
-
-                        // do logic to get only fave genre ones
-                        List<Show> genreMatchedShows = getGenreMatch(updatedShows, currentUser);
-
-                        // no matches, let user know and don't add to adapter
-                        if (genreMatchedShows.isEmpty()) {
-                            Toast.makeText(context, "No shows available right now :(", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-
-                        // send to adapter to update
-                        adapter.addAll(genreMatchedShows);
-
+                        callback.onSuccess(response.body());
                     } else {
-                        Toast.makeText(context, "No shows available right now :(", Toast.LENGTH_LONG).show();
-                        determineError(response.code());
+                        callback.onFailure(response.code());
                     }
                 }
 
@@ -121,7 +81,7 @@ public class RecommendationClient {
         }
     }
 
-    private List<Show> getGenreMatch(List<Show> shows, User user){
+    public static List<Show> getGenreMatch(List<Show> shows, User user){
         // get proper user genres
         List<String> favoriteGenres = user.getFaveGenres();
 
@@ -141,7 +101,7 @@ public class RecommendationClient {
     }
 
     public static void determineError(int code) {
-        switch(code){
+        switch (code) {
             case UNAUTHORIZED_REQUEST:
                 // authorization required, supply a valid OAuth access token
                 Log.e(TAG, "Access token required");
@@ -153,5 +113,4 @@ public class RecommendationClient {
                 Log.e(TAG, "Response code: " + code);
         }
     }
-
 }

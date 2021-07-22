@@ -13,12 +13,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.next_show.R;
+import com.example.next_show.callbacks.ImageCallback;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
 import com.parse.GetCallback;
@@ -28,7 +28,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -100,7 +99,15 @@ public class ShowDetailFragment extends Fragment {
         tvYearAndNetwork.setText(yearAndNetwork);
 
         // grab image from API and load into image view
-        fetchShowPoster(ivShowPoster);
+        fetchShowPoster(new DetailImageCallback() {
+            @Override
+            public void onSuccess(JsonHttpResponseHandler.JSON json) {
+                super.onSuccess(json);
+
+                // display backdrop poster here
+                Glide.with(getContext()).load(currShow.getImageUrl()).into(ivShowPoster);
+            }
+        });
 
         // check if previous fragment was the SavedFragment -> disable save feature
         if (currShow.isSaved()) {
@@ -167,7 +174,7 @@ public class ShowDetailFragment extends Fragment {
         });
     }
 
-    private void fetchShowPoster(ImageView iv) {
+    private void fetchShowPoster(ImageCallback callback) {
         // create HTTP client
         AsyncHttpClient client = new AsyncHttpClient();
         String id = currShow.getId();
@@ -177,27 +184,13 @@ public class ShowDetailFragment extends Fragment {
         client.get(getUrl, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int i, Headers headers, JSON json) {
-                Log.d(TAG, "onSuccess");
-
-                // get json object
-                JSONObject jsonObj = json.jsonObject;
-
-                // get results and save to show object
-                try {
-                    String path = jsonObj.getString("backdrop_path");
-                    currShow.setImageUrl(path);
-
-                    // display backdrop poster here
-                    Glide.with(getContext()).load(currShow.getImageUrl()).into(iv);
-
-                } catch (JSONException e) {
-                    Log.e(TAG, "Hit JSON Exception");
-                }
+                // call image callback do manipulate json obj
+                callback.onSuccess(json);
             }
 
             @Override
             public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-                Log.e(TAG, "Error Code: " + i, throwable);
+                callback.onFailure(i);
             }
         });
     }
@@ -240,5 +233,29 @@ public class ShowDetailFragment extends Fragment {
                 }
             }
         });
+    }
+
+    class DetailImageCallback implements ImageCallback {
+        @Override
+        public void onSuccess(JsonHttpResponseHandler.JSON json) {
+            Log.d(TAG, "onSuccess");
+
+            // get json object
+            JSONObject jsonObj = json.jsonObject;
+
+            // get results and save to show object
+            try {
+                String path = jsonObj.getString("backdrop_path");
+                currShow.setImageUrl(path);
+
+            } catch (JSONException e) {
+                Log.e(TAG, "Hit JSON Exception");
+            }
+        }
+
+        @Override
+        public void onFailure(int i) {
+            Log.e(TAG, "Error Code: " + i);
+        }
     }
 }

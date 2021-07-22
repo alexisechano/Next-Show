@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next_show.R;
+import com.example.next_show.callbacks.ResponseCallback;
 import com.example.next_show.adapters.ShowAdapter;
 import com.example.next_show.data.RecommendationClient;
 import com.example.next_show.data.TraktApplication;
@@ -44,6 +45,7 @@ public class FeedFragment extends Fragment {
     private RecyclerView rvFeed;
     private View currView;
     private Shows showsObj;
+    private User currentUser;
 
     protected ShowAdapter adapter;
     protected List<Show> showsList;
@@ -59,7 +61,7 @@ public class FeedFragment extends Fragment {
         showsObj = new TraktApplication(getContext()).getNewShowsInstance();
 
         // get trending shows
-        fetchTraktData(showsObj);
+        fetchTrendingShows(showsObj);
     }
 
     @Override
@@ -73,8 +75,10 @@ public class FeedFragment extends Fragment {
             // find Recycler View
             rvFeed = currView.findViewById(R.id.rvFeed);
 
-            // initialize the array that will hold posts and create a ShowAdapter
+            // initialize the array that will hold posts
             showsList = new ArrayList<>();
+
+            // creates a show adapter with show list
             adapter = new ShowAdapter(getActivity(), showsList, new NavigateFeedToDetail());
 
             // set the adapter on the recycler view
@@ -82,6 +86,9 @@ public class FeedFragment extends Fragment {
 
             // set the layout manager on the recycler view
             rvFeed.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+            // get current user
+            currentUser = (User) ParseUser.getCurrentUser();
 
             // determine whether to show trending or recommended
             BottomNavigationView bottomNavigationView = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
@@ -96,21 +103,15 @@ public class FeedFragment extends Fragment {
                             adapter.clear();
 
                             // get trending shows
-                            fetchTraktData(showsObj);
+                            fetchTrendingShows(showsObj);
 
                             break;
                         case R.id.action_recommend:
                             // clear adapter to be able to make room for new recommendations
                             adapter.clear();
 
-                            // set up recommendation client to grab more shows
-                            RecommendationClient recClient = new RecommendationClient(getContext(), (User) ParseUser.getCurrentUser());
-
-                            // get related shows based on saved LIKED shows
-                            //recClient.fetchRelatedShows(showsObj, adapter);
-
-                            // get recommended shows based on User preferences
-                            recClient.fetchRecommendedShows(showsObj, adapter);
+                            // fetch recommended shows
+                            fetchRecommendedShows(showsObj);
 
                             break;
                     }
@@ -121,7 +122,24 @@ public class FeedFragment extends Fragment {
         return currView;
     }
 
-    private void fetchTraktData(Shows traktShows) {
+    private void fetchRecommendedShows(Shows showsObj) {
+        // get user's liked shows
+        List<String> savedShows = currentUser.getLikedSavedShows();
+
+        // set up recommendation client to grab more shows
+        RecommendationClient recClient = new RecommendationClient();
+
+        // get related shows based on saved LIKED shows -> updates adapter within callback
+        recClient.fetchRelatedShows(showsObj, savedShows, new RelatedCallback());
+
+        // get more recommended shows if the above doesn't retrieve any shows
+        if(adapter.getItemCount() == 0) {
+            // get recommended shows based on User preferences -> updates adapter within callback
+            recClient.fetchGenreMatchedShows(showsObj, new GenreMatchedCallback());
+        }
+    }
+
+    private void fetchTrendingShows(Shows traktShows) {
         try {
             // enqueue to do asynchronous call and execute to do it synchronously
             traktShows.trending(PAGES_REQUESTED, LIMIT, Extended.FULL).enqueue(new Callback<List<TrendingShow>>() {
@@ -155,6 +173,48 @@ public class FeedFragment extends Fragment {
     class NavigateFeedToDetail implements NavigationInterface {
         public void navigate(View v, Bundle b){
             Navigation.findNavController(v).navigate(R.id.action_feedFragment_to_showDetailFragment, b);
+        }
+    }
+
+    class RelatedCallback implements ResponseCallback {
+        @Override
+        public void onSuccess(List<com.uwetrottmann.trakt5.entities.Show> shows) {
+            // turn all of these into usable Show objects
+            List<Show> updatedShows = Show.fromRecShows(shows);
+
+            // update adapter
+            adapter.addAll(updatedShows);
+        }
+
+        @Override
+        public void onFailure(int code) {
+            RecommendationClient.determineError(code);
+        }
+    }
+
+    class GenreMatchedCallback implements ResponseCallback {
+        @Override
+        public void onSuccess(List<com.uwetrottmann.trakt5.entities.Show> shows) {
+            // turn all of these into usable Show objects
+            List<Show> updatedShows = Show.fromRecShows(shows);
+
+            // do logic to get only fave genre ones
+            List<Show> genreMatchedShows = RecommendationClient.getGenreMatch(updatedShows, currentUser);
+
+            // no matches, let user know and don't add to adapter
+            if (genreMatchedShows.isEmpty()) {
+                Toast.makeText(getContext(), "No shows available right now :(", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            // update adapter
+            adapter.addAll(updatedShows);
+        }
+
+        @Override
+        public void onFailure(int code) {
+            Toast.makeText(getContext(), "No shows available right now :(", Toast.LENGTH_LONG).show();
+            RecommendationClient.determineError(code);
         }
     }
 }
