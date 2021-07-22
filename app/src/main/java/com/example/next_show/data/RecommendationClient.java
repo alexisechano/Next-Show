@@ -39,7 +39,7 @@ public class RecommendationClient {
                 @Override
                 public void onResponse(Call<List<com.uwetrottmann.trakt5.entities.Show>> call, Response<List<com.uwetrottmann.trakt5.entities.Show>> response) {
                     if (response.isSuccessful()) {
-                        callback.onSuccess(response.body());
+                        callback.onSuccess(Show.formatShows(response.body()));
                     } else {
                         callback.onFailure(response.code());
                     }
@@ -64,7 +64,7 @@ public class RecommendationClient {
                 @Override
                 public void onResponse(Call<List<com.uwetrottmann.trakt5.entities.Show>> call, Response<List<com.uwetrottmann.trakt5.entities.Show>> response) {
                     if (response.isSuccessful()) {
-                        callback.onSuccess(response.body());
+                        callback.onSuccess(Show.formatShows(response.body()));
                     } else {
                         callback.onFailure(response.code());
                     }

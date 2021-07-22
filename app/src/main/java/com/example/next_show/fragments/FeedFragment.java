@@ -61,7 +61,7 @@ public class FeedFragment extends Fragment {
         showsObj = new TraktApplication(getContext()).getNewShowsInstance();
 
         // get trending shows
-        fetchTrendingShows(showsObj);
+        fetchTrendingShows(showsObj, new ShowCallback());
     }
 
     @Override
@@ -103,7 +103,7 @@ public class FeedFragment extends Fragment {
                             adapter.clear();
 
                             // get trending shows
-                            fetchTrendingShows(showsObj);
+                            fetchTrendingShows(showsObj, new ShowCallback());
 
                             break;
                         case R.id.action_recommend:
@@ -130,7 +130,7 @@ public class FeedFragment extends Fragment {
         RecommendationClient recClient = new RecommendationClient();
 
         // get related shows based on saved LIKED shows -> updates adapter within callback
-        recClient.fetchRelatedShows(showsObj, savedShows, new RelatedCallback());
+        recClient.fetchRelatedShows(showsObj, savedShows, new ShowCallback());
 
         // get more recommended shows if the above doesn't retrieve any shows
         if(adapter.getItemCount() == 0) {
@@ -139,23 +139,16 @@ public class FeedFragment extends Fragment {
         }
     }
 
-    private void fetchTrendingShows(Shows traktShows) {
+    private void fetchTrendingShows(Shows traktShows, ResponseCallback callback) {
         try {
             // enqueue to do asynchronous call and execute to do it synchronously
             traktShows.trending(PAGES_REQUESTED, LIMIT, Extended.FULL).enqueue(new Callback<List<TrendingShow>>() {
                 @Override
                 public void onResponse(Call<List<TrendingShow>> call, Response<List<TrendingShow>> response) {
                     if (response.isSuccessful()) {
-                        List<TrendingShow> repsonseShows = response.body();
-
-                        // turn all of these into usable Show objects
-                        List<Show> updatedShows = Show.fromTrendingShows(repsonseShows);
-
-                        // set the adapter to update
-                        adapter.addAll(updatedShows);
+                        callback.onSuccess(Show.formatTrendingShows(response.body()));
                     } else {
-                        Toast.makeText(getContext(), "No shows available right now :(", Toast.LENGTH_LONG).show();
-                        RecommendationClient.determineError(response.code());
+                        callback.onFailure(response.code());
                     }
                 }
 
@@ -176,14 +169,11 @@ public class FeedFragment extends Fragment {
         }
     }
 
-    class RelatedCallback implements ResponseCallback {
+    class ShowCallback implements ResponseCallback {
         @Override
-        public void onSuccess(List<com.uwetrottmann.trakt5.entities.Show> shows) {
-            // turn all of these into usable Show objects
-            List<Show> updatedShows = Show.fromRecShows(shows);
-
-            // update adapter
-            adapter.addAll(updatedShows);
+        public void onSuccess(List<Show> shows) {
+            // update adapter declared in FeedFragment
+            adapter.addAll(shows);
         }
 
         @Override
@@ -194,12 +184,9 @@ public class FeedFragment extends Fragment {
 
     class GenreMatchedCallback implements ResponseCallback {
         @Override
-        public void onSuccess(List<com.uwetrottmann.trakt5.entities.Show> shows) {
-            // turn all of these into usable Show objects
-            List<Show> updatedShows = Show.fromRecShows(shows);
-
+        public void onSuccess(List<Show> shows) {
             // do logic to get only fave genre ones
-            List<Show> genreMatchedShows = RecommendationClient.getGenreMatch(updatedShows, currentUser);
+            List<Show> genreMatchedShows = RecommendationClient.getGenreMatch(shows, currentUser);
 
             // no matches, let user know and don't add to adapter
             if (genreMatchedShows.isEmpty()) {
@@ -208,7 +195,7 @@ public class FeedFragment extends Fragment {
             }
 
             // update adapter
-            adapter.addAll(updatedShows);
+            adapter.addAll(shows);
         }
 
         @Override

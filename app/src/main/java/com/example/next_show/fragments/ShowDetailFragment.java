@@ -54,6 +54,7 @@ public class ShowDetailFragment extends Fragment {
 
     private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
     private static final String ADD_API_KEY = "?api_key=";
+    private static final String BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w342/%s";
 
     // empty constructor
     public ShowDetailFragment() { }
@@ -99,15 +100,7 @@ public class ShowDetailFragment extends Fragment {
         tvYearAndNetwork.setText(yearAndNetwork);
 
         // grab image from API and load into image view
-        fetchShowPoster(new DetailImageCallback() {
-            @Override
-            public void onSuccess(JsonHttpResponseHandler.JSON json) {
-                super.onSuccess(json);
-
-                // display backdrop poster here
-                Glide.with(getContext()).load(currShow.getImageUrl()).into(ivShowPoster);
-            }
-        });
+        fetchShowPoster(new DetailImageCallback());
 
         // check if previous fragment was the SavedFragment -> disable save feature
         if (currShow.isSaved()) {
@@ -246,7 +239,10 @@ public class ShowDetailFragment extends Fragment {
             // get results and save to show object
             try {
                 String path = jsonObj.getString("backdrop_path");
-                currShow.setImageUrl(path);
+                String imgUrl = String.format(BASE_IMAGE_URL, path);
+
+                // display backdrop poster here
+                Glide.with(getContext()).load(imgUrl).into(ivShowPoster);
 
             } catch (JSONException e) {
                 Log.e(TAG, "Hit JSON Exception");

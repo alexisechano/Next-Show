@@ -49,7 +49,7 @@ public class Show extends ParseObject implements Parcelable {
     }
 
     // from Trending Show objects to NextShow Show objects
-    public static List<Show> fromTrendingShows(List<TrendingShow> response) {
+    public static List<Show> formatTrendingShows(List<TrendingShow> response) {
         List<Show> updatedShows = new ArrayList<>();
         for (TrendingShow trendingShow : response) {
             Show currentShow = new Show(trendingShow.show.title, trendingShow.show.overview,
@@ -60,7 +60,7 @@ public class Show extends ParseObject implements Parcelable {
     }
 
     // from Recommended Show objects to NextShow Show objects
-    public static List<Show> fromRecShows(List<com.uwetrottmann.trakt5.entities.Show> repsonseShows) {
+    public static List<Show> formatShows(List<com.uwetrottmann.trakt5.entities.Show> repsonseShows) {
         List<Show> updatedShows = new ArrayList<>();
         for (com.uwetrottmann.trakt5.entities.Show show : repsonseShows) {
             Show currentShow = new Show(show.title, show.overview,
@@ -130,7 +130,7 @@ public class Show extends ParseObject implements Parcelable {
     public String getImageUrl() { return imageUrl; }
 
     public void setImageUrl(String p) {
-        this.imageUrl = String.format("https://image.tmdb.org/t/p/w342/%s", p);;
+        this.imageUrl = String.format("https://image.tmdb.org/t/p/w342/%s", p);
     }
 
     // **** for Parse instance of Show -> grab saved shows data only ****
