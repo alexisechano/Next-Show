@@ -9,15 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.next_show.R;
 import com.example.next_show.navigators.NavigationInterface;
 import com.example.next_show.models.Show;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -26,6 +23,9 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     private Context context;
     private List<Show> shows;
     private NavigationInterface nav;
+
+    // constants
+    public static final int NOT_FOUND = -1;
 
     public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav){
         this.context = context;
@@ -56,7 +56,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    // uses basic search algorithm
+    // uses basic search algorithm -> not in adapter API
     public int search(String id){
         for (int index = 0; index < getItemCount(); index++){
             Show s = shows.get(index);
@@ -64,13 +64,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
                 return index;
             }
         }
-        return -1;
-    }
-
-    public void updateShowImage(int i, String imgPath) {
-        Show show = shows.get(i);
-        show.setImageUrl(imgPath);
-        notifyItemChanged(i);
+        return NOT_FOUND;
     }
 
     public void addAll(List<Show> list) {
@@ -97,7 +91,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         }
 
         private void setUpView() {
-            // find them in the layout
+            // find view elements in the layout
             tvShowTitle = itemView.findViewById(R.id.tvShowTitle);
             tvShowBody = itemView.findViewById(R.id.tvShowBody);
             ivCardImage = itemView.findViewById(R.id.ivCardImage);
