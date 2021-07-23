@@ -35,6 +35,7 @@ import okhttp3.Headers;
 
 public class ShowDetailFragment extends Fragment {
     private Show currShow;
+    private String imgUrl;
 
     // view elements
     private TextView tvDetailTitle;
@@ -51,10 +52,6 @@ public class ShowDetailFragment extends Fragment {
     public static final String LIKED = "liked";
     public static final String DISLIKED = "disliked";
     public static final String KEY_SHOW = "Show";
-
-    private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
-    private static final String ADD_API_KEY = "?api_key=";
-    private static final String BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w342/%s";
 
     // empty constructor
     public ShowDetailFragment() { }
@@ -100,7 +97,9 @@ public class ShowDetailFragment extends Fragment {
         tvYearAndNetwork.setText(yearAndNetwork);
 
         // grab image from API and load into image view
-        fetchShowPoster(new DetailImageCallback());
+        imgUrl = currShow.getImageUrl();
+        Log.i(TAG, "IMGURL:" + imgUrl);
+        Glide.with(getContext()).load(imgUrl).into(ivShowPoster);
 
         // check if previous fragment was the SavedFragment -> disable save feature
         if (currShow.isSaved()) {
@@ -140,6 +139,8 @@ public class ShowDetailFragment extends Fragment {
         btnSaveShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i(TAG, "IMGURL in btn:" + imgUrl);
+                Log.i(TAG, "IMGURL in show:" + currShow.getImageUrl());
                 // set parse fields like title and overview
                 currShow.setParseFields(parseUser);
 
@@ -163,27 +164,6 @@ public class ShowDetailFragment extends Fragment {
                         Toast.makeText(getActivity(), "Saved show!", Toast.LENGTH_SHORT).show();
                     }
                 });
-            }
-        });
-    }
-
-    private void fetchShowPoster(ImageCallback callback) {
-        // create HTTP client
-        AsyncHttpClient client = new AsyncHttpClient();
-        String id = currShow.getId();
-        String getUrl = SHOW_DETAIL_URL + id + ADD_API_KEY + getContext().getString(R.string.movie_api_key);
-
-        // call URL and parse through JSON
-        client.get(getUrl, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int i, Headers headers, JSON json) {
-                // call image callback do manipulate json obj
-                callback.onSuccess(json);
-            }
-
-            @Override
-            public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-                callback.onFailure(i);
             }
         });
     }
@@ -228,30 +208,4 @@ public class ShowDetailFragment extends Fragment {
         });
     }
 
-    class DetailImageCallback implements ImageCallback {
-        @Override
-        public void onSuccess(JsonHttpResponseHandler.JSON json) {
-            Log.d(TAG, "onSuccess");
-
-            // get json object
-            JSONObject jsonObj = json.jsonObject;
-
-            // get results and save to show object
-            try {
-                String path = jsonObj.getString("backdrop_path");
-                String imgUrl = String.format(BASE_IMAGE_URL, path);
-
-                // display backdrop poster here
-                Glide.with(getContext()).load(imgUrl).into(ivShowPoster);
-
-            } catch (JSONException e) {
-                Log.e(TAG, "Hit JSON Exception");
-            }
-        }
-
-        @Override
-        public void onFailure(int i) {
-            Log.e(TAG, "Error Code: " + i);
-        }
-    }
 }

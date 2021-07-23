@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.next_show.R;
 import com.example.next_show.navigators.NavigationInterface;
 import com.example.next_show.models.Show;
@@ -53,6 +54,23 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     public void clear() {
         shows.clear();
         notifyDataSetChanged();
+    }
+
+    // uses basic search algorithm
+    public int search(String id){
+        for (int index = 0; index < getItemCount(); index++){
+            Show s = shows.get(index);
+            if(s.getId().equals(id)){
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    public void updateShowImage(int i, String imgPath) {
+        Show show = shows.get(i);
+        show.setImageUrl(imgPath);
+        notifyItemChanged(i);
     }
 
     public void addAll(List<Show> list) {
@@ -106,7 +124,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             tvShowTitle.setText(show.getTitle());
             tvShowBody.setText(show.getOverview());
 
-            // Glide.with(getContext()).load(show.getImageUrl()).into(ivCardImage);
+            Glide.with(context).load(show.getImageUrl()).into(ivCardImage);
         }
     }
 }
