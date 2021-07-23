@@ -1,5 +1,8 @@
 package com.example.next_show.fragments;
 
+import android.media.Image;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,15 +12,21 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.next_show.R;
+import com.example.next_show.callbacks.ImageCallback;
 import com.example.next_show.callbacks.ResponseCallback;
 import com.example.next_show.adapters.ShowAdapter;
 import com.example.next_show.data.RecommendationClient;
+
 import com.example.next_show.data.TraktApplication;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
@@ -28,9 +37,15 @@ import com.uwetrottmann.trakt5.entities.TrendingShow;
 import com.uwetrottmann.trakt5.enums.Extended;
 import com.uwetrottmann.trakt5.services.Shows;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 
+import okhttp3.Headers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,6 +55,9 @@ public class FeedFragment extends Fragment {
     private static final String TAG = "FeedFragment";
     public static final int PAGES_REQUESTED = 1;
     public static final int LIMIT = 5;
+
+    private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
+    private static final String ADD_API_KEY = "?api_key=";
 
     // view element variables
     private RecyclerView rvFeed;
@@ -62,8 +80,10 @@ public class FeedFragment extends Fragment {
 
         // get trending shows
         fetchTrendingShows(showsObj, new ShowCallback());
+
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,10 +111,12 @@ public class FeedFragment extends Fragment {
             currentUser = (User) ParseUser.getCurrentUser();
 
             // determine whether to show trending or recommended
-            BottomNavigationView bottomNavigationView = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
+            BottomNavigationView toggleNav = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
+
+            // EXPERIMENT
 
             // set selector
-            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            toggleNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
@@ -122,6 +144,24 @@ public class FeedFragment extends Fragment {
         return currView;
     }
 
+    private void fetchImage(String id, ImageCallback callback){
+        AsyncHttpClient client = new AsyncHttpClient();
+        String getUrl = SHOW_DETAIL_URL + id + ADD_API_KEY + getContext().getString(R.string.movie_api_key);
+
+            // call URL and parse through JSON
+            client.get(getUrl, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int i, Headers headers, JSON json) {
+                    callback.onSuccess(json);
+                }
+
+                @Override
+                public void onFailure(int i, Headers headers, String s, Throwable throwable) {
+                    callback.onFailure(i);
+                }
+            });
+    }
+
     private void fetchRecommendedShows(Shows showsObj) {
         // get user's liked shows
         List<String> savedShows = currentUser.getLikedSavedShows();
@@ -140,6 +180,7 @@ public class FeedFragment extends Fragment {
     }
 
     private void fetchTrendingShows(Shows traktShows, ResponseCallback callback) {
+        Log.i(TAG, "Fetching shows now!");
         try {
             // enqueue to do asynchronous call and execute to do it synchronously
             traktShows.trending(PAGES_REQUESTED, LIMIT, Extended.FULL).enqueue(new Callback<List<TrendingShow>>() {
@@ -174,6 +215,11 @@ public class FeedFragment extends Fragment {
         public void onSuccess(List<Show> shows) {
             // update adapter declared in FeedFragment
             adapter.addAll(shows);
+
+            // make API call to grab images
+            for(Show s: shows){
+                fetchImage(s.getId(), new DetailImageCallback());
+            }
         }
 
         @Override
@@ -196,12 +242,46 @@ public class FeedFragment extends Fragment {
 
             // update adapter
             adapter.addAll(shows);
+
+            // make API call to grab images
+            for(Show s: shows){
+                fetchImage(s.getId(), new DetailImageCallback());
+            }
         }
 
         @Override
         public void onFailure(int code) {
             Toast.makeText(getContext(), "No shows available right now :(", Toast.LENGTH_LONG).show();
             RecommendationClient.determineError(code);
+        }
+    }
+
+    class DetailImageCallback implements ImageCallback {
+        @Override
+        public void onSuccess(JsonHttpResponseHandler.JSON json) {
+            Log.d(TAG, "onSuccess");
+
+            // get json object
+            JSONObject jsonObj = json.jsonObject;
+
+            // get results and save to show object
+            try {
+                String path = jsonObj.getString("backdrop_path");
+
+                // finds show in adapter
+                int index = adapter.search(jsonObj.getString("id"));
+
+                // updates the show images
+                adapter.updateShowImage(index, path);
+
+            } catch (JSONException e) {
+                Log.e(TAG, "Hit JSON Exception");
+            }
+        }
+
+        @Override
+        public void onFailure(int i) {
+            Log.e(TAG, "Error Code: " + i);
         }
     }
 }

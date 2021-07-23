@@ -14,25 +14,29 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="10dp"
         app:cardElevation="8dp"
+        app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/ivCardImage"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="0dp" />
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginEnd="0dp"
+                android:scaleType="centerCrop"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
             <TextView
                 android:id="@+id/tvShowTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="7dp"
                 android:text="Show Name"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -41,15 +45,14 @@
                 android:id="@+id/tvShowBody"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvShowTitle"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:text="Synopsis"
                 android:ellipsize="end"
-                android:maxLines="4"/>
+                android:maxLines="4"
+                android:text="Synopsis" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

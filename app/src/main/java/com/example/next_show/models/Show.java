@@ -83,6 +83,9 @@ public class Show extends ParseObject implements Parcelable {
             currentShow.setObjectID(parseShow.getObjectId());
             currentShow.setUserLiked(parseShow.getParseUserLiked());
             currentShow.setSavedStatus(true);
+            currentShow.setImageUrl(parseShow.getParseImage());
+
+            // add to new list
             updatedShows.add(currentShow);
         }
         return updatedShows;
@@ -130,7 +133,11 @@ public class Show extends ParseObject implements Parcelable {
     public String getImageUrl() { return imageUrl; }
 
     public void setImageUrl(String p) {
-        this.imageUrl = String.format("https://image.tmdb.org/t/p/w342/%s", p);
+        if(p.contains("https")){
+            this.imageUrl = p;
+        } else{
+            this.imageUrl = String.format("https://image.tmdb.org/t/p/w342/%s", p);
+        }
     }
 
     // **** for Parse instance of Show -> grab saved shows data only ****
@@ -214,7 +221,7 @@ public class Show extends ParseObject implements Parcelable {
         setParseTVID(id);
         setParseNetwork(network);
         setParseYearAired(year_aired);
-        setParseImage(imageUrl); // make sure this is not null
+        setParseImage(getImageUrl());
         setParseUser(currUser);
 
         // null check before adding to Parse since Parse does not accept null strings
