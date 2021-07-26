@@ -1,127 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/ivShowPoster"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentTop="true"
-        android:gravity="center"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:paddingTop="30dp"
-        android:id="@+id/tvDetailTitle"
-        android:layout_below="@+id/ivShowPoster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:gravity="center"
-        android:text="Show Title"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:textSize="30sp" />
-
-    <TextView
-        android:id="@+id/tvYearAndNetwork"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDetailTitle"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:gravity="center"
-        android:padding="2dp"
-        android:text="Year Aired | Network"
-        android:textSize="12sp"/>
-
-    <TextView
-        android:id="@+id/tvDetailOverview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvYearAndNetwork"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="Overview"
-        android:textSize="16sp"/>
-
-    <LinearLayout
-        android:id="@+id/lRatings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@+id/tvDetailOverview"
-        android:layout_marginTop="15dp">
+        <ImageView
+            android:id="@+id/ivShowPoster"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tvRatingTitle"
+            android:id="@+id/tvDetailTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:padding="10dp"
-            android:text="Watched it already? Add your rating!"
-            android:textSize="14sp"/>
+            android:layout_below="@+id/ivShowPoster"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/roboto_bold_italic"
+            android:gravity="center"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:paddingTop="30dp"
+            android:text="Show Title"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/tvAlreadyRated"
+            android:id="@+id/tvYearAndNetwork"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:padding="10dp"
-            android:text="Already rated!"
-            android:textSize="14sp"
-            android:visibility="gone"/>
+            android:layout_below="@+id/tvDetailTitle"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/lato"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="Year Aired | Network"
+            android:textSize="12sp" />
 
-        <RelativeLayout
-            android:id="@+id/ratingsBar"
+        <TextView
+            android:id="@+id/tvDetailOverview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvYearAndNetwork"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/lato"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Overview"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/lRatings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/tvRatingTitle"
-            android:layout_marginTop="5dp"
-            android:layout_gravity="center_horizontal">
+            android:layout_below="@+id/tvDetailOverview"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
 
-            <CheckBox
-                android:id="@+id/btnLiked"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="60dp"
+            <TextView
+                android:id="@+id/tvRatingTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Liked" />
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/lato"
+                android:padding="10dp"
+                android:text="Watched it already? Add your rating!"
+                android:textSize="14sp" />
 
-            <CheckBox
-                android:id="@+id/btnDisliked"
+            <TextView
+                android:id="@+id/tvAlreadyRated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Disliked"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="60dp"/>
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/lato"
+                android:padding="10dp"
+                android:text="Already rated!"
+                android:textSize="14sp"
+                android:visibility="gone" />
 
-        </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/ratingsBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvRatingTitle"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-    </LinearLayout>
+                <CheckBox
+                    android:id="@+id/btnLiked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="60dp"
+                    android:fontFamily="@font/lato"
+                    android:text="Liked" />
 
-    <Button
-        android:id="@+id/btnSaveShow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="20dp"
-        android:text="Save show" />
+                <CheckBox
+                    android:id="@+id/btnDisliked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="60dp"
+                    android:fontFamily="@font/lato"
+                    android:text="Disliked" />
 
-</RelativeLayout>
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnSaveShow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:fontFamily="@font/lato"
+                android:text="Save show"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</ScrollView>

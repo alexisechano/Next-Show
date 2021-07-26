@@ -36,10 +36,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/roboto_bold_italic"
                 android:text="Show Name"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvShowBody"
@@ -49,6 +50,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:ellipsize="end"
+                android:fontFamily="@font/lato"
                 android:maxLines="4"
                 android:text="Synopsis" />
 
