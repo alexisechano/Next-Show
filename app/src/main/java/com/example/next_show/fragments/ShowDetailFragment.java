@@ -15,10 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.next_show.R;
-import com.example.next_show.callbacks.ImageCallback;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
 import com.parse.GetCallback;
@@ -28,14 +25,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import okhttp3.Headers;
-
 public class ShowDetailFragment extends Fragment {
     private Show currShow;
-    private String imgUrl;
 
     // view elements
     private TextView tvDetailTitle;
@@ -96,10 +87,8 @@ public class ShowDetailFragment extends Fragment {
         String yearAndNetwork = currShow.getYearAired() + " | " + currShow.getNetwork();
         tvYearAndNetwork.setText(yearAndNetwork);
 
-        // grab image from API and load into image view
-        imgUrl = currShow.getImageUrl();
-        Log.i(TAG, "IMGURL:" + imgUrl);
-        Glide.with(getContext()).load(imgUrl).into(ivShowPoster);
+        // put into imageview -> if not loaded yet, this will be blank but loads properly if clicked again
+        Glide.with(getContext()).load(currShow.getImageUrl()).into(ivShowPoster);
 
         // check if previous fragment was the SavedFragment -> disable save feature
         if (currShow.isSaved()) {
@@ -110,7 +99,7 @@ public class ShowDetailFragment extends Fragment {
                 String status = (currShow.getUserLiked().equals(LIKED)) ? LIKED : DISLIKED;
                 tvAlreadyRated = currView.findViewById(R.id.tvAlreadyRated);
 
-                // toggle view
+                // toggle view, remove liked and disliked if rated already
                 btnLiked.setVisibility(View.GONE);
                 btnDisliked.setVisibility(View.GONE);
 
@@ -139,8 +128,6 @@ public class ShowDetailFragment extends Fragment {
         btnSaveShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "IMGURL in btn:" + imgUrl);
-                Log.i(TAG, "IMGURL in show:" + currShow.getImageUrl());
                 // set parse fields like title and overview
                 currShow.setParseFields(parseUser);
 
@@ -207,5 +194,4 @@ public class ShowDetailFragment extends Fragment {
             }
         });
     }
-
 }

@@ -18,7 +18,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.next_show.R;
@@ -42,8 +41,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Headers;
 import retrofit2.Call;
@@ -55,6 +52,7 @@ public class FeedFragment extends Fragment {
     private static final String TAG = "FeedFragment";
     public static final int PAGES_REQUESTED = 1;
     public static final int LIMIT = 5;
+    public static final int NOT_FOUND = -1;
 
     private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
     private static final String ADD_API_KEY = "?api_key=";
@@ -78,16 +76,15 @@ public class FeedFragment extends Fragment {
         // new application for Trakt Call, pass in the Context
         showsObj = new TraktApplication(getContext()).getNewShowsInstance();
 
-        // get trending shows
+        // get trending shows on load
         fetchTrendingShows(showsObj, new ShowCallback());
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // prevent reloading if not necessary
+        // prevent reloading view if not necessary
         if(currView == null) {
             // Inflate the layout for this fragment
             currView = inflater.inflate(R.layout.fragment_feed, container, false);
@@ -112,8 +109,6 @@ public class FeedFragment extends Fragment {
 
             // determine whether to show trending or recommended
             BottomNavigationView toggleNav = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
-
-            // EXPERIMENT
 
             // set selector
             toggleNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -269,10 +264,14 @@ public class FeedFragment extends Fragment {
                 String path = jsonObj.getString("backdrop_path");
 
                 // finds show in adapter
-                int index = adapter.search(jsonObj.getString("id"));
+                int index = search(jsonObj.getString("id"));
 
-                // updates the show images
-                adapter.updateShowImage(index, path);
+                // update show in FeedFragment
+                Show show = showsList.get(index);
+                show.setImageUrl(path);
+
+                // updates the show image at that index
+                adapter.notifyItemChanged(index);
 
             } catch (JSONException e) {
                 Log.e(TAG, "Hit JSON Exception");
@@ -283,5 +282,16 @@ public class FeedFragment extends Fragment {
         public void onFailure(int i) {
             Log.e(TAG, "Error Code: " + i);
         }
+    }
+
+    // uses basic search algorithm
+    public int search(String id){
+        for (int index = 0; index < showsList.size(); index++){
+            Show s = showsList.get(index);
+            if(s.getId().equals(id)){
+                return index;
+            }
+        }
+        return NOT_FOUND;
     }
 }
