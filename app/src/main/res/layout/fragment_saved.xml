@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginTop="0dp"
+            android:fontFamily="@font/roboto_bold_italic"
             android:text="Saved Shows"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 

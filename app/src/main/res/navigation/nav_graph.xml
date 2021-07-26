@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_feed" >
         <action
             android:id="@+id/action_feedFragment_to_showDetailFragment"
-            app:destination="@id/showDetailFragment" />
+            app:destination="@id/showDetailFragment"
+            app:enterAnim="@transition/slide_in_right"
+            app:exitAnim="@transition/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -24,7 +26,9 @@
         android:label="SavedFragment" >
         <action
             android:id="@+id/action_savedFragment_to_showDetailFragment"
-            app:destination="@id/showDetailFragment" />
+            app:destination="@id/showDetailFragment"
+            app:enterAnim="@transition/slide_in_right"
+            app:exitAnim="@transition/slide_out_left"  />
     </fragment>
     <fragment
         android:id="@+id/showDetailFragment"
