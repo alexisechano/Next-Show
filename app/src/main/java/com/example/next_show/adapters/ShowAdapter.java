@@ -24,9 +24,6 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     private List<Show> shows;
     private NavigationInterface nav;
 
-    // constants
-    public static final int NOT_FOUND = -1;
-
     public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav){
         this.context = context;
         this.shows = shows;
@@ -54,17 +51,6 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     public void clear() {
         shows.clear();
         notifyDataSetChanged();
-    }
-
-    // uses basic search algorithm -> not in adapter API
-    public int search(String id){
-        for (int index = 0; index < getItemCount(); index++){
-            Show s = shows.get(index);
-            if(s.getId().equals(id)){
-                return index;
-            }
-        }
-        return NOT_FOUND;
     }
 
     public void addAll(List<Show> list) {

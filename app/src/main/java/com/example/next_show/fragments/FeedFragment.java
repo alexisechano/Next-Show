@@ -52,6 +52,7 @@ public class FeedFragment extends Fragment {
     private static final String TAG = "FeedFragment";
     public static final int PAGES_REQUESTED = 1;
     public static final int LIMIT = 5;
+    public static final int NOT_FOUND = -1;
 
     private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
     private static final String ADD_API_KEY = "?api_key=";
@@ -263,9 +264,9 @@ public class FeedFragment extends Fragment {
                 String path = jsonObj.getString("backdrop_path");
 
                 // finds show in adapter
-                int index = adapter.search(jsonObj.getString("id"));
+                int index = search(jsonObj.getString("id"));
 
-                // update show in FeedFragment -> same show list as adapter!
+                // update show in FeedFragment
                 Show show = showsList.get(index);
                 show.setImageUrl(path);
 
@@ -281,5 +282,16 @@ public class FeedFragment extends Fragment {
         public void onFailure(int i) {
             Log.e(TAG, "Error Code: " + i);
         }
+    }
+
+    // uses basic search algorithm
+    public int search(String id){
+        for (int index = 0; index < showsList.size(); index++){
+            Show s = showsList.get(index);
+            if(s.getId().equals(id)){
+                return index;
+            }
+        }
+        return NOT_FOUND;
     }
 }
