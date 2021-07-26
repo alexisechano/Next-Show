@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name= "image_height">150dp</dimen>
+
+    <!-- DETAIL FRAGMENT DIMENSIONS -->
+    <dimen name= "detail_spacing_large">20dp</dimen>
+    <dimen name= "detail_spacing_med">10dp</dimen>
+    <dimen name= "detail_spacing_small">5dp</dimen>
+
+    <!-- ITEM DIMENSIONS -->
+    <dimen name= "item_spacing_large">10dp</dimen>
+    <dimen name= "item_spacing_med">5dp</dimen>
+    <dimen name= "item_spacing_small">2dp</dimen>
+</resources>
