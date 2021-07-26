@@ -15,11 +15,48 @@
         app:itemIconTint="@color/black"
         app:menu="@menu/filter_menu" />
 
+        <RadioGroup
+            android:id="@+id/rgGenre"
+            android:layout_below="@+id/filterMenu"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/btnAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Action"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:allowUndo="true"/>
+
+        <RadioButton
+            android:id="@+id/btnDrama"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Drama"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:allowUndo="true"/>
+
+        <RadioButton
+            android:id="@+id/btnComedy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comedy"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:allowUndo="true"/>
+
+        </RadioGroup>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFeed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/filterMenu"
+        android:layout_below="@+id/rgGenre"
         android:layout_marginTop="0dp"
         android:padding="8dp" />
 

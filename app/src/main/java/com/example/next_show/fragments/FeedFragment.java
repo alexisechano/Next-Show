@@ -9,6 +9,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,15 +54,22 @@ import retrofit2.Response;
 public class FeedFragment extends Fragment {
     // constants
     private static final String TAG = "FeedFragment";
+    private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
+    private static final String ADD_API_KEY = "?api_key=";
+
     public static final int PAGES_REQUESTED = 1;
     public static final int LIMIT = 5;
     public static final int NOT_FOUND = -1;
 
-    private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
-    private static final String ADD_API_KEY = "?api_key=";
+    // genres for shows
+    public static final String ACTION = "action";
+    public static final String COMEDY = "comedy";
+    public static final String DRAMA = "drama";
 
     // view element variables
     private RecyclerView rvFeed;
+    private RadioGroup rgGenre;
+    private RadioButton selectedButton;
     private View currView;
     private Shows showsObj;
     private User currentUser;
@@ -78,12 +89,12 @@ public class FeedFragment extends Fragment {
 
         // get trending shows on load
         fetchTrendingShows(showsObj, new ShowCallback());
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // prevent reloading view if not necessary
         if(currView == null) {
             // Inflate the layout for this fragment
@@ -136,7 +147,39 @@ public class FeedFragment extends Fragment {
                 }
             });
         }
+
+        // set up filtering by genre
+        setFilterButtons();
+
         return currView;
+    }
+
+    private void setFilterButtons() {
+        // find the radio button group for filtering
+        rgGenre = currView.findViewById(R.id.rgGenre);
+
+        rgGenre.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                selectedButton = currView.findViewById(checkedId);
+                String buttonText = selectedButton.getText().toString().toLowerCase();
+
+                // check if radio button works
+                Log.i(TAG, "Selected: " + buttonText);
+
+                switch (buttonText) {
+                    case ACTION:
+                        adapter.filter(ACTION);
+                        break;
+                    case COMEDY:
+                        adapter.filter(COMEDY);
+                        break;
+                    case DRAMA:
+                        adapter.filter(DRAMA);
+                        break;
+                }
+            }
+        });
     }
 
     private void fetchImage(String id, ImageCallback callback){

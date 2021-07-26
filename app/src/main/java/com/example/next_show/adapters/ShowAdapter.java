@@ -2,6 +2,7 @@ package com.example.next_show.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +17,22 @@ import com.example.next_show.R;
 import com.example.next_show.navigators.NavigationInterface;
 import com.example.next_show.models.Show;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     // instance variables
     private Context context;
     private List<Show> shows;
+    private List<Show> allShows;
     private NavigationInterface nav;
 
     public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav){
         this.context = context;
         this.shows = shows;
         this.nav = nav;
+
+        allShows = shows;
     }
 
     @NonNull
@@ -55,6 +60,22 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
     public void addAll(List<Show> list) {
         shows.addAll(list);
+        allShows = shows;
+        notifyDataSetChanged();
+    }
+
+    public void filter(String query){
+        Log.i("Adapter", "Filtering for " + query);
+        List<Show> queriedShows = new ArrayList<>();
+        for(Show s : shows){
+            if (s.getGenres().contains(query)) {
+                queriedShows.add(s);
+            }
+        }
+
+        // update the adapter and clear current items
+        shows.clear();
+        shows.addAll(queriedShows);
         notifyDataSetChanged();
     }
 
