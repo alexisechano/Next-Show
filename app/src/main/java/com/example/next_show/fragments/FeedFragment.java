@@ -9,6 +9,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,15 +54,23 @@ import retrofit2.Response;
 public class FeedFragment extends Fragment {
     // constants
     private static final String TAG = "FeedFragment";
+    private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
+    private static final String ADD_API_KEY = "?api_key=";
+
     public static final int PAGES_REQUESTED = 1;
     public static final int LIMIT = 5;
     public static final int NOT_FOUND = -1;
 
-    private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
-    private static final String ADD_API_KEY = "?api_key=";
+    // genres for shows
+    public static final String ACTION = "action";
+    public static final String COMEDY = "comedy";
+    public static final String DRAMA = "drama";
+    public static final String ALL_SHOWS = "all";
 
     // view element variables
     private RecyclerView rvFeed;
+    private RadioGroup rgGenre;
+    private RadioButton selectedButton;
     private View currView;
     private Shows showsObj;
     private User currentUser;
@@ -78,12 +90,12 @@ public class FeedFragment extends Fragment {
 
         // get trending shows on load
         fetchTrendingShows(showsObj, new ShowCallback());
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // prevent reloading view if not necessary
         if(currView == null) {
             // Inflate the layout for this fragment
@@ -110,10 +122,20 @@ public class FeedFragment extends Fragment {
             // determine whether to show trending or recommended
             BottomNavigationView toggleNav = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
 
+            // find the radio button group for filtering
+            rgGenre = currView.findViewById(R.id.rgGenre);
+
+            // set up filtering by genre
+            setFilterButtons();
+
             // set selector
             toggleNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    // reset everytime user switches between trending and recommended
+                    RadioButton b = (RadioButton) currView.findViewById(R.id.btnAll);
+                    b.setChecked(true);
+
                     switch (item.getItemId()) {
                         case R.id.action_trending:
                             // clear recycler view for new shows
@@ -136,7 +158,42 @@ public class FeedFragment extends Fragment {
                 }
             });
         }
+
         return currView;
+    }
+
+    private void setFilterButtons() {
+        rgGenre.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                selectedButton = currView.findViewById(checkedId);
+                String buttonText = selectedButton.getText().toString().toLowerCase();
+
+                // check if radio button works
+                Log.i(TAG, "Selected: " + buttonText);
+
+                // determine which button is clicked
+                switch (buttonText) {
+                    case ACTION:
+                        adapter.filter(ACTION);
+                        rvFeed.smoothScrollToPosition(0);
+                        break;
+                    case COMEDY:
+                        adapter.filter(COMEDY);
+                        rvFeed.smoothScrollToPosition(0);
+                        break;
+                    case DRAMA:
+                        adapter.filter(DRAMA);
+                        rvFeed.smoothScrollToPosition(0);
+                        break;
+                    case ALL_SHOWS:
+                        adapter.filter("");
+                        rvFeed.smoothScrollToPosition(0);
+                        break;
+                }
+            }
+
+        });
     }
 
     private void fetchImage(String id, ImageCallback callback){

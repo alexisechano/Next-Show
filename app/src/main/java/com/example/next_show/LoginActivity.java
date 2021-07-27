@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     // constants
     private static final String TAG = "LoginActivity";
     private static final String LOGO_URL = "https://i.imgur.com/yBGsdF4.png";
+    public static final String THEME_COLOR = "#d6d3d2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         Glide.with(this).load(LOGO_URL).centerInside().into(ivLogo);
 
         // set new on click for button
-        btnSignup.setBackgroundColor(Color.parseColor("#d6d3d2"));
+        btnSignup.setBackgroundColor(Color.parseColor(THEME_COLOR));
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
         // launch new intent
         Intent i = new Intent(this, SignupActivity.class);
 
-        // serialize the post using parceler, use its short name as a key
+        // serialize the username using parceler for ease of signing up
         i.putExtra("username", username);
         startActivity(i);
     }
