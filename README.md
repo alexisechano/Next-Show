@@ -29,7 +29,7 @@ Outlined by FBU App Expectations and Priority
 * **Your app has multiple views**
   * User can view their profile, home timeline, and saved shows and ratings in separate views (P0)
   * User can view TV show details from home timeline (P0)
-* **Your app interacts with a database (e.g. Parse)**
+* **Your app interacts with a database**
   * User can save rated shows and shows-to-watch (P1)
   * User can view more than 5+ shows on home timeline through CardView and RecyclerView (P0)
   * User can view TV show details like synopsis (P0)
@@ -41,27 +41,29 @@ Outlined by FBU App Expectations and Priority
   * User can register with new account (P0)
   * User can set up recommendations by choosing favorite genres and current fave shows (P2)
 * **Your app integrates with at least one SDK (e.g. Google Maps SDK, Facebook SDK) or API (that you didn’t learn about in CodePath)**
-  * User receives show recommendations on home timeline using [Trakt](https://trakt.docs.apiary.io/#reference/shows/recommended) (P1) 
-* **Your app uses at least one gesture (e.g. double tap to like, e.g. pinch to scale)**
+  * User receives show recommendations and trending shows on home timeline from [Trakt](https://trakt.docs.apiary.io/#reference/shows/recommended) (P1) 
+  * User can switch between fragments through [Navigation Component](https://developer.android.com/guide/navigation/navigation-getting-started) (P1)
+* **Your app uses at least one gesture**
   * User can swipe to dismiss a show rec on home timeline which counts as a dislike rating but not a save (P2)
-* **Your app uses at least one animation (e.g. fade in/out, e.g. animating a view growing and shrinking)**
-  * In progress (P2)
+* **Your app uses at least one animation**
+  * Using the Navigation component, user can swith between the RecyclerView and the Detail Fragment through a slide transition animation (P1)
 * **Your app incorporates at least external library to add visual polish**
-  * In progress (P2)
-* **Your app provides opportunities for you to overcome difficult/ambiguous technical problems (more below)**
-  * User can filter through TV shows based on Genre or if they are trending or not (P1)
-  * Use combination of APIs to create own data model that has a recommendation system based on like/dislike ratings (P1)
-  * App might need to do some background fetching and proper data handling to be able to show accurate, fast recommendations (P3)
+  * App utilizes CardView in all RecyclerViews and Material Design elements like Bottom Navigation View (P1)
+* **Your app provides opportunities for you to overcome difficult/ambiguous technical problems**
+  * User can filter through TV shows based on Genre and other show attributes (P2)
+  * App fetches show data from the Trakt API and image data from the Movie Database through chaining sequential API calls (P1)
+  * Use combination of APIs and logic to create a basic recommendation system based on like/dislike ratings (P1)
 
 **Optional Nice-to-have Stories**
 
-* User can broadcast currently watching show on profile
+* User can broadcast currently watching show on profile and edit bio, name, and username
 * User has a nice UI experience with modern, clean design
 * Add more complicated rating system like numerical rating out of 5.0
 * Add season breakdown for show details and ability to rate per season
 * User's news feed has friend's TV shows
 * User ratings persist and are shown to friends's feeds
 * User can customize profile and if they haven't watched shows, use movies as a starting point
+* App might need to do some background fetching and proper data handling to be able to show accurate, fast recommendations
 
 
 ### 2. Screen Archetypes
@@ -98,13 +100,12 @@ Outlined by FBU App Expectations and Priority
 * Home Activity Feed
    * TV Show details
 * Profile
-   * Broadcast current show to feed (like compose tweet and publish) -> optional story
+   * Login if loggged out
 * Login screen/registration
-    * Home Timeline/Activity Feed if signin
+    * Home Timeline/Activity Feed if login
     * Profile if register
 * Rating/Saved shows
-  * Can see TV Show Details page similar to if on feed
-  * Separate rating activity
+  * TV Show details
 
 ## Wireframes
 <img src="WireframeSketch-12.jpg" width=900>
@@ -147,16 +148,15 @@ Home/Timeline
 * (Read/GET) Query all recommended and trending shows with details
 
 Login/Register
-* (Read/GET) Get profile information from DB
+* (Read/GET) Get profile information from Parse
 * (Create/POST) Create new account
 
 Profile
-* (Read/GET) Query profile information from DB
-* (PUT) Edit profile image, bio and genres
+* (Read/GET) Query profile information from Parse
+* (PUT) Edit profile image, bio and genres + update user saved shows
 
 Ratings/Saved Shows
-* (Read/GET) Query show details
-* (Create/POST) Create a new rating and comment
-* (Delete) Delete rating or show
+* (Read/GET) Query show details and user rating
+* (Create/POST) Create a new rating + update user saved shows
 
 [**External API: Trakt**](https://trakt.docs.apiary.io/#reference/shows)
