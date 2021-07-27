@@ -52,9 +52,16 @@ public class Show extends ParseObject implements Parcelable {
     public static List<Show> formatTrendingShows(List<TrendingShow> response) {
         List<Show> updatedShows = new ArrayList<>();
         for (TrendingShow trendingShow : response) {
-            Show currentShow = new Show(trendingShow.show.title, trendingShow.show.overview,
-                    "" + trendingShow.show.ids.tmdb, trendingShow.show.network, trendingShow.show.first_aired.getYear(), trendingShow.show.genres);
-            updatedShows.add(currentShow);
+            // grab showID to check if in forbidden shows
+            String showID = "" + trendingShow.show.ids.tmdb;
+
+            if (!isForbiddenShow(showID)) {
+                Show currentShow = new Show(trendingShow.show.title, trendingShow.show.overview,
+                        showID, trendingShow.show.network, trendingShow.show.first_aired.getYear(),
+                        trendingShow.show.genres);
+
+                updatedShows.add(currentShow);
+            }
         }
         return updatedShows;
     }
@@ -63,9 +70,15 @@ public class Show extends ParseObject implements Parcelable {
     public static List<Show> formatShows(List<com.uwetrottmann.trakt5.entities.Show> repsonseShows) {
         List<Show> updatedShows = new ArrayList<>();
         for (com.uwetrottmann.trakt5.entities.Show show : repsonseShows) {
-            Show currentShow = new Show(show.title, show.overview,
-                    "" + show.ids.tmdb, show.network, show.first_aired.getYear(), show.genres);
-            updatedShows.add(currentShow);
+            // grab showID to check if in forbidden shows
+            String showID = "" + show.ids.tmdb;
+
+            if (!isForbiddenShow(showID)) {
+                Show currentShow = new Show(show.title, show.overview, showID, show.network,
+                        show.first_aired.getYear(), show.genres);
+
+                updatedShows.add(currentShow);
+            }
         }
         return updatedShows;
     }
@@ -75,20 +88,37 @@ public class Show extends ParseObject implements Parcelable {
         List<Show> updatedShows = new ArrayList<>();
 
         // turn them into my own Show objects for use later on
-        for(Show parseShow: parseShows){
-            Show currentShow = new Show(parseShow.getParseTitle(), parseShow.getParseOverview(), parseShow.getParseTVID(),
-                    parseShow.getParseNetwork(), parseShow.getParseYearAired(), parseShow.getParseGenres());
+        for (Show parseShow: parseShows) {
+            // grab showID to check if in forbidden shows
+            String showID = parseShow.getParseTVID();
 
-            // for ratings and updating them later
-            currentShow.setObjectID(parseShow.getObjectId());
-            currentShow.setUserLiked(parseShow.getParseUserLiked());
-            currentShow.setSavedStatus(true);
-            currentShow.setImageUrl(parseShow.getParseImage());
+            if (!isForbiddenShow(showID)) {
+                Show currentShow = new Show(parseShow.getParseTitle(), parseShow.getParseOverview(), showID,
+                        parseShow.getParseNetwork(), parseShow.getParseYearAired(), parseShow.getParseGenres());
 
-            // add to new list
-            updatedShows.add(currentShow);
+                // for ratings and updating them later
+                currentShow.setObjectID(parseShow.getObjectId());
+                currentShow.setUserLiked(parseShow.getParseUserLiked());
+                currentShow.setSavedStatus(true);
+                currentShow.setImageUrl(parseShow.getParseImage());
+
+                // add to new list
+                updatedShows.add(currentShow);
+            }
         }
         return updatedShows;
+    }
+
+    private static boolean isForbiddenShow(String showID) {
+        User user = (User) ParseUser.getCurrentUser();
+        List<String> forbiddenShows = user.getForbiddenShows();
+
+        // check if user has forbidden shows
+        if (forbiddenShows == null || forbiddenShows.isEmpty()) {
+            return false;
+        }
+
+        return forbiddenShows.contains(showID);
     }
 
     // for local instance of Show -> no setter for these, only constructor can set

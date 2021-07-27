@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Next-Show</string>
+    <string name="snackbar_text">Deleted show!</string>
+    <string name="snackbar_action">Undo</string>
 </resources>

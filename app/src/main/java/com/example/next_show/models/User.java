@@ -21,6 +21,7 @@ public class User extends ParseUser {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_BIO = "bio";
     public static final String KEY_FAVE_GENRES = "faveGenres";
+    public static final String KEY_FORBIDDEN = "forbiddenShows";
     public static final String KEY_LIKED_SAVED_SHOWS = "savedShows"; // holds TMDB IDs for LIKED savedShows
 
     // empty constructor
@@ -84,4 +85,22 @@ public class User extends ParseUser {
         saveInBackground();
     }
 
+    public List<String> getForbiddenShows() {
+        return getList(KEY_FORBIDDEN);
+    }
+
+    public void setForbiddenShows(List<String> shows){
+        addAllUnique(KEY_FORBIDDEN, shows);
+        saveInBackground();
+    }
+
+    public void addToForbiddenShows(String s){
+        add(KEY_FORBIDDEN, s);
+        saveInBackground();
+    }
+
+    public void removeFromForbidden(String s){
+        removeAll(KEY_FORBIDDEN, Arrays.asList(s));
+        saveInBackground();
+    }
 }

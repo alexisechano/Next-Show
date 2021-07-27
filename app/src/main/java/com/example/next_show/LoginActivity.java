@@ -1,6 +1,7 @@
 package com.example.next_show;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -32,7 +33,6 @@ public class LoginActivity extends AppCompatActivity {
     // constants
     private static final String TAG = "LoginActivity";
     private static final String LOGO_URL = "https://i.imgur.com/yBGsdF4.png";
-    public static final String THEME_COLOR = "#d6d3d2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         Glide.with(this).load(LOGO_URL).centerInside().into(ivLogo);
 
         // set new on click for button
-        btnSignup.setBackgroundColor(Color.parseColor(THEME_COLOR));
+        btnSignup.setBackgroundColor(ContextCompat.getColor(this, R.color.light_gray));
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
