@@ -23,13 +23,13 @@ import java.util.List;
 public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     // instance variables
     private Context context;
-    private List<Show> shows;
-    private List<Show> allShows;
+    private List<Show> currentShows; // currently displayed shows on recycler view
+    private List<Show> allShows;     // list of all trending or recommended shows retrieved from Trakt
     private NavigationInterface nav;
 
     public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav){
         this.context = context;
-        this.shows = shows;
+        this.currentShows = shows;
         this.nav = nav;
 
         allShows = shows;
@@ -44,38 +44,45 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Show show = shows.get(position);
+        Show show = currentShows.get(position);
         holder.bind(show);
     }
 
     @Override
     public int getItemCount() {
-        return shows.size();
+        return currentShows.size();
     }
 
     public void clear() {
-        shows.clear();
+        currentShows.clear();
         notifyDataSetChanged();
     }
 
     public void addAll(List<Show> list) {
-        shows.addAll(list);
-        allShows = shows;
+        currentShows.addAll(list);
+        allShows = currentShows;
         notifyDataSetChanged();
     }
 
     public void filter(String query){
-        Log.i("Adapter", "Filtering for " + query);
-        List<Show> queriedShows = new ArrayList<>();
-        for(Show s : shows){
-            if (s.getGenres().contains(query)) {
-                queriedShows.add(s);
+        // restore previous state of shows
+        currentShows = allShows;
+
+        // if query is blank, show all shows
+        if (!query.isEmpty()) {
+            Log.i("Adapter", "Filtering for " + query);
+            List<Show> queriedShows = new ArrayList<>();
+            for(Show s : currentShows){
+                if (s.getGenres().contains(query)) {
+                    queriedShows.add(s);
+                }
             }
+
+            // update the adapter with shows that match the query
+            currentShows = queriedShows;
         }
 
-        // update the adapter and clear current items
-        shows.clear();
-        shows.addAll(queriedShows);
+        // tell adapter list was updated
         notifyDataSetChanged();
     }
 
@@ -109,7 +116,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                Show show = shows.get(position);
+                Show show = currentShows.get(position);
 
                 // create new bundle of arguments to pass into Navigation
                 Bundle bundle = new Bundle();

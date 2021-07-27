@@ -65,6 +65,7 @@ public class FeedFragment extends Fragment {
     public static final String ACTION = "action";
     public static final String COMEDY = "comedy";
     public static final String DRAMA = "drama";
+    public static final String ALL_SHOWS = "all";
 
     // view element variables
     private RecyclerView rvFeed;
@@ -121,10 +122,20 @@ public class FeedFragment extends Fragment {
             // determine whether to show trending or recommended
             BottomNavigationView toggleNav = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
 
+            // find the radio button group for filtering
+            rgGenre = currView.findViewById(R.id.rgGenre);
+
+            // set up filtering by genre
+            setFilterButtons();
+
             // set selector
             toggleNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    // reset everytime user switches between trending and recommended
+                    RadioButton b = (RadioButton) currView.findViewById(R.id.btnAll);
+                    b.setChecked(true);
+
                     switch (item.getItemId()) {
                         case R.id.action_trending:
                             // clear recycler view for new shows
@@ -148,16 +159,10 @@ public class FeedFragment extends Fragment {
             });
         }
 
-        // set up filtering by genre
-        setFilterButtons();
-
         return currView;
     }
 
     private void setFilterButtons() {
-        // find the radio button group for filtering
-        rgGenre = currView.findViewById(R.id.rgGenre);
-
         rgGenre.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -167,18 +172,27 @@ public class FeedFragment extends Fragment {
                 // check if radio button works
                 Log.i(TAG, "Selected: " + buttonText);
 
+                // determine which button is clicked
                 switch (buttonText) {
                     case ACTION:
                         adapter.filter(ACTION);
+                        rvFeed.smoothScrollToPosition(0);
                         break;
                     case COMEDY:
                         adapter.filter(COMEDY);
+                        rvFeed.smoothScrollToPosition(0);
                         break;
                     case DRAMA:
                         adapter.filter(DRAMA);
+                        rvFeed.smoothScrollToPosition(0);
+                        break;
+                    case ALL_SHOWS:
+                        adapter.filter("");
+                        rvFeed.smoothScrollToPosition(0);
                         break;
                 }
             }
+
         });
     }
 
