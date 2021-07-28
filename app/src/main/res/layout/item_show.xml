@@ -8,8 +8,17 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/item_spacing_small">
 
+    <com.zerobranch.layout.SwipeLayout
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:draggedItem="@id/showCard"
+        app:rightItem="@id/ivDismiss"
+        app:swipeDirection="left"
+        app:isFreeDragAfterOpen="false">
+
         <androidx.cardview.widget.CardView
-            android:id="@+id/card_view"
+            android:id="@+id/showCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -18,15 +27,6 @@
             app:cardElevation="8dp"
             app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
-
-            <com.zerobranch.layout.SwipeLayout
-                android:id="@+id/swipe_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:draggedItem="@id/llShowContent"
-                app:rightItem="@id/ivDismiss"
-                app:swipeDirection="left"
-                app:isFreeDragAfterOpen="false">
 
             <LinearLayout
                 android:id="@+id/llShowContent"
@@ -82,8 +82,9 @@
                     android:paddingEnd="50dp"
                     android:visibility="invisible"
                     app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
-            </com.zerobranch.layout.SwipeLayout>
+
 
         </androidx.cardview.widget.CardView>
+    </com.zerobranch.layout.SwipeLayout>
 
 </RelativeLayout>

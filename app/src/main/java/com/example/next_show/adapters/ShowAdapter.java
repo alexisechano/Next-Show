@@ -97,7 +97,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         private TextView tvShowBody;
         private TextView tvShowTitle;
         private SwipeLayout swipe_layout;
-        private LinearLayout llShowContent;
+        private CardView showCard;
         private ImageView ivDismiss;
         private ImageView ivCardImage;
         private NavigationInterface navigator;
@@ -107,8 +107,8 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             super(itemView);
 
             // add onclick listener for CardView elements itself
-            llShowContent = itemView.findViewById(R.id.llShowContent);
-            llShowContent.setOnClickListener(this);
+            showCard = itemView.findViewById(R.id.showCard);
+            showCard.setOnClickListener(this);
 
             // set up elements and swipe
             setUpView();
