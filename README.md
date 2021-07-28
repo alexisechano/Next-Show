@@ -52,7 +52,8 @@ Outlined by FBU App Expectations and Priority
 * **Your app provides opportunities for you to overcome difficult/ambiguous technical problems**
   * User can filter through TV shows based on Genre and other show attributes (P2)
   * App fetches show data from the Trakt API and image data from the Movie Database through chaining sequential API calls (P1)
-  * Use combination of APIs and logic to create a basic recommendation system based on like/dislike ratings (P1)
+  * Uses combination of APIs and logic to create a basic recommendation system based on like/dislike ratings (P1)
+    * Randomly chooses a show from the user's liked, saved shows and launches API call to retrieve similar shows and if that request fails (no liked shows or no related shows found), popular shows that match the user's favorite genres are shown
 
 **Optional Nice-to-have Stories**
 
