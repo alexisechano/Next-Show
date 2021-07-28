@@ -144,7 +144,7 @@ public class ShowDetailFragment extends Fragment {
                         User currentUser = (User) ParseUser.getCurrentUser();
 
                         if (currShow.getUserLiked().equals(LIKED)) {
-                            currentUser.addToLikedShows(currShow.getId());
+                            currentUser.addToLikedShows(currShow.getSlug());
                         }
 
                         // if no error, let log and user know
@@ -187,7 +187,7 @@ public class ShowDetailFragment extends Fragment {
 
                     // update matching user's saved show list
                     if (r.equals(LIKED)) {
-                        currentUser.addToLikedShows(currShow.getId());
+                        currentUser.addToLikedShows(currShow.getSlug());
                     }
 
                     Log.i(TAG, "Saved new rating!");

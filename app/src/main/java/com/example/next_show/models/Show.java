@@ -20,6 +20,7 @@ public class Show extends ParseObject implements Parcelable {
     private String network;
     private String liked;
     private String imageUrl;
+    private String slug;
     private int year_aired;
     private boolean isSaved;
     private List<String> genres;
@@ -32,19 +33,22 @@ public class Show extends ParseObject implements Parcelable {
     public static final String KEY_YEAR_AIRED = "yearAired";
     public static final String KEY_USER = "user";
     public static final String KEY_RATING = "userRating";
+    public static final String KEY_SLUG = "slug";
     public static final String KEY_GENRES = "genres"; // list
     public static final String KEY_IMAGE = "imageUrl"; // TODO: not used yet until API call is fixed
 
     // empty constructor
     public Show() { }
 
-    public Show(String title, String overview, String id, String network, int year_aired, List<String> genres) {
+    public Show(String title, String overview, String id, String network, int year_aired,
+                List<String> genres, String slug) {
         this.title = title;
         this.overview = overview;
         this.id = id;
         this.network = network;
         this.year_aired = year_aired;
         this.genres = genres;
+        this.slug = slug;
         this.isSaved = false; // default is that this new Show object is not saved in Parse
     }
 
@@ -54,11 +58,12 @@ public class Show extends ParseObject implements Parcelable {
         for (TrendingShow trendingShow : response) {
             // grab showID to check if in forbidden shows
             String showID = "" + trendingShow.show.ids.tmdb;
+            String showSlug = "" + trendingShow.show.ids.slug;
 
             if (!isForbiddenShow(showID)) {
                 Show currentShow = new Show(trendingShow.show.title, trendingShow.show.overview,
                         showID, trendingShow.show.network, trendingShow.show.first_aired.getYear(),
-                        trendingShow.show.genres);
+                        trendingShow.show.genres, showSlug);
 
                 updatedShows.add(currentShow);
             }
@@ -72,10 +77,11 @@ public class Show extends ParseObject implements Parcelable {
         for (com.uwetrottmann.trakt5.entities.Show show : repsonseShows) {
             // grab showID to check if in forbidden shows
             String showID = "" + show.ids.tmdb;
+            String showSlug = "" + show.ids.slug;
 
             if (!isForbiddenShow(showID)) {
                 Show currentShow = new Show(show.title, show.overview, showID, show.network,
-                        show.first_aired.getYear(), show.genres);
+                        show.first_aired.getYear(), show.genres, showSlug);
 
                 updatedShows.add(currentShow);
             }
@@ -94,7 +100,7 @@ public class Show extends ParseObject implements Parcelable {
 
             if (!isForbiddenShow(showID)) {
                 Show currentShow = new Show(parseShow.getParseTitle(), parseShow.getParseOverview(), showID,
-                        parseShow.getParseNetwork(), parseShow.getParseYearAired(), parseShow.getParseGenres());
+                        parseShow.getParseNetwork(), parseShow.getParseYearAired(), parseShow.getParseGenres(), parseShow.getParseSlug());
 
                 // for ratings and updating them later
                 currentShow.setObjectID(parseShow.getObjectId());
@@ -143,6 +149,8 @@ public class Show extends ParseObject implements Parcelable {
     public String getUserLiked() { return liked; }
 
     public void setUserLiked(String liked) { this.liked = liked; }
+
+    public String getSlug() { return slug; }
 
     public List<String> getGenres() {
         return genres;
@@ -228,6 +236,14 @@ public class Show extends ParseObject implements Parcelable {
         saveInBackground();
     }
 
+    public String getParseSlug() {
+        return getString(KEY_SLUG);
+    }
+
+    public void setParseSlug(String s) {
+        put(KEY_SLUG, s);
+    }
+
     public String getParseImage() {
         return getString(KEY_IMAGE);
     }
@@ -251,6 +267,7 @@ public class Show extends ParseObject implements Parcelable {
         setParseTVID(id);
         setParseNetwork(network);
         setParseYearAired(year_aired);
+        setParseSlug(slug);
         setParseImage(getImageUrl());
         setParseUser(currUser);
 
@@ -262,4 +279,5 @@ public class Show extends ParseObject implements Parcelable {
         setParseUserLiked(liked);
         setParseGenres(genres);
     }
+
 }

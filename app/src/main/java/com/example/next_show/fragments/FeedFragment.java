@@ -1,22 +1,16 @@
 package com.example.next_show.fragments;
 
-import android.media.Image;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,8 +30,6 @@ import com.example.next_show.models.User;
 import com.example.next_show.navigators.NavigationInterface;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
-import com.uwetrottmann.trakt5.entities.TrendingShow;
-import com.uwetrottmann.trakt5.enums.Extended;
 import com.uwetrottmann.trakt5.services.Shows;
 
 import org.json.JSONException;
@@ -47,18 +39,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Headers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class FeedFragment extends Fragment {
     // constants
     private static final String TAG = "FeedFragment";
     private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
     private static final String ADD_API_KEY = "?api_key=";
-
-    public static final int PAGES_REQUESTED = 1;
-    public static final int LIMIT = 5;
     public static final int NOT_FOUND = -1;
 
     // genres for shows
@@ -71,12 +57,15 @@ public class FeedFragment extends Fragment {
     private RecyclerView rvFeed;
     private RadioGroup rgGenre;
     private RadioButton selectedButton;
+
+    // models and data variables
     private View currView;
     private Shows showsObj;
     private User currentUser;
+    private RecommendationClient recClient;
 
     protected ShowAdapter adapter;
-    protected List<Show> showsList;
+    protected List<Show> showsList; // what is being shown
 
     // empty constructor
     public FeedFragment() { }
@@ -85,11 +74,23 @@ public class FeedFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // initialize the array that will hold posts
+        showsList = new ArrayList<>();
+
+        // creates a show adapter with show list
+        adapter = new ShowAdapter(getActivity(), showsList, new NavigateFeedToDetail());
+
+        // get current user
+        currentUser = (User) ParseUser.getCurrentUser();
+
         // new application for Trakt Call, pass in the Context
         showsObj = new TraktApplication(getContext()).getNewShowsInstance();
 
+        // set up rec client
+        recClient = new RecommendationClient(showsObj);
+
         // get trending shows on load
-        fetchTrendingShows(showsObj, new ShowCallback());
+        TraktApplication.fetchTrendingShows(showsObj, new ShowCallback());
     }
 
     @Override
@@ -104,29 +105,20 @@ public class FeedFragment extends Fragment {
             // find Recycler View
             rvFeed = currView.findViewById(R.id.rvFeed);
 
-            // initialize the array that will hold posts
-            showsList = new ArrayList<>();
-
-            // creates a show adapter with show list
-            adapter = new ShowAdapter(getActivity(), showsList, new NavigateFeedToDetail());
-
             // set the adapter on the recycler view
             rvFeed.setAdapter(adapter);
 
             // set the layout manager on the recycler view
             rvFeed.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-            // get current user
-            currentUser = (User) ParseUser.getCurrentUser();
-
-            // determine whether to show trending or recommended
-            BottomNavigationView toggleNav = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
-
             // find the radio button group for filtering
             rgGenre = currView.findViewById(R.id.rgGenre);
 
             // set up filtering by genre
             setFilterButtons();
+
+            // determine whether to show trending or recommended
+            BottomNavigationView toggleNav = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
 
             // set selector
             toggleNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -135,23 +127,19 @@ public class FeedFragment extends Fragment {
                     // reset everytime user switches between trending and recommended
                     RadioButton b = (RadioButton) currView.findViewById(R.id.btnAll);
                     b.setChecked(true);
+                    adapter.clear();
 
                     switch (item.getItemId()) {
                         case R.id.action_trending:
-                            // clear recycler view for new shows
-                            adapter.clear();
-
                             // get trending shows
-                            fetchTrendingShows(showsObj, new ShowCallback());
-
+                            TraktApplication.fetchTrendingShows(showsObj, new ShowCallback());
                             break;
                         case R.id.action_recommend:
-                            // clear adapter to be able to make room for new recommendations
-                            adapter.clear();
+                            // get user's liked shows
+                            List<String> savedShows = currentUser.getLikedSavedShows();
 
                             // fetch recommended shows
-                            fetchRecommendedShows(showsObj);
-
+                            recClient.fetchRecommendedShows(savedShows, new ShowCallback(), new GenreMatchedCallback());
                             break;
                     }
                     return true;
@@ -168,9 +156,6 @@ public class FeedFragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 selectedButton = currView.findViewById(checkedId);
                 String buttonText = selectedButton.getText().toString().toLowerCase();
-
-                // check if radio button works
-                Log.i(TAG, "Selected: " + buttonText);
 
                 // determine which button is clicked
                 switch (buttonText) {
@@ -196,7 +181,7 @@ public class FeedFragment extends Fragment {
         });
     }
 
-    private void fetchImage(String id, ImageCallback callback){
+    public void fetchImage(String id, ImageCallback callback){
         AsyncHttpClient client = new AsyncHttpClient();
         String getUrl = SHOW_DETAIL_URL + id + ADD_API_KEY + getContext().getString(R.string.movie_api_key);
 
@@ -214,47 +199,7 @@ public class FeedFragment extends Fragment {
             });
     }
 
-    private void fetchRecommendedShows(Shows showsObj) {
-        // get user's liked shows
-        List<String> savedShows = currentUser.getLikedSavedShows();
-
-        // set up recommendation client to grab more shows
-        RecommendationClient recClient = new RecommendationClient();
-
-        // get related shows based on saved LIKED shows -> updates adapter within callback
-        recClient.fetchRelatedShows(showsObj, savedShows, new ShowCallback());
-
-        // get more recommended shows if the above doesn't retrieve any shows
-        if(adapter.getItemCount() == 0) {
-            // get recommended shows based on User preferences -> updates adapter within callback
-            recClient.fetchGenreMatchedShows(showsObj, new GenreMatchedCallback());
-        }
-    }
-
-    private void fetchTrendingShows(Shows traktShows, ResponseCallback callback) {
-        Log.i(TAG, "Fetching shows now!");
-        try {
-            // enqueue to do asynchronous call and execute to do it synchronously
-            traktShows.trending(PAGES_REQUESTED, LIMIT, Extended.FULL).enqueue(new Callback<List<TrendingShow>>() {
-                @Override
-                public void onResponse(Call<List<TrendingShow>> call, Response<List<TrendingShow>> response) {
-                    if (response.isSuccessful()) {
-                        callback.onSuccess(Show.formatTrendingShows(response.body()));
-                    } else {
-                        callback.onFailure(response.code());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<TrendingShow>> call, Throwable t) {
-                    Log.e(TAG, "OnFailure", t);
-                }
-            });
-
-        } catch (Exception e) {
-            Log.e(TAG, "Call error", e);
-        }
-    }
+    // ********************** Callback and Navigation Classes ********************** //
 
     class NavigateFeedToDetail implements NavigationInterface {
         public void navigate(View v, Bundle b){
@@ -262,7 +207,7 @@ public class FeedFragment extends Fragment {
         }
     }
 
-    class ShowCallback implements ResponseCallback {
+    public class ShowCallback implements ResponseCallback {
         @Override
         public void onSuccess(List<Show> shows) {
             // update adapter declared in FeedFragment
@@ -280,7 +225,7 @@ public class FeedFragment extends Fragment {
         }
     }
 
-    class GenreMatchedCallback implements ResponseCallback {
+    public class GenreMatchedCallback implements ResponseCallback {
         @Override
         public void onSuccess(List<Show> shows) {
             // do logic to get only fave genre ones
@@ -308,7 +253,7 @@ public class FeedFragment extends Fragment {
         }
     }
 
-    class DetailImageCallback implements ImageCallback {
+    public class DetailImageCallback implements ImageCallback {
         @Override
         public void onSuccess(JsonHttpResponseHandler.JSON json) {
             Log.d(TAG, "onSuccess");
@@ -320,7 +265,7 @@ public class FeedFragment extends Fragment {
             try {
                 String path = jsonObj.getString("backdrop_path");
 
-                // finds show in adapter
+                // finds show in list
                 int index = search(jsonObj.getString("id"));
 
                 // update show in FeedFragment

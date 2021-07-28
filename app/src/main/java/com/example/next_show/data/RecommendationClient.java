@@ -3,6 +3,7 @@ package com.example.next_show.data;
 import android.util.Log;
 
 import com.example.next_show.callbacks.ResponseCallback;
+import com.example.next_show.fragments.FeedFragment;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
 import com.uwetrottmann.trakt5.enums.Extended;
@@ -25,13 +26,37 @@ public class RecommendationClient {
     public static final int FORBIDDEN_REQUEST = 403;
     public static final int LIMIT = 5;
 
+    // instance vars
+    private Shows showsObj;
+    private FeedFragment.GenreMatchedCallback genreMatchedCallback;
+    private FeedFragment.ShowCallback showCallback;
+
     // empty constructor
     public RecommendationClient() { }
 
-    public void fetchRelatedShows(Shows traktShows, List<String> savedShows, ResponseCallback callback) {
+    public RecommendationClient(Shows showsObj) {
+        this.showsObj = showsObj;
+    }
+
+    public void fetchRecommendedShows(List<String> savedShows, FeedFragment.ShowCallback showCallback, FeedFragment.GenreMatchedCallback gmCallback) {
+        this.genreMatchedCallback = gmCallback;
+        this.showCallback = showCallback;
+
+        if (savedShows.isEmpty()){
+            // if no shows to compare, call user genre matched ones
+            fetchGenreMatchedShows(showsObj, genreMatchedCallback);
+            return;
+        }
+
+        // get related shows based on saved LIKED shows -> updates adapter within callback
+        fetchRelatedShows(showsObj, savedShows, showCallback);
+    }
+
+    private void fetchRelatedShows(Shows traktShows, List<String> savedShows, ResponseCallback callback) {
         // use randomly picked show ID to generate related, recommended shows
         final int randomShowIndex = new Random().nextInt(savedShows.size());
         String searchID = savedShows.get(randomShowIndex);
+        Log.i(TAG, "Chosen: " + searchID);
 
         try {
             // enqueue to do asynchronous call and execute to do it synchronously
@@ -42,6 +67,11 @@ public class RecommendationClient {
                         callback.onSuccess(Show.formatShows(response.body()));
                     } else {
                         callback.onFailure(response.code());
+
+                        // only if this first call fails...
+                        // get recommended shows based on User preferences -> updates adapter within callback
+                        fetchGenreMatchedShows(showsObj, genreMatchedCallback);
+                        return;
                     }
                 }
 
@@ -57,7 +87,7 @@ public class RecommendationClient {
     }
 
     // get it by genre from recommended shows call
-    public void fetchGenreMatchedShows(Shows traktShows, ResponseCallback callback) {
+    private void fetchGenreMatchedShows(Shows traktShows, ResponseCallback callback) {
         try {
             // enqueue to do asynchronous call and execute to do it synchronously
             traktShows.popular(PAGES_REQUESTED, LIMIT, Extended.FULL).enqueue(new Callback<List<com.uwetrottmann.trakt5.entities.Show>>() {

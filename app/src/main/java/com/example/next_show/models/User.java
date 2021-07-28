@@ -1,14 +1,7 @@
 package com.example.next_show.models;
 
-import android.os.Parcelable;
-
 import com.parse.ParseClassName;
-import com.parse.ParseFile;
 import com.parse.ParseUser;
-
-import org.parceler.Parcel;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,8 +14,8 @@ public class User extends ParseUser {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_BIO = "bio";
     public static final String KEY_FAVE_GENRES = "faveGenres";
-    public static final String KEY_FORBIDDEN = "forbiddenShows";
-    public static final String KEY_LIKED_SAVED_SHOWS = "savedShows"; // holds TMDB IDs for LIKED savedShows
+    public static final String KEY_FORBIDDEN = "forbiddenShows"; // holds TVIDs for DELETED SHOWS
+    public static final String KEY_LIKED_SAVED_SHOWS = "savedShows"; // holds SLUGS for LIKED savedShows
 
     // empty constructor
     public User() { }
