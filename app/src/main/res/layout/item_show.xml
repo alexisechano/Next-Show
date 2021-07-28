@@ -1,61 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlCardHolder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/item_spacing_small">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view"
+    <com.zerobranch.layout.SwipeLayout
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="8dp"
-        app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
+        app:draggedItem="@id/showCard"
+        app:rightItem="@id/ivDismiss"
+        app:swipeDirection="left"
+        app:isFreeDragAfterOpen="false">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/showCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/item_spacing_large"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
 
-            <ImageView
-                android:id="@+id/ivCardImage"
+            <LinearLayout
+                android:id="@+id/llShowContent"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/image_height"
-                android:scaleType="centerCrop"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-            <TextView
-                android:id="@+id/tvShowTitle"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/item_spacing_large"
-                android:layout_marginTop="@dimen/item_spacing_large"
-                android:fontFamily="@font/roboto_bold_italic"
-                android:text="Show Name"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:layout_margin="@dimen/item_spacing_large"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvShowBody"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/item_spacing_large"
-                android:layout_marginTop="@dimen/item_spacing_med"
-                android:layout_marginBottom="@dimen/item_spacing_med"
-                android:ellipsize="end"
-                android:fontFamily="@font/lato"
-                android:maxLines="4"
-                android:text="Synopsis" />
+                <ImageView
+                    android:id="@+id/ivCardImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/image_height"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tvShowTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/item_spacing_large"
+                    android:layout_marginTop="@dimen/item_spacing_large"
+                    android:fontFamily="@font/roboto_bold_italic"
+                    android:text="Show Name"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/tvShowBody"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/item_spacing_large"
+                    android:layout_marginTop="@dimen/item_spacing_med"
+                    android:layout_marginBottom="@dimen/item_spacing_med"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato"
+                    android:maxLines="4"
+                    android:text="Synopsis" />
+
+            </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ivDismiss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="@dimen/item_spacing_large"
+                    android:layout_marginBottom="@dimen/item_spacing_large"
+                    android:adjustViewBounds="false"
+                    android:background="#F44336"
+                    android:cropToPadding="false"
+                    android:gravity="center"
+                    android:paddingStart="50dp"
+                    android:paddingEnd="50dp"
+                    android:visibility="invisible"
+                    app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+
+        </androidx.cardview.widget.CardView>
+    </com.zerobranch.layout.SwipeLayout>
 
 </RelativeLayout>
-
