@@ -33,7 +33,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     private List<Show> allShows;     // list of all trending or recommended shows retrieved from Trakt
     private NavigationInterface nav;
 
-    public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav, HashMap<String, List<String>> filters){
+    public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav){
         this.context = context;
         this.currentShows = shows;
         this.nav = nav;
