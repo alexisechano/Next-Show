@@ -15,6 +15,47 @@
         app:itemIconTint="@color/black"
         app:menu="@menu/filter_menu" />
 
+    <LinearLayout
+        android:id="@+id/llFilters"
+        android:paddingTop="@dimen/item_spacing_med"
+        android:paddingBottom="@dimen/item_spacing_med"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/filterMenu"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnGenre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:layout_marginStart="@dimen/item_spacing_large"
+            android:text="Genre"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnNetwork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:layout_marginStart="@dimen/item_spacing_large"
+            android:text="Network"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/btnYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:layout_marginStart="@dimen/item_spacing_large"
+            android:text="Year"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!--
     <RadioGroup
         android:id="@+id/rgGenre"
         android:layout_below="@+id/filterMenu"
@@ -65,7 +106,6 @@
 
     </RadioGroup>
 
-    <!-- Start Additional Filters section -->
 
     <ImageButton
         android:id="@+id/btnDrop"
@@ -76,13 +116,13 @@
         android:layout_marginBottom="@dimen/item_spacing_large"
         android:src="@android:drawable/arrow_down_float" />
 
-    <!-- End Additional Filters section -->
+    -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFeed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rgGenre"
+        android:layout_below="@+id/llFilters"
         android:layout_marginTop="0dp"
         android:padding="8dp" />
 

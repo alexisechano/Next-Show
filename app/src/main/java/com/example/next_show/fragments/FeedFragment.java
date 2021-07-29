@@ -2,10 +2,14 @@ package com.example.next_show.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -24,6 +28,7 @@ import com.example.next_show.callbacks.ResponseCallback;
 import com.example.next_show.adapters.ShowAdapter;
 import com.example.next_show.data.RecommendationClient;
 
+import com.example.next_show.data.ShowFilterer;
 import com.example.next_show.data.TraktApplication;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
@@ -36,6 +41,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.Headers;
@@ -48,21 +55,29 @@ public class FeedFragment extends Fragment {
     public static final int NOT_FOUND = -1;
 
     // genres for shows
-    public static final String ACTION = "action";
-    public static final String COMEDY = "comedy";
-    public static final String DRAMA = "drama";
-    public static final String ALL_SHOWS = "all";
+    private static final String ACTION = "action";
+    private static final String COMEDY = "comedy";
+    private static final String DRAMA = "drama";
+    private static final String ALL_SHOWS = "all";
+
+    // filters
+    public static final String GENRE = "genre";
+    public static final String NETWORK = "network";
+    public static final String YEAR = "year";
 
     // view element variables
     private RecyclerView rvFeed;
-    private RadioGroup rgGenre;
-    private RadioButton selectedButton;
+    private Button btnGenre;
+    private Button btnNetwork;
+    private Button btnYear;
+    private PopupMenu popupMenu;
 
     // models and data variables
     private View currView;
     private Shows showsObj;
     private User currentUser;
     private RecommendationClient recClient;
+    private ShowFilterer filterer;
 
     protected ShowAdapter adapter;
     protected List<Show> showsList; // what is being shown
@@ -77,8 +92,11 @@ public class FeedFragment extends Fragment {
         // initialize the array that will hold posts
         showsList = new ArrayList<>();
 
+        // init the filters
+        filterer = new ShowFilterer();
+
         // creates a show adapter with show list
-        adapter = new ShowAdapter(getActivity(), showsList, new NavigateFeedToDetail());
+        adapter = new ShowAdapter(getActivity(), showsList, new NavigateFeedToDetail(), filterer.getFilters());
 
         // get current user
         currentUser = (User) ParseUser.getCurrentUser();
@@ -111,10 +129,7 @@ public class FeedFragment extends Fragment {
             // set the layout manager on the recycler view
             rvFeed.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-            // find the radio button group for filtering
-            rgGenre = currView.findViewById(R.id.rgGenre);
-
-            // set up filtering by genre
+            // find filter buttons
             setFilterButtons();
 
             // determine whether to show trending or recommended
@@ -125,8 +140,6 @@ public class FeedFragment extends Fragment {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     // reset everytime user switches between trending and recommended
-                    RadioButton b = (RadioButton) currView.findViewById(R.id.btnAll);
-                    b.setChecked(true);
                     adapter.clear();
 
                     switch (item.getItemId()) {
@@ -151,34 +164,40 @@ public class FeedFragment extends Fragment {
     }
 
     private void setFilterButtons() {
-        rgGenre.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        // find them in layout
+        btnGenre = currView.findViewById(R.id.btnGenre);
+        btnNetwork = currView.findViewById(R.id.btnNetwork);
+        btnYear = currView.findViewById(R.id.btnYear);
+
+        // set onclick listeners for dropdown menu
+        btnGenre.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                selectedButton = currView.findViewById(checkedId);
-                String buttonText = selectedButton.getText().toString().toLowerCase();
-
-                // determine which button is clicked
-                switch (buttonText) {
-                    case ACTION:
-                        adapter.filter(ACTION);
-                        rvFeed.smoothScrollToPosition(0);
-                        break;
-                    case COMEDY:
-                        adapter.filter(COMEDY);
-                        rvFeed.smoothScrollToPosition(0);
-                        break;
-                    case DRAMA:
-                        adapter.filter(DRAMA);
-                        rvFeed.smoothScrollToPosition(0);
-                        break;
-                    case ALL_SHOWS:
-                        adapter.filter("");
-                        rvFeed.smoothScrollToPosition(0);
-                        break;
-                }
+            public void onClick(View v) {
+                showMenu(v, R.menu.genre_filter);
             }
-
         });
+
+        btnNetwork.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMenu(v, R.menu.network_filter);
+            }
+        });
+
+        btnYear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Implement the layout menu for this!
+                //showMenu(v, R.menu.year_filter);
+            }
+        });
+    }
+
+    private void showMenu(View view, int filter_id) {
+        popupMenu = new PopupMenu(getContext(), view);
+        MenuInflater menuInflater = popupMenu.getMenuInflater();
+        menuInflater.inflate(filter_id, popupMenu.getMenu());
+        popupMenu.show();
     }
 
     public void fetchImage(String id, ImageCallback callback){
