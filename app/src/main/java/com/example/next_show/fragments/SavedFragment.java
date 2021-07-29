@@ -60,7 +60,7 @@ public class SavedFragment extends Fragment {
         savedShows = new ArrayList<>();
 
         // initialize the adapter
-        adapter = new ShowAdapter(getActivity(), savedShows, new NavigateSavedToDetail());
+        adapter = new ShowAdapter(getActivity(), savedShows, new NavigateSavedToDetail(), null);
 
         // set the adapter on the recycler view
         rvSaved.setAdapter(adapter);

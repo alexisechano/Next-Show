@@ -23,6 +23,7 @@ import com.parse.ParseUser;
 import com.zerobranch.layout.SwipeLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
@@ -32,7 +33,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     private List<Show> allShows;     // list of all trending or recommended shows retrieved from Trakt
     private NavigationInterface nav;
 
-    public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav){
+    public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav, HashMap<String, List<String>> filters){
         this.context = context;
         this.currentShows = shows;
         this.nav = nav;
