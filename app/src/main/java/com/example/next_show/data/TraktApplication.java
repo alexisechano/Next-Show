@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.next_show.R;
+import com.example.next_show.callbacks.ResponseCallback;
 import com.example.next_show.fragments.FeedFragment;
 import com.example.next_show.models.Show;
 import com.uwetrottmann.trakt5.TraktV2;
@@ -22,6 +23,7 @@ public class TraktApplication {
     private static final String TAG = "TraktApplication";
     public static final int PAGES_REQUESTED = 1;
     public static final int LIMIT = 5;
+    public static final int NO_CODE = 0;
 
     // instance var
     private Context context;
@@ -47,7 +49,7 @@ public class TraktApplication {
         return traktShows;
     }
 
-    public static void fetchTrendingShows(Shows showsObj, FeedFragment.ShowCallback showCallback) {
+    public static void fetchTrendingShows(Shows showsObj, ResponseCallback callback) {
         Log.i(TAG, "Fetching shows now!");
         try {
             // enqueue to do asynchronous call and execute to do it synchronously
@@ -55,20 +57,22 @@ public class TraktApplication {
                 @Override
                 public void onResponse(Call<List<TrendingShow>> call, Response<List<TrendingShow>> response) {
                     if (response.isSuccessful()) {
-                        showCallback.onSuccess(Show.formatTrendingShows(response.body()));
+                        callback.onSuccess(Show.formatTrendingShows(response.body()));
                     } else {
-                        showCallback.onFailure(response.code());
+                        callback.onFailure(response.code());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<TrendingShow>> call, Throwable t) {
                     Log.e(TAG, "OnFailure", t);
+                    callback.onFailure(NO_CODE);
                 }
             });
 
         } catch (Exception e) {
-            Log.e(TAG, "Call error", e);
+            Log.e(TAG, "Call error in try/catch", e);
+            callback.onFailure(NO_CODE);
         }
     }
 }

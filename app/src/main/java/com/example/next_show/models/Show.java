@@ -57,8 +57,8 @@ public class Show extends ParseObject implements Parcelable {
         List<Show> updatedShows = new ArrayList<>();
         for (TrendingShow trendingShow : response) {
             // grab showID to check if in forbidden shows
-            String showID = "" + trendingShow.show.ids.tmdb;
-            String showSlug = "" + trendingShow.show.ids.slug;
+            String showID = String.valueOf(trendingShow.show.ids.tmdb);
+            String showSlug = String.valueOf(trendingShow.show.ids.slug);
 
             if (!isForbiddenShow(showID)) {
                 Show currentShow = new Show(trendingShow.show.title, trendingShow.show.overview,
@@ -76,8 +76,8 @@ public class Show extends ParseObject implements Parcelable {
         List<Show> updatedShows = new ArrayList<>();
         for (com.uwetrottmann.trakt5.entities.Show show : repsonseShows) {
             // grab showID to check if in forbidden shows
-            String showID = "" + show.ids.tmdb;
-            String showSlug = "" + show.ids.slug;
+            String showID = String.valueOf(show.ids.tmdb);
+            String showSlug = String.valueOf(show.ids.slug);
 
             if (!isForbiddenShow(showID)) {
                 Show currentShow = new Show(show.title, show.overview, showID, show.network,

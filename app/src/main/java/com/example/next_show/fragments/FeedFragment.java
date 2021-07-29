@@ -54,17 +54,6 @@ public class FeedFragment extends Fragment {
     private static final String ADD_API_KEY = "?api_key=";
     public static final int NOT_FOUND = -1;
 
-    // genres for shows
-    private static final String ACTION = "action";
-    private static final String COMEDY = "comedy";
-    private static final String DRAMA = "drama";
-    private static final String ALL_SHOWS = "all";
-
-    // filters
-    public static final String GENRE = "genre";
-    public static final String NETWORK = "network";
-    public static final String YEAR = "year";
-
     // view element variables
     private RecyclerView rvFeed;
     private Button btnGenre;
@@ -96,7 +85,7 @@ public class FeedFragment extends Fragment {
         filterer = new ShowFilterer();
 
         // creates a show adapter with show list
-        adapter = new ShowAdapter(getActivity(), showsList, new NavigateFeedToDetail(), filterer.getFilters());
+        adapter = new ShowAdapter(getActivity(), showsList, new NavigateFeedToDetail());
 
         // get current user
         currentUser = (User) ParseUser.getCurrentUser();
@@ -108,7 +97,7 @@ public class FeedFragment extends Fragment {
         recClient = new RecommendationClient(showsObj);
 
         // get trending shows on load
-        TraktApplication.fetchTrendingShows(showsObj, new ShowCallback());
+        TraktApplication.fetchTrendingShows(showsObj, new TrendingShowCallback());
     }
 
     @Override
@@ -139,20 +128,19 @@ public class FeedFragment extends Fragment {
             toggleNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    // reset everytime user switches between trending and recommended
-                    adapter.clear();
-
                     switch (item.getItemId()) {
                         case R.id.action_trending:
                             // get trending shows
-                            TraktApplication.fetchTrendingShows(showsObj, new ShowCallback());
+                            adapter.clear();
+                            TraktApplication.fetchTrendingShows(showsObj, new TrendingShowCallback());
                             break;
                         case R.id.action_recommend:
                             // get user's liked shows
                             List<String> savedShows = currentUser.getLikedSavedShows();
 
                             // fetch recommended shows
-                            recClient.fetchRecommendedShows(savedShows, new ShowCallback(), new GenreMatchedCallback());
+                            adapter.clear();
+                            recClient.fetchRelatedShows(savedShows, new RelatedShowCallback());
                             break;
                     }
                     return true;
@@ -200,7 +188,7 @@ public class FeedFragment extends Fragment {
         popupMenu.show();
     }
 
-    public void fetchImage(String id, ImageCallback callback){
+    private void fetchImage(String id, ImageCallback callback){
         AsyncHttpClient client = new AsyncHttpClient();
         String getUrl = SHOW_DETAIL_URL + id + ADD_API_KEY + getContext().getString(R.string.movie_api_key);
 
@@ -226,7 +214,7 @@ public class FeedFragment extends Fragment {
         }
     }
 
-    public class ShowCallback implements ResponseCallback {
+    public class TrendingShowCallback implements ResponseCallback {
         @Override
         public void onSuccess(List<Show> shows) {
             // update adapter declared in FeedFragment
@@ -244,6 +232,27 @@ public class FeedFragment extends Fragment {
         }
     }
 
+    public class RelatedShowCallback implements ResponseCallback {
+        @Override
+        public void onSuccess(List<Show> shows) {
+            // update adapter declared in FeedFragment
+            adapter.addAll(shows);
+
+            // make API call to grab images
+            for(Show s: shows){
+                fetchImage(s.getId(), new DetailImageCallback());
+            }
+        }
+
+        @Override
+        public void onFailure(int code) {
+            RecommendationClient.determineError(code);
+            if (code == NOT_FOUND) {
+                recClient.fetchGenreMatchedShows(new GenreMatchedCallback());
+            }
+        }
+    }
+
     public class GenreMatchedCallback implements ResponseCallback {
         @Override
         public void onSuccess(List<Show> shows) {
@@ -252,7 +261,7 @@ public class FeedFragment extends Fragment {
 
             // no matches, let user know and don't add to adapter
             if (genreMatchedShows.isEmpty()) {
-                Toast.makeText(getContext(), "No shows available right now :(", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "No shows match your genres :(", Toast.LENGTH_LONG).show();
                 return;
             }
 

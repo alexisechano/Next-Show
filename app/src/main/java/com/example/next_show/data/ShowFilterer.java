@@ -1,5 +1,6 @@
 package com.example.next_show.data;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -9,10 +10,10 @@ public class ShowFilterer {
     private HashMap<String, List<String>> filters;
 
     // genres for shows
-    private static final String ACTION = "action";
-    private static final String COMEDY = "comedy";
-    private static final String DRAMA = "drama";
-    private static final String ALL_SHOWS = "all";
+    public static final String ACTION = "action";
+    public static final String COMEDY = "comedy";
+    public static final String DRAMA = "drama";
+    public static final String ALL_SHOWS = "all";
 
     // filters
     public static final String GENRE = "genre";
@@ -26,10 +27,10 @@ public class ShowFilterer {
     private HashMap<String, List<String>> setUpFilters() {
         HashMap<String, List<String>> filterDict = new HashMap<>();
 
-        // populate the dictionary
-        filterDict.put(GENRE, Arrays.asList(ALL_SHOWS, ACTION, COMEDY, DRAMA));
-        filterDict.put(NETWORK, Arrays.asList("streaming", "cable"));
-        filterDict.put(YEAR, Arrays.asList("<2010", "2011 - 2015", "2016 - 2021"));
+        // initialize dictionary with keys and blank lists
+        filterDict.put(GENRE, new ArrayList<>());
+        filterDict.put(NETWORK, new ArrayList<>());
+        filterDict.put(YEAR, new ArrayList<>());
 
         return filterDict;
     }
