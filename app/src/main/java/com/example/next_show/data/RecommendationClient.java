@@ -3,9 +3,7 @@ package com.example.next_show.data;
 import android.util.Log;
 
 import com.example.next_show.callbacks.ResponseCallback;
-import com.example.next_show.fragments.FeedFragment;
 import com.example.next_show.models.Show;
-import com.example.next_show.models.User;
 import com.uwetrottmann.trakt5.enums.Extended;
 import com.uwetrottmann.trakt5.services.Shows;
 
@@ -17,8 +15,6 @@ import java.util.Random;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 public class RecommendationClient {
     // constants
@@ -28,6 +24,9 @@ public class RecommendationClient {
     public static final int FORBIDDEN_REQUEST = 403;
     public static final int LOWER_LIMIT = 5;
     public static final int UPPER_LIMIT = 7;
+
+    public static final int ERROR_NO_SAVED_SHOWS_TO_MATCH_RELATED = 11;
+    public static final int TRAKT_FAILURE = 10;
     public static final int NO_CALL = -1;
 
     // instance vars
@@ -42,8 +41,8 @@ public class RecommendationClient {
 
     public void fetchRelatedShows(List<String> savedShows, ResponseCallback callback) {
         // check if no saved shows and immediately fail
-        if(savedShows.isEmpty() || savedShows == null) {
-            callback.onFailure(NO_CALL);
+        if (savedShows == null || savedShows.isEmpty()) {
+            callback.onFailure(ERROR_NO_SAVED_SHOWS_TO_MATCH_RELATED);
             return;
         }
 
@@ -67,7 +66,7 @@ public class RecommendationClient {
                 @Override
                 public void onFailure(Call<List<com.uwetrottmann.trakt5.entities.Show>> call, Throwable t) {
                     Log.e(TAG, "OnFailure", t);
-                    callback.onFailure(NO_CALL);
+                    callback.onFailure(TRAKT_FAILURE);
                 }
             });
 
@@ -94,7 +93,7 @@ public class RecommendationClient {
                 @Override
                 public void onFailure(Call<List<com.uwetrottmann.trakt5.entities.Show>> call, Throwable t) {
                     Log.e(TAG, "OnFailure", t);
-                    callback.onFailure(NO_CALL);
+                    callback.onFailure(TRAKT_FAILURE);
                 }
             });
 
@@ -104,18 +103,15 @@ public class RecommendationClient {
         }
     }
 
-    public static List<Show> getGenreMatch(List<Show> shows, User user){
-        // get proper user genres -> there is query that does this for Trakt
-        List<String> favoriteGenres = user.getFaveGenres();
-
+    public static List<Show> getGenreMatch(List<Show> shows, List<String> compareGenres){
         // init return list
         List<Show> genreMatched = new ArrayList<>();
 
         for (Show s: shows) {
             List<String> showGenres = s.getGenres();
 
-            // if any genre(s) match the favorite ones
-            if (!Collections.disjoint(showGenres, favoriteGenres)) {
+            // if any genre(s) match the comparison ones
+            if (!Collections.disjoint(showGenres, compareGenres)) {
                 genreMatched.add(s);
             }
         }

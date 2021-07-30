@@ -53,6 +53,17 @@
             android:text="Year"
             android:textStyle="bold" />
 
+        <ImageButton
+            android:id="@+id/btnReset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/item_spacing_large"
+            android:fontFamily="@font/lato"
+            android:textStyle="bold"
+            android:padding="@dimen/item_spacing_small"
+            android:background="@color/light_gray"
+            android:src="@drawable/ic_baseline_refresh_24" />
+
     </LinearLayout>
 
     <!--

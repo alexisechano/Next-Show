@@ -1,17 +1,16 @@
 package com.example.next_show.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,7 +27,7 @@ import com.example.next_show.callbacks.ResponseCallback;
 import com.example.next_show.adapters.ShowAdapter;
 import com.example.next_show.data.RecommendationClient;
 
-import com.example.next_show.data.ShowFilterer;
+import com.example.next_show.data.ShowFilter;
 import com.example.next_show.data.TraktApplication;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
@@ -41,8 +40,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.Headers;
@@ -52,21 +49,32 @@ public class FeedFragment extends Fragment {
     private static final String TAG = "FeedFragment";
     private static final String SHOW_DETAIL_URL = "https://api.themoviedb.org/3/tv/";
     private static final String ADD_API_KEY = "?api_key=";
-    public static final int NOT_FOUND = -1;
+    private static final int NOT_FOUND = -1;
+
+    // lists match with dialog list of checks -> view related
+    private static final String[] GENRE_FILTERS = {ShowFilter.ACTION, ShowFilter.COMEDY, ShowFilter.DRAMA};
+    boolean[] selectedGenres = {false, false, false};
+    private static final String[] NETWORK_FILERS = {ShowFilter.CABLE, ShowFilter.STREAMING};
+    private boolean[] selectedNetworks = {false, false};
 
     // view element variables
     private RecyclerView rvFeed;
     private Button btnGenre;
     private Button btnNetwork;
     private Button btnYear;
-    private PopupMenu popupMenu;
+    private ImageButton btnReset;
 
     // models and data variables
     private View currView;
     private Shows showsObj;
     private User currentUser;
     private RecommendationClient recClient;
-    private ShowFilterer filterer;
+    private ShowFilter showFilter;
+
+    // callbacks for Trakt
+    private TrendingShowCallback trendingShowCallback;
+    private RelatedShowCallback relatedShowCallback;
+    private GenreMatchedCallback genreMatchedCallback;
 
     protected ShowAdapter adapter;
     protected List<Show> showsList; // what is being shown
@@ -82,10 +90,10 @@ public class FeedFragment extends Fragment {
         showsList = new ArrayList<>();
 
         // init the filters
-        filterer = new ShowFilterer();
+        showFilter = new ShowFilter(showsList);
 
         // creates a show adapter with show list
-        adapter = new ShowAdapter(getActivity(), showsList, new NavigateFeedToDetail());
+        adapter = new ShowAdapter(getActivity(), showsList, new NavigateFeedToDetail(), showFilter);
 
         // get current user
         currentUser = (User) ParseUser.getCurrentUser();
@@ -96,8 +104,13 @@ public class FeedFragment extends Fragment {
         // set up rec client
         recClient = new RecommendationClient(showsObj);
 
+        // init callbacks
+        trendingShowCallback = new TrendingShowCallback();
+        relatedShowCallback = new RelatedShowCallback();
+        genreMatchedCallback = new GenreMatchedCallback();
+
         // get trending shows on load
-        TraktApplication.fetchTrendingShows(showsObj, new TrendingShowCallback());
+        TraktApplication.fetchTrendingShows(showsObj, trendingShowCallback);
     }
 
     @Override
@@ -131,16 +144,16 @@ public class FeedFragment extends Fragment {
                     switch (item.getItemId()) {
                         case R.id.action_trending:
                             // get trending shows
-                            adapter.clear();
-                            TraktApplication.fetchTrendingShows(showsObj, new TrendingShowCallback());
+                            resetPage();
+                            TraktApplication.fetchTrendingShows(showsObj, trendingShowCallback);
                             break;
                         case R.id.action_recommend:
                             // get user's liked shows
                             List<String> savedShows = currentUser.getLikedSavedShows();
 
                             // fetch recommended shows
-                            adapter.clear();
-                            recClient.fetchRelatedShows(savedShows, new RelatedShowCallback());
+                            resetPage();
+                            recClient.fetchRelatedShows(savedShows, relatedShowCallback);
                             break;
                     }
                     return true;
@@ -151,24 +164,42 @@ public class FeedFragment extends Fragment {
         return currView;
     }
 
+    private void resetPage() {
+        adapter.clear();
+        // resets filters
+        showFilter.setUpFilters();
+
+        // reset vars
+        selectedGenres = new boolean[]{false, false, false};
+        selectedNetworks = new boolean[]{false, false};
+    }
+
     private void setFilterButtons() {
         // find them in layout
         btnGenre = currView.findViewById(R.id.btnGenre);
         btnNetwork = currView.findViewById(R.id.btnNetwork);
         btnYear = currView.findViewById(R.id.btnYear);
+        btnReset = currView.findViewById(R.id.btnReset);
+
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.update(showFilter.getAllShows());
+            }
+        });
 
         // set onclick listeners for dropdown menu
         btnGenre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMenu(v, R.menu.genre_filter);
+                showDialog(GENRE_FILTERS, selectedGenres,ShowFilter.GENRE);
             }
         });
 
         btnNetwork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showMenu(v, R.menu.network_filter);
+                showDialog(NETWORK_FILERS, selectedNetworks, ShowFilter.NETWORK);
             }
         });
 
@@ -181,11 +212,54 @@ public class FeedFragment extends Fragment {
         });
     }
 
-    private void showMenu(View view, int filter_id) {
-        popupMenu = new PopupMenu(getContext(), view);
-        MenuInflater menuInflater = popupMenu.getMenuInflater();
-        menuInflater.inflate(filter_id, popupMenu.getMenu());
-        popupMenu.show();
+    private void showDialog(String[] options, boolean[] checkedItems, String type) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        dialogBuilder.setTitle(R.string.filter_title);
+        dialogBuilder.setCancelable(true);
+
+        dialogBuilder.setMultiChoiceItems(options, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                // update options
+                checkedItems[which] = isChecked;
+                String option = options[which];
+
+                switch (type) {
+                    case ShowFilter.GENRE:
+                        if (isChecked) {
+                            showFilter.addToGenre(option);
+                        } else {
+                            showFilter.removeFromGenre(option);
+                        }
+                        return;
+                    case ShowFilter.NETWORK:
+                        if (isChecked) {
+                            showFilter.addToNetwork(option);
+                        } else {
+                            showFilter.removeFromNetwork(option);
+                        }
+                        return;
+                }
+            }
+        });
+
+        // create and show the dialog
+        dialogBuilder.setPositiveButton("Filter", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // verify filters
+                Log.i(TAG, showFilter.getFilters().toString());
+
+                // filter shows and send to adapter to load
+                List<Show> filtered = showFilter.filterShows(showsList);
+                adapter.update(filtered);
+            }
+        });
+
+        dialogBuilder.setNegativeButton("Cancel", null);
+
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
     }
 
     private void fetchImage(String id, ImageCallback callback){
@@ -240,6 +314,7 @@ public class FeedFragment extends Fragment {
 
             // make API call to grab images
             for(Show s: shows){
+                Log.i("RELATED SHOWS!", "Show: " + s.getId() + " " + s.getTitle());
                 fetchImage(s.getId(), new DetailImageCallback());
             }
         }
@@ -247,8 +322,8 @@ public class FeedFragment extends Fragment {
         @Override
         public void onFailure(int code) {
             RecommendationClient.determineError(code);
-            if (code == NOT_FOUND) {
-                recClient.fetchGenreMatchedShows(new GenreMatchedCallback());
+            if (code == RecommendationClient.ERROR_NO_SAVED_SHOWS_TO_MATCH_RELATED) {
+                recClient.fetchGenreMatchedShows(genreMatchedCallback);
             }
         }
     }
@@ -256,8 +331,11 @@ public class FeedFragment extends Fragment {
     public class GenreMatchedCallback implements ResponseCallback {
         @Override
         public void onSuccess(List<Show> shows) {
+            // retrieve user fave genres
+            List<String> favoriteGenres = currentUser.getFaveGenres();
+
             // do logic to get only fave genre ones
-            List<Show> genreMatchedShows = RecommendationClient.getGenreMatch(shows, currentUser);
+            List<Show> genreMatchedShows = RecommendationClient.getGenreMatch(shows, favoriteGenres);
 
             // no matches, let user know and don't add to adapter
             if (genreMatchedShows.isEmpty()) {
@@ -295,6 +373,11 @@ public class FeedFragment extends Fragment {
 
                 // finds show in list
                 int index = search(jsonObj.getString("id"));
+
+                if (index == NOT_FOUND) {
+                    Log.e(TAG, "Cannot find index!");
+                    return;
+                }
 
                 // update show in FeedFragment
                 Show show = showsList.get(index);

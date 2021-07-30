@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.next_show.R;
+import com.example.next_show.data.ShowFilter;
 import com.example.next_show.models.User;
 import com.example.next_show.navigators.NavigationInterface;
 import com.example.next_show.models.Show;
@@ -23,22 +24,23 @@ import com.parse.ParseUser;
 import com.zerobranch.layout.SwipeLayout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     // instance variables
     private Context context;
     private List<Show> currentShows; // currently displayed shows on recycler view
-    private List<Show> allShows;     // list of all trending or recommended shows retrieved from Trakt
+    private List<Show> allShows; // all shows from Trakt call
+    private ShowFilter showFilter;
     private NavigationInterface nav;
 
-    public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav){
+    public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav, ShowFilter showFilter){
         this.context = context;
         this.currentShows = shows;
         this.nav = nav;
+        this.showFilter = showFilter;
 
-        allShows = shows;
+        showFilter.setShowsList(shows);
     }
 
     @NonNull
@@ -67,28 +69,13 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     public void addAll(List<Show> list) {
         currentShows.addAll(list);
         allShows = currentShows;
+        showFilter.setShowsList(allShows);
         notifyDataSetChanged();
     }
 
-    public void filter(String query){
-        // restore previous state of shows
-        currentShows = allShows;
-
-        // if query is blank, show all shows
-        if (!query.isEmpty()) {
-            Log.i("Adapter", "Filtering for " + query);
-            List<Show> queriedShows = new ArrayList<>();
-            for(Show s : currentShows){
-                if (s.getGenres().contains(query)) {
-                    queriedShows.add(s);
-                }
-            }
-
-            // update the adapter with shows that match the query
-            currentShows = queriedShows;
-        }
-
-        // tell adapter list was updated
+    // for filtering
+    public void update(List<Show> list) {
+        currentShows = list;
         notifyDataSetChanged();
     }
 
