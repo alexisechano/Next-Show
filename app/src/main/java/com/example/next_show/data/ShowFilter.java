@@ -49,15 +49,19 @@ public class ShowFilter {
     }
 
     public void setUpFilters() {
+        resetFilters();
+
+        // clear shows
+        showsList.clear();
+    }
+
+    public void resetFilters() {
         filters = new HashMap<>();
 
         // initialize dictionary with keys and blank lists
         filters.put(GENRE, new ArrayList<>());
         filters.put(NETWORK, new ArrayList<>());
         filters.put(YEAR, new ArrayList<>());
-
-        // clear shows
-        showsList.clear();
     }
 
     public HashMap<String, List<String>> getFilters(){

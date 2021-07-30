@@ -8,10 +8,42 @@
     android:padding="8dp">
 
     <RelativeLayout
+        android:id="@+id/ratingsTop"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/header_height"
+        android:background="@color/theme_color"
+        android:elevation="@dimen/item_spacing_large">
+
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="0dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/roboto_bold_italic"
+            android:text="My Profile"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    </RelativeLayout>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/profileCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="8dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true">
+
+    <RelativeLayout
         android:id="@+id/profileTop"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="#DCCDCB">
+        android:layout_height="@dimen/profile_height"
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/ivProfileImage"
@@ -43,19 +75,38 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             tools:text="username" />
 
-        <TextView
-            android:id="@+id/tvBio"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvUsername"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="0dp"
-            android:fontFamily="@font/lato"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            tools:text="Bio goes here! Hello there!" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/tvBio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/item_spacing_large"
+        android:paddingEnd="@dimen/item_spacing_large"
+        android:layout_below="@+id/profileCard"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/item_spacing_small"
+        android:layout_marginBottom="@dimen/item_spacing_large"
+        android:fontFamily="@font/lato"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:text="Bio goes here! Hello there!" />
+
+    <TextView
+        android:id="@+id/tvGenres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBio"
+        android:paddingStart="@dimen/item_spacing_large"
+        android:paddingEnd="@dimen/item_spacing_large"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/item_spacing_small"
+        android:layout_marginBottom="@dimen/item_spacing_large"
+        android:fontFamily="@font/lato"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:text="My Favorite Genres:" />
 
     <Button
         android:id="@+id/btnLogout"

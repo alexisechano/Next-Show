@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name= "image_height">150dp</dimen>
+    <dimen name= "header_height">60dp</dimen>
+    <dimen name= "profile_height">250dp</dimen>
 
     <!-- DETAIL FRAGMENT DIMENSIONS -->
     <dimen name= "detail_spacing_large">20dp</dimen>

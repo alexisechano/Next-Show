@@ -18,6 +18,7 @@ import com.example.next_show.data.ShowFilter;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
 import com.example.next_show.navigators.NavigationInterface;
+import com.google.android.material.snackbar.Snackbar;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -29,8 +30,8 @@ import java.util.List;
 // NO API CALLS IN THIS CLASS -> SOLELY PARSE DATABASE DATA!
 public class SavedFragment extends Fragment {
     // view elements
-    private TextView tvName;
     private RecyclerView rvSaved;
+    private View currView;
 
     protected ShowAdapter adapter;
     protected List<Show> savedShows;
@@ -53,7 +54,7 @@ public class SavedFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View currView = inflater.inflate(R.layout.fragment_saved, container, false);
+        currView = inflater.inflate(R.layout.fragment_saved, container, false);
 
         // find Recycler View
         rvSaved = currView.findViewById(R.id.rvSaved);
@@ -119,6 +120,11 @@ public class SavedFragment extends Fragment {
 
                 // save received posts to list and notify adapter of new data
                 adapter.addAll(modifiedShows);
+
+                // check if any shows actually loaded and show message if not
+                if (adapter.getItemCount() == 0) {
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), "No saved shows!", Snackbar.LENGTH_LONG).show();
+                }
             }
         });
     }

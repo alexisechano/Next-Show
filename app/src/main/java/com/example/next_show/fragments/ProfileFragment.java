@@ -21,6 +21,7 @@ import com.parse.ParseUser;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.util.List;
 
 public class ProfileFragment extends Fragment {
     // constants
@@ -31,6 +32,7 @@ public class ProfileFragment extends Fragment {
     private TextView tvName;
     private TextView tvUsername;
     private TextView tvBio;
+    private TextView tvGenres;
     private ImageView ivProfileImage;
 
     // empty constructor
@@ -58,6 +60,7 @@ public class ProfileFragment extends Fragment {
         tvUsername = currView.findViewById(R.id.tvUsername);
         tvBio = currView.findViewById(R.id.tvBio);
         ivProfileImage = currView.findViewById(R.id.ivProfileImage);
+        tvGenres = currView.findViewById(R.id.tvGenres);
 
         // set up logout button
         btnLogout = currView.findViewById(R.id.btnLogout);
@@ -79,7 +82,16 @@ public class ProfileFragment extends Fragment {
         tvUsername.setText(username);
 
         String bio = currUser.getBio();
-        tvBio.setText(bio);
+        tvBio.setText("Bio: " + bio);
+
+        List<String> faveGenres = currUser.getFaveGenres();
+        String genreText = "";
+
+        for (String g : faveGenres) {
+            genreText += (g + ", ");
+        }
+
+        tvGenres.setText("Favorite Genres: " + genreText.substring(0, genreText.length() - 2));
 
         // add temp image
         Glide.with(getContext()).load(R.drawable.ic_baseline_account_box_24).into(ivProfileImage);

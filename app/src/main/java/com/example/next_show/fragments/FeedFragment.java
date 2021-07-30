@@ -117,6 +117,7 @@ public class FeedFragment extends Fragment {
         TraktApplication.fetchTrendingShows(showsObj, trendingShowCallback);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -169,16 +170,18 @@ public class FeedFragment extends Fragment {
     }
 
     private void resetPage() {
-        // clears the screen and current list of shows
-        adapter.clear();
+        // forces reset here -> NECESSARY
+        adapter.update(showFilter.getAllShows());
 
         // resets filters
-        showFilter.setUpFilters();
-
-        // reset vars
+        showFilter.resetFilters();
         selectedGenres = new boolean[]{false, false, false};
         selectedNetworks = new boolean[]{false, false};
         selectedYears = new boolean[]{false, false, false};
+
+        // clears the screen and current list of shows
+        adapter.clear();
+
     }
 
     private void setFilterButtons() {
@@ -192,6 +195,12 @@ public class FeedFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 adapter.update(showFilter.getAllShows());
+
+                // resets everything
+                showFilter.resetFilters();
+                selectedGenres = new boolean[]{false, false, false};
+                selectedNetworks = new boolean[]{false, false};
+                selectedYears = new boolean[]{false, false, false};
             }
         });
 
@@ -264,7 +273,7 @@ public class FeedFragment extends Fragment {
                 Log.i(TAG, showFilter.getFilters().toString());
 
                 // filter shows and send to adapter to load
-                List<Show> filtered = showFilter.filterShows(showsList);
+                List<Show> filtered = showFilter.filterShows(new ArrayList<>(showsList));
                 adapter.update(filtered);
 
                 // check if blank
@@ -284,18 +293,18 @@ public class FeedFragment extends Fragment {
         AsyncHttpClient client = new AsyncHttpClient();
         String getUrl = SHOW_DETAIL_URL + id + ADD_API_KEY + getContext().getString(R.string.movie_api_key);
 
-            // call URL and parse through JSON
-            client.get(getUrl, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int i, Headers headers, JSON json) {
-                    callback.onSuccess(json);
-                }
+        // call URL and parse through JSON
+        client.get(getUrl, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Headers headers, JSON json) {
+                callback.onSuccess(json);
+            }
 
-                @Override
-                public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-                    callback.onFailure(i);
-                }
-            });
+            @Override
+            public void onFailure(int i, Headers headers, String s, Throwable throwable) {
+                callback.onFailure(i);
+            }
+        });
     }
 
     // ********************** Callback and Navigation Classes ********************** //

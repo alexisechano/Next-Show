@@ -40,6 +40,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         this.nav = nav;
         this.showFilter = showFilter;
 
+        allShows = currentShows;
         showFilter.setShowsList(shows);
     }
 
@@ -63,6 +64,7 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
     public void clear() {
         currentShows.clear();
+        allShows.clear();
         notifyDataSetChanged();
     }
 
