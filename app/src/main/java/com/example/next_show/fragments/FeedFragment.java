@@ -33,6 +33,8 @@ import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
 import com.example.next_show.navigators.NavigationInterface;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseUser;
 import com.uwetrottmann.trakt5.services.Shows;
 
@@ -53,9 +55,11 @@ public class FeedFragment extends Fragment {
 
     // lists match with dialog list of checks -> view related
     private static final String[] GENRE_FILTERS = {ShowFilter.ACTION, ShowFilter.COMEDY, ShowFilter.DRAMA};
-    boolean[] selectedGenres = {false, false, false};
-    private static final String[] NETWORK_FILERS = {ShowFilter.CABLE, ShowFilter.STREAMING};
+    private boolean[] selectedGenres = {false, false, false};
+    private static final String[] NETWORK_FILTERS = {ShowFilter.CABLE, ShowFilter.STREAMING};
     private boolean[] selectedNetworks = {false, false};
+    private static final String[] YEAR_FILTERS = {ShowFilter.PRIOR, ShowFilter.PAST_FIVE, ShowFilter.THIS_YEAR};
+    private boolean[] selectedYears = {false, false, false};
 
     // view element variables
     private RecyclerView rvFeed;
@@ -165,13 +169,16 @@ public class FeedFragment extends Fragment {
     }
 
     private void resetPage() {
+        // clears the screen and current list of shows
         adapter.clear();
+
         // resets filters
         showFilter.setUpFilters();
 
         // reset vars
         selectedGenres = new boolean[]{false, false, false};
         selectedNetworks = new boolean[]{false, false};
+        selectedYears = new boolean[]{false, false, false};
     }
 
     private void setFilterButtons() {
@@ -192,29 +199,28 @@ public class FeedFragment extends Fragment {
         btnGenre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(GENRE_FILTERS, selectedGenres,ShowFilter.GENRE);
+                showDialog(GENRE_FILTERS, selectedGenres, ShowFilter.GENRE);
             }
         });
 
         btnNetwork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(NETWORK_FILERS, selectedNetworks, ShowFilter.NETWORK);
+                showDialog(NETWORK_FILTERS, selectedNetworks, ShowFilter.NETWORK);
             }
         });
 
         btnYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Implement the layout menu for this!
-                //showMenu(v, R.menu.year_filter);
+                showDialog(YEAR_FILTERS, selectedYears, ShowFilter.YEAR);
             }
         });
     }
 
     private void showDialog(String[] options, boolean[] checkedItems, String type) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        dialogBuilder.setTitle(R.string.filter_title);
+        dialogBuilder.setTitle("Add filter(s) for " + type);
         dialogBuilder.setCancelable(true);
 
         dialogBuilder.setMultiChoiceItems(options, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
@@ -239,6 +245,13 @@ public class FeedFragment extends Fragment {
                             showFilter.removeFromNetwork(option);
                         }
                         return;
+                    case ShowFilter.YEAR:
+                        if (isChecked) {
+                            showFilter.addToYear(option);
+                        } else {
+                            showFilter.removeFromYear(option);
+                        }
+                        return;
                 }
             }
         });
@@ -253,6 +266,11 @@ public class FeedFragment extends Fragment {
                 // filter shows and send to adapter to load
                 List<Show> filtered = showFilter.filterShows(showsList);
                 adapter.update(filtered);
+
+                // check if blank
+                if (adapter.getItemCount() == 0) {
+                    Snackbar.make(currView, "No shows match your filter(s)!", Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 

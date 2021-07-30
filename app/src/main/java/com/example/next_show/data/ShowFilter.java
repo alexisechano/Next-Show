@@ -26,12 +26,16 @@ public class ShowFilter {
     public static final String CABLE = "cable";
     public static final String STREAMING = "streaming";
     public static final List<String> STREAMING_SERVICES =
-            Arrays.asList("Netflix", "Hulu", "Disney+", "HBOMax", "Peacock", "Prime Video", "Apple TV+");
+            Arrays.asList("Netflix", "Hulu", "Disney+", "HBOMax", "Peacock", "Amazon", "Apple TV+");
 
     // filters for year
     public static final String THIS_YEAR = "2021";
     public static final String PAST_FIVE = "2016 - 2020";
     public static final String PRIOR = "< 2015";
+
+    public static final int CURRENT_YEAR = 2021;
+    public static final int PAST_YEAR = 2020;
+    public static final int PRIOR_YEAR = 2015;
 
     // filters
     public static final String GENRE = "genre";
@@ -120,7 +124,16 @@ public class ShowFilter {
         }
 
         List<Show> filterByYear = new ArrayList<>();
-        // TODO: implement filter by year -> unsure if year is the filter I want for the third attribute
+        for (Show s : current) {
+            int yearAired = s.getYearAired();
+            if (yearAired >= CURRENT_YEAR && queries.contains(THIS_YEAR)) {
+                filterByYear.add(s);
+            } else if (yearAired <= PAST_YEAR && yearAired > PRIOR_YEAR && queries.contains(PAST_FIVE)) {
+                filterByYear.add(s);
+            } else if (yearAired <= PRIOR_YEAR && queries.contains(PRIOR)) {
+                filterByYear.add(s);
+            }
+        }
         return filterByYear;
     }
 

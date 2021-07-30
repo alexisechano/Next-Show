@@ -9,7 +9,7 @@
         android:id="@+id/feedFragment"
         android:name="com.example.next_show.fragments.FeedFragment"
         android:label="fragment_feed"
-        tools:layout="@layout/fragment_feed" >
+        tools:layout="@layout/fragment_feed">
         <action
             android:id="@+id/action_feedFragment_to_showDetailFragment"
             app:destination="@id/showDetailFragment"
@@ -23,16 +23,15 @@
     <fragment
         android:id="@+id/savedFragment"
         android:name="com.example.next_show.fragments.SavedFragment"
-        android:label="SavedFragment" >
+        android:label="SavedFragment">
         <action
             android:id="@+id/action_savedFragment_to_showDetailFragment"
             app:destination="@id/showDetailFragment"
             app:enterAnim="@transition/slide_in_right"
-            app:exitAnim="@transition/slide_out_left"  />
+            app:exitAnim="@transition/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/showDetailFragment"
         android:name="com.example.next_show.fragments.ShowDetailFragment"
-        android:label="ShowDetailFragment" >
-    </fragment>
+        android:label="ShowDetailFragment"></fragment>
 </navigation>

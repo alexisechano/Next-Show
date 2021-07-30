@@ -2,5 +2,4 @@
     <string name="app_name">Next-Show</string>
     <string name="snackbar_text">Deleted show!</string>
     <string name="snackbar_action">Undo</string>
-    <string name="filter_title">Add filters</string>
 </resources>
