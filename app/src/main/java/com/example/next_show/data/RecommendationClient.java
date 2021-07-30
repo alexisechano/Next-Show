@@ -103,22 +103,6 @@ public class RecommendationClient {
         }
     }
 
-    public static List<Show> getGenreMatch(List<Show> shows, List<String> compareGenres){
-        // init return list
-        List<Show> genreMatched = new ArrayList<>();
-
-        for (Show s: shows) {
-            List<String> showGenres = s.getGenres();
-
-            // if any genre(s) match the comparison ones
-            if (!Collections.disjoint(showGenres, compareGenres)) {
-                genreMatched.add(s);
-            }
-        }
-
-        return genreMatched;
-    }
-
     public static void determineError(int code) {
         switch (code) {
             case UNAUTHORIZED_REQUEST:

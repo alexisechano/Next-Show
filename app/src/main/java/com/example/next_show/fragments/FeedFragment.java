@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,7 +32,6 @@ import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
 import com.example.next_show.navigators.NavigationInterface;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseUser;
 import com.uwetrottmann.trakt5.services.Shows;
@@ -42,7 +40,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import okhttp3.Headers;
 
@@ -53,7 +53,7 @@ public class FeedFragment extends Fragment {
     private static final String ADD_API_KEY = "?api_key=";
     private static final int NOT_FOUND = -1;
 
-    // lists match with dialog list of checks -> view related
+    // lists match with dialog list of checks -> necessary types for AlertDialog.Builder
     private static final String[] GENRE_FILTERS = {ShowFilter.ACTION, ShowFilter.COMEDY, ShowFilter.DRAMA};
     private boolean[] selectedGenres = {false, false, false};
     private static final String[] NETWORK_FILTERS = {ShowFilter.CABLE, ShowFilter.STREAMING};
@@ -79,6 +79,7 @@ public class FeedFragment extends Fragment {
     private TrendingShowCallback trendingShowCallback;
     private RelatedShowCallback relatedShowCallback;
     private GenreMatchedCallback genreMatchedCallback;
+    private DetailImageCallback imageCallback;
 
     protected ShowAdapter adapter;
     protected List<Show> showsList; // what is being shown
@@ -93,11 +94,11 @@ public class FeedFragment extends Fragment {
         // initialize the array that will hold posts
         showsList = new ArrayList<>();
 
-        // init the filters
-        showFilter = new ShowFilter(showsList);
+        // init the filter
+        showFilter = new ShowFilter();
 
         // creates a show adapter with show list
-        adapter = new ShowAdapter(getActivity(), showsList, new NavigateFeedToDetail(), showFilter);
+        adapter = new ShowAdapter(getActivity(), showsList, new NavigateFeedToDetail());
 
         // get current user
         currentUser = (User) ParseUser.getCurrentUser();
@@ -112,6 +113,7 @@ public class FeedFragment extends Fragment {
         trendingShowCallback = new TrendingShowCallback();
         relatedShowCallback = new RelatedShowCallback();
         genreMatchedCallback = new GenreMatchedCallback();
+        imageCallback = new DetailImageCallback();
 
         // get trending shows on load
         TraktApplication.fetchTrendingShows(showsObj, trendingShowCallback);
@@ -148,7 +150,7 @@ public class FeedFragment extends Fragment {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_trending:
-                            // get trending shows
+                            // get trending shows and reset
                             resetPage();
                             TraktApplication.fetchTrendingShows(showsObj, trendingShowCallback);
                             break;
@@ -156,7 +158,7 @@ public class FeedFragment extends Fragment {
                             // get user's liked shows
                             List<String> savedShows = currentUser.getLikedSavedShows();
 
-                            // fetch recommended shows
+                            // fetch recommended shows and reset
                             resetPage();
                             recClient.fetchRelatedShows(savedShows, relatedShowCallback);
                             break;
@@ -170,18 +172,20 @@ public class FeedFragment extends Fragment {
     }
 
     private void resetPage() {
-        // forces reset here -> NECESSARY
-        adapter.update(showFilter.getAllShows());
+        // resets filters using same set up method
+        showFilter.setFilters();
 
-        // resets filters
-        showFilter.resetFilters();
+        // necessary to ensure all files are referring to same list of shows
+        showsList = showFilter.getAllShows();
+
+        // clears the screen and current list of shows everywhere
+        adapter.clear();
+        showFilter.clear();
+        showsList.clear();
+
         selectedGenres = new boolean[]{false, false, false};
         selectedNetworks = new boolean[]{false, false};
         selectedYears = new boolean[]{false, false, false};
-
-        // clears the screen and current list of shows
-        adapter.clear();
-
     }
 
     private void setFilterButtons() {
@@ -194,13 +198,7 @@ public class FeedFragment extends Fragment {
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.update(showFilter.getAllShows());
-
-                // resets everything
-                showFilter.resetFilters();
-                selectedGenres = new boolean[]{false, false, false};
-                selectedNetworks = new boolean[]{false, false};
-                selectedYears = new boolean[]{false, false, false};
+                resetShows();
             }
         });
 
@@ -260,7 +258,6 @@ public class FeedFragment extends Fragment {
                         } else {
                             showFilter.removeFromYear(option);
                         }
-                        return;
                 }
             }
         });
@@ -278,7 +275,8 @@ public class FeedFragment extends Fragment {
 
                 // check if blank
                 if (adapter.getItemCount() == 0) {
-                    Snackbar.make(currView, "No shows match your filter(s)!", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(currView, "No shows found! Showing all shows...", Snackbar.LENGTH_LONG).show();
+                    resetShows();
                 }
             }
         });
@@ -287,6 +285,18 @@ public class FeedFragment extends Fragment {
 
         AlertDialog dialog = dialogBuilder.create();
         dialog.show();
+    }
+
+    // removes filters and shows all shows
+    private void resetShows() {
+        adapter.update(showFilter.getAllShows());
+        rvFeed.smoothScrollToPosition(0);
+
+        // resets everything
+        showFilter.setFilters();
+        selectedGenres = new boolean[]{false, false, false};
+        selectedNetworks = new boolean[]{false, false};
+        selectedYears = new boolean[]{false, false, false};
     }
 
     private void fetchImage(String id, ImageCallback callback){
@@ -320,10 +330,11 @@ public class FeedFragment extends Fragment {
         public void onSuccess(List<Show> shows) {
             // update adapter declared in FeedFragment
             adapter.addAll(shows);
+            showFilter.addAll(shows);
 
             // make API call to grab images
             for(Show s: shows){
-                fetchImage(s.getId(), new DetailImageCallback());
+                fetchImage(s.getId(), imageCallback);
             }
         }
 
@@ -338,11 +349,12 @@ public class FeedFragment extends Fragment {
         public void onSuccess(List<Show> shows) {
             // update adapter declared in FeedFragment
             adapter.addAll(shows);
+            showFilter.addAll(shows);
 
             // make API call to grab images
             for(Show s: shows){
                 Log.i("RELATED SHOWS!", "Show: " + s.getId() + " " + s.getTitle());
-                fetchImage(s.getId(), new DetailImageCallback());
+                fetchImage(s.getId(), imageCallback);
             }
         }
 
@@ -362,7 +374,9 @@ public class FeedFragment extends Fragment {
             List<String> favoriteGenres = currentUser.getFaveGenres();
 
             // do logic to get only fave genre ones
-            List<Show> genreMatchedShows = RecommendationClient.getGenreMatch(shows, favoriteGenres);
+            Set<String> faveGenres = new HashSet<String>(favoriteGenres);
+            faveGenres.addAll(favoriteGenres);
+            List<Show> genreMatchedShows = ShowFilter.getGenreMatch(shows, faveGenres);
 
             // no matches, let user know and don't add to adapter
             if (genreMatchedShows.isEmpty()) {
@@ -371,11 +385,12 @@ public class FeedFragment extends Fragment {
             }
 
             // update adapter
-            adapter.addAll(shows);
+            adapter.addAll(genreMatchedShows);
+            showFilter.addAll(genreMatchedShows);
 
             // make API call to grab images
-            for(Show s: shows){
-                fetchImage(s.getId(), new DetailImageCallback());
+            for(Show s: genreMatchedShows){
+                fetchImage(s.getId(), imageCallback);
             }
         }
 

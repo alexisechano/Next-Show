@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.next_show.R;
-import com.example.next_show.data.ShowFilter;
 import com.example.next_show.models.User;
 import com.example.next_show.navigators.NavigationInterface;
 import com.example.next_show.models.Show;
@@ -23,25 +22,18 @@ import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseUser;
 import com.zerobranch.layout.SwipeLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     // instance variables
     private Context context;
     private List<Show> currentShows; // currently displayed shows on recycler view
-    private List<Show> allShows; // all shows from Trakt call
-    private ShowFilter showFilter;
     private NavigationInterface nav;
 
-    public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav, ShowFilter showFilter){
+    public ShowAdapter (Context context, List<Show> shows, NavigationInterface nav){
         this.context = context;
         this.currentShows = shows;
         this.nav = nav;
-        this.showFilter = showFilter;
-
-        allShows = currentShows;
-        showFilter.setShowsList(shows);
     }
 
     @NonNull
@@ -64,14 +56,11 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
     public void clear() {
         currentShows.clear();
-        allShows.clear();
         notifyDataSetChanged();
     }
 
     public void addAll(List<Show> list) {
         currentShows.addAll(list);
-        allShows = currentShows;
-        showFilter.setShowsList(allShows);
         notifyDataSetChanged();
     }
 
