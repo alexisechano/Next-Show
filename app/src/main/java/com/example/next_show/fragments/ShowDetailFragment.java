@@ -1,5 +1,6 @@
 package com.example.next_show.fragments;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -101,12 +102,12 @@ public class ShowDetailFragment extends Fragment {
 
         // go through show genres and add chips
         List<String> showGenres = currShow.getGenres();
-        int track = 1;
+        int genreChipCount = 1;
         for (String g: showGenres) {
             // only put 3 genres max (formatting constraint)
-            if (track <= MAX_CHIPS){
+            if (genreChipCount <= MAX_CHIPS){
                 addChip(g);
-                track += 1;
+                genreChipCount++;
             } else {
                break;
             }
@@ -115,11 +116,13 @@ public class ShowDetailFragment extends Fragment {
         // check if previous fragment was the SavedFragment -> disable save feature
         if (currShow.isSaved()) {
             btnSaveShow.setVisibility(View.GONE);
+            TextView tvRatingTitle = currView.findViewById(R.id.tvRatingTitle);
+            tvAlreadyRated = currView.findViewById(R.id.tvAlreadyRated);
+            String likedStatus = currShow.getUserLiked();
 
             // check if user already rated it, show if user liked it or not
-            if (currShow.getUserLiked().equals(LIKED) || currShow.getUserLiked().equals(DISLIKED)) {
+            if (likedStatus != null && (likedStatus.equals(LIKED) || likedStatus.equals(DISLIKED))) {
                 String status = (currShow.getUserLiked().equals(LIKED)) ? LIKED : DISLIKED;
-                tvAlreadyRated = currView.findViewById(R.id.tvAlreadyRated);
 
                 // toggle view, remove liked and disliked if rated already
                 btnLiked.setVisibility(View.GONE);
@@ -127,6 +130,12 @@ public class ShowDetailFragment extends Fragment {
 
                 tvAlreadyRated.setVisibility(View.VISIBLE);
                 tvAlreadyRated.setText("You " + status + " this show!");
+            } else {
+                btnLiked.setVisibility(View.GONE);
+                btnDisliked.setVisibility(View.GONE);
+
+                tvRatingTitle.setText("Already saved this show, click Saved tab!");
+                tvRatingTitle.setTypeface(tvRatingTitle.getTypeface(), Typeface.BOLD);
             }
         }
 
@@ -167,6 +176,9 @@ public class ShowDetailFragment extends Fragment {
                         if (currShow.getUserLiked().equals(LIKED)) {
                             currentUser.addToLikedShows(currShow.getSlug());
                         }
+
+                        // add to general list of saved shows
+                        currentUser.addToSavedShows(currShow.getSlug());
 
                         // if no error, let log and user know
                         Log.i(TAG, "Saved post successfully");
@@ -223,6 +235,7 @@ public class ShowDetailFragment extends Fragment {
                     }
 
                     Log.i(TAG, "Saved new rating!");
+                    Toast.makeText(getActivity(), "Updated the rating!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

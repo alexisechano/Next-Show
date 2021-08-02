@@ -66,6 +66,11 @@ public class Show extends ParseObject implements Parcelable {
                         trendingShow.show.genres, showSlug);
 
                 updatedShows.add(currentShow);
+
+                // for labelling on feedfragment
+                if (isSaved(showSlug)) {
+                    currentShow.setSavedStatus(true);
+                }
             }
         }
         return updatedShows;
@@ -82,6 +87,11 @@ public class Show extends ParseObject implements Parcelable {
             if (!isForbiddenShow(showID)) {
                 Show currentShow = new Show(show.title, show.overview, showID, show.network,
                         show.first_aired.getYear(), show.genres, showSlug);
+
+                // for labelling on feedfragment
+                if (isSaved(showSlug)) {
+                    currentShow.setSavedStatus(true);
+                }
 
                 updatedShows.add(currentShow);
             }
@@ -125,6 +135,18 @@ public class Show extends ParseObject implements Parcelable {
         }
 
         return forbiddenShows.contains(showID);
+    }
+
+    private static boolean isSaved(String slug) {
+        User user = (User) ParseUser.getCurrentUser();
+        List<String> savedShows = user.getAllSavedShows();
+
+        // check if user has saved shows -> trivially true
+        if (savedShows == null || savedShows.isEmpty()) {
+            return true;
+        }
+
+        return savedShows.contains(slug);
     }
 
     // for local instance of Show -> no setter for these, only constructor can set
