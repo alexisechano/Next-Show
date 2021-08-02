@@ -7,8 +7,6 @@ import com.example.next_show.models.Show;
 import com.uwetrottmann.trakt5.enums.Extended;
 import com.uwetrottmann.trakt5.services.Shows;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -25,6 +23,7 @@ public class RecommendationClient {
     public static final int LOWER_LIMIT = 5;
     public static final int UPPER_LIMIT = 7;
 
+    // error code constants -> public since used in callbacks
     public static final int ERROR_NO_SAVED_SHOWS_TO_MATCH_RELATED = 11;
     public static final int TRAKT_FAILURE = 10;
     public static final int NO_CALL = -1;

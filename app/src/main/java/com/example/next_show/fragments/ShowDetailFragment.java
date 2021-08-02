@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.transition.TransitionInflater;
 
 import com.bumptech.glide.Glide;
 import com.example.next_show.R;
@@ -44,6 +43,7 @@ public class ShowDetailFragment extends Fragment {
     public static final String LIKED = "liked";
     public static final String DISLIKED = "disliked";
     public static final String KEY_SHOW = "Show";
+    public static final String PARSE_RATING_KEY = "userRating";
 
     // empty constructor
     public ShowDetailFragment() { }
@@ -52,7 +52,7 @@ public class ShowDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // grab from args
+        // grab parceled show object from args
         currShow = getArguments().getParcelable(Show.class.getSimpleName());
         Log.i(TAG, "TITLE: " + currShow.getTitle());
     }
@@ -182,7 +182,7 @@ public class ShowDetailFragment extends Fragment {
                     Log.i(TAG, "Updating show rating...");
 
                     // save rating
-                    show.put("userRating", r);
+                    show.put(PARSE_RATING_KEY, r);
                     show.saveInBackground();
 
                     // update matching user's saved show list
