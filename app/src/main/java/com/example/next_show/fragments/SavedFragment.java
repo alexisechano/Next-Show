@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next_show.R;
 import com.example.next_show.adapters.ShowAdapter;
-import com.example.next_show.data.ShowFilter;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
 import com.example.next_show.navigators.NavigationInterface;
@@ -35,7 +33,6 @@ public class SavedFragment extends Fragment {
 
     protected ShowAdapter adapter;
     protected List<Show> savedShows;
-    protected ShowFilter blankFilter;
 
     // constants
     public static final String TAG = "SavedFragment";
@@ -62,11 +59,8 @@ public class SavedFragment extends Fragment {
         // initialize the array that will hold posts and create a PostsAdapter
         savedShows = new ArrayList<>();
 
-        // init a blank filter
-        blankFilter = new ShowFilter(savedShows);
-
         // initialize the adapter
-        adapter = new ShowAdapter(getActivity(), savedShows, new NavigateSavedToDetail(), blankFilter);
+        adapter = new ShowAdapter(getActivity(), savedShows, new NavigateSavedToDetail());
 
         // set the adapter on the recycler view
         rvSaved.setAdapter(adapter);
