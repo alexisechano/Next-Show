@@ -35,6 +35,19 @@
                 android:layout_margin="@dimen/item_spacing_large"
                 android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/tvShowTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/item_spacing_large"
+                    android:fontFamily="@font/roboto_bold_italic"
+                    android:text="Show Name"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginStart="@dimen/item_spacing_large"
+                    android:layout_marginTop="@dimen/item_spacing_small"
+                    android:layout_marginBottom="@dimen/item_spacing_large"/>
+
                 <ImageView
                     android:id="@+id/ivCardImage"
                     android:layout_width="match_parent"
@@ -43,22 +56,11 @@
                     tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
                 <TextView
-                    android:id="@+id/tvShowTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/item_spacing_large"
-                    android:layout_marginTop="@dimen/item_spacing_large"
-                    android:fontFamily="@font/roboto_bold_italic"
-                    android:text="Show Name"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <TextView
                     android:id="@+id/tvShowBody"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/item_spacing_large"
-                    android:layout_marginTop="@dimen/item_spacing_med"
+                    android:layout_marginTop="@dimen/item_spacing_large"
                     android:layout_marginBottom="@dimen/item_spacing_med"
                     android:ellipsize="end"
                     android:fontFamily="@font/lato"
