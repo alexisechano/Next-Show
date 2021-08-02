@@ -138,10 +138,10 @@ Outlined by FBU App Expectations and Priority
 | firstName  | String | String for first name |
 | lastName  | String | String for last name |
 | bio  | String | String for bio blurb |
-| savedShows   | Array of TMDB IDs      | Shows that are already watched and rated   |
+| savedShows   | Array of Strings     | Shows that are already saved and liked   |
+| likedShows   | Array of Strings      | Shows that are already saved  |
 | forbiddenShows   | Array of TMDB IDs      | Shows that are disliked but not saved (gesture)  |
 | faveGenres  | Array of Strings      | List of this User's favorite TV genres |
-| displayShow  | Show | Currently watching or Fave Show broadcasted on profile |
 
 
 ### Networking
