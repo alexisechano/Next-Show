@@ -2,6 +2,7 @@ package com.example.next_show.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,16 @@ import com.bumptech.glide.Glide;
 import com.example.next_show.R;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import java.util.List;
 
 public class ShowDetailFragment extends Fragment {
     private Show currShow;
@@ -36,6 +41,7 @@ public class ShowDetailFragment extends Fragment {
     private Button btnSaveShow;
     private Button btnLiked;
     private Button btnDisliked;
+    private ChipGroup genreChipGroup;
     private ImageView ivShowPoster;
 
     // constants
@@ -44,6 +50,7 @@ public class ShowDetailFragment extends Fragment {
     public static final String DISLIKED = "disliked";
     public static final String KEY_SHOW = "Show";
     public static final String PARSE_RATING_KEY = "userRating";
+    public static final int MAX_CHIPS = 3;
 
     // empty constructor
     public ShowDetailFragment() { }
@@ -80,6 +87,7 @@ public class ShowDetailFragment extends Fragment {
         btnLiked = currView.findViewById(R.id.btnLiked);
         btnDisliked = currView.findViewById(R.id.btnDisliked);
         ivShowPoster = currView.findViewById(R.id.ivShowPoster);
+        genreChipGroup = currView.findViewById(R.id.genreChipGroup);
 
         // display show text data
         tvDetailTitle.setText(currShow.getTitle());
@@ -90,6 +98,19 @@ public class ShowDetailFragment extends Fragment {
 
         // put into imageview -> if not loaded yet, this will be blank but loads properly if clicked again
         Glide.with(getContext()).load(currShow.getImageUrl()).into(ivShowPoster);
+
+        // go through show genres and add chips
+        List<String> showGenres = currShow.getGenres();
+        int track = 1;
+        for (String g: showGenres) {
+            // only put 3 genres max (formatting constraint)
+            if (track <= MAX_CHIPS){
+                addChip(g);
+                track += 1;
+            } else {
+               break;
+            }
+        }
 
         // check if previous fragment was the SavedFragment -> disable save feature
         if (currShow.isSaved()) {
@@ -154,6 +175,17 @@ public class ShowDetailFragment extends Fragment {
                 });
             }
         });
+    }
+
+    private void addChip(String g) {
+        Chip currentGenre = new Chip(getContext());
+        currentGenre.setText(g);
+        currentGenre.setChipBackgroundColorResource(R.color.theme_color);
+        currentGenre.setTextColor(getResources().getColor(R.color.white));
+        currentGenre.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        // add to chip group
+        genreChipGroup.addView(currentGenre);
     }
 
     private void updateRating(String rating) {

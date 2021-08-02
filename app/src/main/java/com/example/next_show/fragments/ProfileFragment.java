@@ -82,7 +82,7 @@ public class ProfileFragment extends Fragment {
         tvUsername.setText(username);
 
         String bio = currUser.getBio();
-        tvBio.setText("Bio: " + bio);
+        tvBio.setText(bio);
 
         List<String> faveGenres = currUser.getFaveGenres();
         String genreText = "";

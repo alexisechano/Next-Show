@@ -25,7 +25,8 @@
                                               <map>
                                                 <entry key="color" value="000000" />
                                                 <entry key="imagePath" value="/private/var/folders/g_/gtspqhr149v0dr0by5c25g_r0000gn/T/ic_android_black_24dp.xml" />
-                                                <entry key="opacityPercent" value="60" />
+                                                <entry key="opacityPercent" value="80" />
+                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -37,8 +38,9 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="$PROJECT_DIR$/pfp-placeholder.png" />
-                                                <entry key="opacityPercent" value="60" />
+                                                <entry key="imagePath" value="$USER_HOME$/Downloads/tv.svg" />
+                                                <entry key="opacityPercent" value="80" />
+                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -71,8 +73,9 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$PROJECT_DIR$/pfp-placeholder.png" />
-                                      <entry key="outputName" value="placeholder-image" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/tv.svg" />
+                                      <entry key="outputName" value="nextshow-logo" />
+                                      <entry key="theme" value="HOLO_DARK" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -340,7 +343,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_baseline_refresh_24" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_tv" />
+                            <entry key="sourceFile" value="$USER_HOME$/Downloads/tv.svg" />
                           </map>
                         </option>
                       </PersistentState>
