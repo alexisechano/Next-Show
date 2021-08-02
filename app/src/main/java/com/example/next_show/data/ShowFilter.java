@@ -156,9 +156,6 @@ public class ShowFilter {
         showGenres.retainAll(compareGenres);
 
         // if genres match
-        if (!showGenres.isEmpty()) {
-            return true;
-        }
-        return false;
+        return !showGenres.isEmpty();
     }
 }

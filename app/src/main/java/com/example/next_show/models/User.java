@@ -15,7 +15,8 @@ public class User extends ParseUser {
     public static final String KEY_BIO = "bio";
     public static final String KEY_FAVE_GENRES = "faveGenres";
     public static final String KEY_FORBIDDEN = "forbiddenShows"; // holds TVIDs for DELETED SHOWS
-    public static final String KEY_LIKED_SAVED_SHOWS = "savedShows"; // holds SLUGS for LIKED savedShows
+    public static final String KEY_LIKED_SAVED_SHOWS = "likedShows"; // holds SLUGS for LIKED savedShows
+    public static final String KEY_ALL_SAVED_SHOWS = "savedShows"; // holds SLUGS for all savedShows
 
     // empty constructor
     public User() { }
@@ -68,13 +69,17 @@ public class User extends ParseUser {
         return getList(KEY_LIKED_SAVED_SHOWS);
     }
 
-    public void setLikedShows(List<String> shows){
-        addAllUnique(KEY_LIKED_SAVED_SHOWS, shows);
+    public void addToLikedShows(String s){
+        add(KEY_LIKED_SAVED_SHOWS, s);
         saveInBackground();
     }
 
-    public void addToLikedShows(String s){
-        add(KEY_LIKED_SAVED_SHOWS, s);
+    public List<String> getAllSavedShows() {
+        return getList(KEY_ALL_SAVED_SHOWS);
+    }
+
+    public void addToSavedShows(String s){
+        add(KEY_ALL_SAVED_SHOWS, s);
         saveInBackground();
     }
 
