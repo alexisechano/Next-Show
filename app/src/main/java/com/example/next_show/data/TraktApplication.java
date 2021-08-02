@@ -29,9 +29,7 @@ public class TraktApplication {
     private Context context;
 
     // empty constructor
-    public TraktApplication() {
-
-    }
+    public TraktApplication() { }
 
     public TraktApplication(Context context) {
         this.context = context;

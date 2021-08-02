@@ -76,10 +76,10 @@ public class FeedFragment extends Fragment {
     private ShowFilter showFilter;
 
     // callbacks for Trakt
-    private TrendingShowCallback trendingShowCallback;
-    private RelatedShowCallback relatedShowCallback;
     private GenreMatchedCallback genreMatchedCallback;
     private DetailImageCallback imageCallback;
+    private TrendingShowCallback trendingShowCallback;
+    private RelatedShowCallback relatedShowCallback;
 
     protected ShowAdapter adapter;
     protected List<Show> showsList; // what is being shown
@@ -142,10 +142,10 @@ public class FeedFragment extends Fragment {
             setFilterButtons();
 
             // determine whether to show trending or recommended
-            BottomNavigationView toggleNav = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
+            BottomNavigationView topFeedNav = (BottomNavigationView) currView.findViewById(R.id.filterMenu);
 
             // set selector
-            toggleNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            topFeedNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
@@ -173,7 +173,7 @@ public class FeedFragment extends Fragment {
 
     private void resetPage() {
         // resets filters using same set up method
-        showFilter.setFilters();
+        showFilter.resetFilters();
 
         // necessary to ensure all files are referring to same list of shows
         showsList = showFilter.getAllShows();
@@ -289,11 +289,12 @@ public class FeedFragment extends Fragment {
 
     // removes filters and shows all shows
     private void resetShows() {
-        adapter.update(showFilter.getAllShows());
+        adapter.clear();
+        adapter.addAll(showFilter.getAllShows());
         rvFeed.smoothScrollToPosition(0);
 
         // resets everything
-        showFilter.setFilters();
+        showFilter.resetFilters();
         selectedGenres = new boolean[]{false, false, false};
         selectedNetworks = new boolean[]{false, false};
         selectedYears = new boolean[]{false, false, false};
@@ -374,9 +375,15 @@ public class FeedFragment extends Fragment {
             List<String> favoriteGenres = currentUser.getFaveGenres();
 
             // do logic to get only fave genre ones
+            List<Show> genreMatchedShows = new ArrayList<>();
             Set<String> faveGenres = new HashSet<String>(favoriteGenres);
             faveGenres.addAll(favoriteGenres);
-            List<Show> genreMatchedShows = ShowFilter.getGenreMatch(shows, faveGenres);
+
+            for (Show s: shows) {
+                if (showFilter.matchedGenreFilter(s, faveGenres)) {
+                    genreMatchedShows.add(s);
+                }
+            }
 
             // no matches, let user know and don't add to adapter
             if (genreMatchedShows.isEmpty()) {

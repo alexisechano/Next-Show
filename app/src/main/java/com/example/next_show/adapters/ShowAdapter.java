@@ -74,12 +74,12 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         // view elements
         private TextView tvShowBody;
         private TextView tvShowTitle;
-        private SwipeLayout swipe_layout;
+        private SwipeLayout swipeLayout;
         private CardView showCard;
         private ImageView ivDismiss;
         private ImageView ivCardImage;
         private NavigationInterface navigator;
-        private String showID;
+        private String showId;
 
         public ViewHolder(@NonNull View itemView, NavigationInterface navigator) {
             super(itemView);
@@ -102,11 +102,11 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
             ivCardImage = itemView.findViewById(R.id.ivCardImage);
 
             // swipe layout set up
-            swipe_layout = itemView.findViewById(R.id.swipe_layout);
+            swipeLayout = itemView.findViewById(R.id.swipe_layout);
             ivDismiss = itemView.findViewById(R.id.ivDismiss);
 
             // set listener for swiping
-            swipe_layout.setOnActionsListener(new SwipeLayout.SwipeActionsListener() {
+            swipeLayout.setOnActionsListener(new SwipeLayout.SwipeActionsListener() {
                 @Override
                 public void onOpen(int direction, boolean isContinuous) {
                     if (direction == SwipeLayout.LEFT) {
@@ -115,11 +115,11 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
                         // grab current show and remove from list
                         User user = (User) ParseUser.getCurrentUser();
-                        showID = removeShow(user);
+                        showId = removeShow(user);
                         ivDismiss.setVisibility(View.INVISIBLE);
 
                         // update user forbidden shows
-                        user.addToForbiddenShows(showID);
+                        user.addToForbiddenShows(showId);
                     }
                 }
 

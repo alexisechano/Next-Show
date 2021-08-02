@@ -1,4 +1,5 @@
 package com.example.next_show.data;
+
 import com.example.next_show.models.Show;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.Set;
 public class ShowFilter {
     // instance vars
     private HashMap<String, Set<String>> filters;
-    private List<Show> allShows; // contains all shows from Trakt, THIS IS NOT FILTERED
+    private List<Show> allShows; // contains all shows from Trakt, not filtered
 
     // genres for shows
     public static final String ACTION = "action";
@@ -41,10 +42,10 @@ public class ShowFilter {
     public ShowFilter() {
         // set up shows list and filters
         this.allShows = new ArrayList<>();
-        setFilters();
+        resetFilters();
     }
 
-    public void setFilters() {
+    public void resetFilters() {
         // init a new hashmap
         filters = new HashMap<>();
 
@@ -54,7 +55,7 @@ public class ShowFilter {
         filters.put(YEAR, new HashSet<String>());
     }
 
-    public HashMap<String, Set<String>> getFilters(){
+    public HashMap<String, Set<String>> getFilters() {
         return filters;
     }
 
@@ -95,23 +96,16 @@ public class ShowFilter {
     }
 
     public List<Show> filterShows(List<Show> shows) {
-        // filter by genre first
+        // queries for filtering
         Set<String> genreQueries = filters.get(GENRE);
-        List<Show> genreMatchedShows  = getGenreMatch(shows, genreQueries);
-
-        if(genreMatchedShows.isEmpty()) {
-            genreMatchedShows = shows;
-        }
-
-        // queries for other attributes
         Set<String> networkQueries = filters.get(NETWORK);
         Set<String> yearQueries = filters.get(YEAR);
 
         List<Show> filteredShows = new ArrayList<>();
 
-        for (Show s: genreMatchedShows) {
-            // check network and year
-            if (matchedNetworkFilter(s, networkQueries) && matchedYearFilter(s, yearQueries)) {
+        for (Show s : shows) {
+            // check genre, network and year to se if ALL match
+            if (matchedNetworkFilter(s, networkQueries) && matchedYearFilter(s, yearQueries) && matchedGenreFilter(s, genreQueries)) {
                 filteredShows.add(s);
             }
         }
@@ -152,26 +146,19 @@ public class ShowFilter {
         return false;
     }
 
-    public static List<Show> getGenreMatch(List<Show> shows, Set<String> compareGenres){
-        // init return list
-        List<Show> genreMatched = new ArrayList<>();
-
-        // check if we need to even compare
+    public boolean matchedGenreFilter(Show current, Set<String> compareGenres) {
         if (compareGenres.isEmpty()) {
-            return genreMatched;
+            return true;
         }
 
-        for (Show s: shows) {
-            Set<String> showGenres = new HashSet<String>(s.getGenres());
-            showGenres.addAll(s.getGenres());
+        Set<String> showGenres = new HashSet<String>();
+        showGenres.addAll(current.getGenres());
+        showGenres.retainAll(compareGenres);
 
-            // if any genre(s) match the comparison ones or if set intersection is not empty
-            showGenres.retainAll(compareGenres);
-            if (!showGenres.isEmpty()) {
-                genreMatched.add(s);
-            }
+        // if genres match
+        if (!showGenres.isEmpty()) {
+            return true;
         }
-
-        return genreMatched;
+        return false;
     }
 }

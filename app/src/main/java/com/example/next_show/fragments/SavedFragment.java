@@ -79,7 +79,7 @@ public class SavedFragment extends Fragment {
         // get current user
         User currUser = (User) ParseUser.getCurrentUser();
 
-        // get list of Shows from Parse -> I don't really need query if I user User list!
+        // get list of Shows from Parse
         queryPosts(currUser);
     }
 
