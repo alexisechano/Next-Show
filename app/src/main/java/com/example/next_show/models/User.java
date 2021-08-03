@@ -13,6 +13,7 @@ public class User extends ParseUser {
     public static final String KEY_LASTNAME = "lastName";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_BIO = "bio";
+    public static final String KEY_CURRENTLY_WATCHING = "currentlyWatching"; // holds POINTER to show
     public static final String KEY_FAVE_GENRES = "faveGenres";
     public static final String KEY_FORBIDDEN = "forbiddenShows"; // holds TVIDs for DELETED SHOWS
     public static final String KEY_LIKED_SAVED_SHOWS = "likedShows"; // holds SLUGS for LIKED savedShows
@@ -49,6 +50,11 @@ public class User extends ParseUser {
 
     public void setBio(String bio) {
         put(KEY_BIO, bio);
+    }
+
+    public void setCurrentlyWatching(Show s) {
+        put(KEY_CURRENTLY_WATCHING, s);
+        saveInBackground();
     }
 
     public List<String> getFaveGenres() {
