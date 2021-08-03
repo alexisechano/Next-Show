@@ -1,111 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="8dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/item_spacing_large"
-        android:fontFamily="@font/roboto_bold"
-        android:text="My Profile"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/black" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/profileCard"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="8dp"
-        app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
+        android:layout_height="match_parent"
+        android:padding="8dp">
 
-        <RelativeLayout
-            android:id="@+id/profileTop"
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/item_spacing_large"
+            android:fontFamily="@font/roboto_bold"
+            android:text="My Profile"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/black" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profileCard"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_height"
-            android:background="@color/white">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true">
 
-            <ImageView
-                android:id="@+id/ivProfileImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
-                tools:src="@tools:sample/avatars" />
+            <RelativeLayout
+                android:id="@+id/profileTop"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_height"
+                android:gravity="center"
+                android:background="@color/white">
 
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/ivProfileImage"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_centerHorizontal="true"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ivProfileImage"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    tools:text="First Last" />
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvName"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="0dp"
+                    android:fontFamily="@font/lato"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    tools:text="username" />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvAboutMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/item_spacing_med"
+            android:fontFamily="@font/roboto_bold"
+            android:text="About Me"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tvBio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/item_spacing_large"
+            android:paddingEnd="@dimen/item_spacing_large"
+            android:layout_below="@+id/profileCard"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/item_spacing_med"
+            android:layout_marginBottom="@dimen/item_spacing_large"
+            android:fontFamily="@font/lato"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="Bio goes here! Hello there!" />
+
+        <TextView
+            android:id="@+id/tvGenres"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvBio"
+            android:paddingStart="@dimen/item_spacing_large"
+            android:paddingEnd="@dimen/item_spacing_large"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/item_spacing_small"
+            android:layout_marginBottom="@dimen/item_spacing_large"
+            android:fontFamily="@font/lato"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="My Favorite Genres:" />
+
+        <TextView
+            android:id="@+id/tvWatching"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/item_spacing_large"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Currently Watching"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/black"
+            android:visibility="gone"/>
+
+        <!-- Currently Watching Card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/showCardProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/llShowContent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ivProfileImage"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="3dp"
-                android:fontFamily="@font/roboto_bold"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                tools:text="First Last" />
+                android:layout_margin="@dimen/item_spacing_large"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvUsername"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvName"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="0dp"
-                android:fontFamily="@font/lato"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                tools:text="username" />
+                <TextView
+                    android:id="@+id/tvShowTitleProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/item_spacing_large"
+                    android:fontFamily="@font/roboto_bold_italic"
+                    android:text="Show Name"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginStart="@dimen/item_spacing_large"
+                    android:layout_marginTop="@dimen/item_spacing_small"
+                    android:layout_marginBottom="@dimen/item_spacing_large"/>
 
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/ivCardImageProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/image_height"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic"
+                    android:layout_marginBottom="@dimen/item_spacing_med"/>
 
-    <TextView
-        android:id="@+id/tvBio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/item_spacing_large"
-        android:paddingEnd="@dimen/item_spacing_large"
-        android:layout_below="@+id/profileCard"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/item_spacing_small"
-        android:layout_marginBottom="@dimen/item_spacing_large"
-        android:fontFamily="@font/lato"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        tools:text="Bio goes here! Hello there!" />
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvGenres"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvBio"
-        android:paddingStart="@dimen/item_spacing_large"
-        android:paddingEnd="@dimen/item_spacing_large"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/item_spacing_small"
-        android:layout_marginBottom="@dimen/item_spacing_large"
-        android:fontFamily="@font/lato"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        tools:text="My Favorite Genres:" />
+        </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/item_spacing_large"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/lato"
-        android:text="Log Out"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/item_spacing_med"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:text="Log Out"
+            android:textStyle="bold" />
 
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

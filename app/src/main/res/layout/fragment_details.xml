@@ -91,17 +91,6 @@
                 android:text="Watched it already? Add your rating!"
                 android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/tvAlreadyRated"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:fontFamily="@font/lato"
-                android:padding="@dimen/detail_spacing_med"
-                android:text="Already rated!"
-                android:textSize="14sp"
-                android:visibility="gone" />
-
             <RelativeLayout
                 android:id="@+id/ratingsBar"
                 android:layout_width="match_parent"
@@ -128,6 +117,38 @@
                     android:layout_marginEnd="60dp"
                     android:fontFamily="@font/lato"
                     android:text="Disliked" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvCurrentWatch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lRatings"
+                android:fontFamily="@font/lato"
+                android:layout_gravity="center"
+                android:padding="@dimen/detail_spacing_med"
+                android:text="Set as Currently Watching? (must be saved show)"
+                android:textSize="14sp"
+                android:visibility="gone"/>
+
+            <RelativeLayout
+                android:id="@+id/currentWatchBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvRatingTitle"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/detail_spacing_small"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <CheckBox
+                    android:id="@+id/btnYes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/lato"
+                    android:text="Yes" />
 
             </RelativeLayout>
 

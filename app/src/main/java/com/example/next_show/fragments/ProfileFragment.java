@@ -10,17 +10,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.next_show.LoginActivity;
 import com.example.next_show.R;
+import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.w3c.dom.Text;
-
-import java.io.File;
 import java.util.List;
 
 public class ProfileFragment extends Fragment {
@@ -34,6 +37,12 @@ public class ProfileFragment extends Fragment {
     private TextView tvBio;
     private TextView tvGenres;
     private ImageView ivProfileImage;
+
+    // currently watching
+    private CardView showCardProfile;
+    private TextView tvWatching;
+    private TextView tvShowTitleProfile;
+    private ImageView ivCardImageProfile;
 
     // empty constructor
     public ProfileFragment() { }
@@ -61,6 +70,10 @@ public class ProfileFragment extends Fragment {
         tvBio = currView.findViewById(R.id.tvBio);
         ivProfileImage = currView.findViewById(R.id.ivProfileImage);
         tvGenres = currView.findViewById(R.id.tvGenres);
+        showCardProfile = currView.findViewById(R.id.showCardProfile);
+        tvWatching = currView.findViewById(R.id.tvWatching);
+        tvShowTitleProfile = currView.findViewById(R.id.tvShowTitleProfile);
+        ivCardImageProfile = currView.findViewById(R.id.ivCardImageProfile);
 
         // set up logout button
         btnLogout = currView.findViewById(R.id.btnLogout);
@@ -95,6 +108,31 @@ public class ProfileFragment extends Fragment {
 
         // add temp image
         Glide.with(getContext()).load(R.drawable.ic_baseline_account_box_24).into(ivProfileImage);
+
+        // load currently watching show
+        getCurrentlyWatching(currUser);
+    }
+
+    private void getCurrentlyWatching(User currUser) {
+        ParseQuery<Show> query = ParseQuery.getQuery(Show.class);
+
+        // parse object attached to user
+        ParseObject pointer = currUser.getParseObject(User.KEY_CURRENTLY_WATCHING);
+
+        // get the Show object attached to pointer and load into view
+        query.getInBackground(pointer.getObjectId(), new GetCallback<Show>() {
+            @Override
+            public void done(Show object, ParseException e) {
+                if (e == null && object != null) {
+                    tvWatching.setVisibility(View.VISIBLE);
+                    showCardProfile.setVisibility(View.VISIBLE);
+
+                    // load info into card view
+                    Glide.with(getContext()).load(object.getParseImage()).into(ivCardImageProfile);
+                    tvShowTitleProfile.setText(object.getParseTitle());
+                }
+            }
+        });
     }
 
     private void logout(){

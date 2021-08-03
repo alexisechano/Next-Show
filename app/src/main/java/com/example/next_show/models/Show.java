@@ -149,9 +149,13 @@ public class Show extends ParseObject implements Parcelable {
         return savedShows.contains(slug);
     }
 
-    // for local instance of Show -> no setter for these, only constructor can set
+    // for local instance of Show
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String s) {
+        this.title = s;
     }
 
     public String getOverview() {

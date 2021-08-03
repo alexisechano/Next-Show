@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,10 +39,11 @@ public class ShowDetailFragment extends Fragment {
     private TextView tvDetailTitle;
     private TextView tvDetailOverview;
     private TextView tvYearAndNetwork;
-    private TextView tvAlreadyRated;
+    private TextView tvRatingTitle;
     private Button btnSaveShow;
     private Button btnLiked;
     private Button btnDisliked;
+    private Button btnYes;
     private ChipGroup genreChipGroup;
     private ImageView ivShowPoster;
 
@@ -89,6 +91,7 @@ public class ShowDetailFragment extends Fragment {
         btnDisliked = currView.findViewById(R.id.btnDisliked);
         ivShowPoster = currView.findViewById(R.id.ivShowPoster);
         genreChipGroup = currView.findViewById(R.id.genreChipGroup);
+        btnYes = currView.findViewById(R.id.btnYes);
 
         // display show text data
         tvDetailTitle.setText(currShow.getTitle());
@@ -116,8 +119,13 @@ public class ShowDetailFragment extends Fragment {
         // check if previous fragment was the SavedFragment -> disable save feature
         if (currShow.isSaved()) {
             btnSaveShow.setVisibility(View.GONE);
-            TextView tvRatingTitle = currView.findViewById(R.id.tvRatingTitle);
-            tvAlreadyRated = currView.findViewById(R.id.tvAlreadyRated);
+
+            // local view vars to toggle visible or gone
+            tvRatingTitle = currView.findViewById(R.id.tvRatingTitle);
+            TextView tvCurrentWatch = currView.findViewById(R.id.tvCurrentWatch);
+            RelativeLayout currentWatchBar = currView.findViewById(R.id.currentWatchBar);
+
+            // retrieve user liked status
             String likedStatus = currShow.getUserLiked();
 
             // check if user already rated it, show if user liked it or not
@@ -128,8 +136,8 @@ public class ShowDetailFragment extends Fragment {
                 btnLiked.setVisibility(View.GONE);
                 btnDisliked.setVisibility(View.GONE);
 
-                tvAlreadyRated.setVisibility(View.VISIBLE);
-                tvAlreadyRated.setText("You " + status + " this show!");
+                tvRatingTitle.setVisibility(View.VISIBLE);
+                tvRatingTitle.setText("You " + status + " this show!");
             } else {
                 btnLiked.setVisibility(View.GONE);
                 btnDisliked.setVisibility(View.GONE);
@@ -137,13 +145,26 @@ public class ShowDetailFragment extends Fragment {
                 tvRatingTitle.setText("Already saved this show, click Saved tab!");
                 tvRatingTitle.setTypeface(tvRatingTitle.getTypeface(), Typeface.BOLD);
             }
+
+            // make currently watching option available
+            currentWatchBar.setVisibility(View.VISIBLE);
+            tvCurrentWatch.setVisibility(View.VISIBLE);
+            btnYes.setVisibility(View.VISIBLE);
+
+            // set as currently watching for user
+            btnYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    updateCurrentlyWatching(parseUser);
+                }
+            });
         }
 
         // mark POSITIVE rating
         btnLiked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateRating(LIKED);
+                updateRating(LIKED, parseUser);
             }
         });
 
@@ -151,7 +172,7 @@ public class ShowDetailFragment extends Fragment {
         btnDisliked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateRating(DISLIKED);
+                updateRating(DISLIKED, parseUser);
             }
         });
 
@@ -200,11 +221,10 @@ public class ShowDetailFragment extends Fragment {
         genreChipGroup.addView(currentGenre);
     }
 
-    private void updateRating(String rating) {
+    private void updateRating(String rating, User currentUser) {
         currShow.setUserLiked(rating);
         Toast.makeText(getActivity(), "You " + rating + " this show!", Toast.LENGTH_SHORT).show();
         if (currShow.isSaved()) {
-            User currentUser = (User) ParseUser.getCurrentUser();
             updateParseRating(rating, currentUser);
         }
     }
@@ -236,6 +256,28 @@ public class ShowDetailFragment extends Fragment {
 
                     Log.i(TAG, "Saved new rating!");
                     Toast.makeText(getActivity(), "Updated the rating!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void updateCurrentlyWatching(User currentUser) {
+        // grab current show's unique Parse object ID
+        String objId = currShow.getObjectID();
+
+        Log.i(TAG, "Attempting set this saved show: " + objId);
+
+        // use Parse query
+        ParseQuery<Show> query = ParseQuery.getQuery(Show.class);
+
+        // Retrieve the object by id
+        query.getInBackground(objId, new GetCallback<Show>() {
+            public void done(Show show, ParseException e) {
+                if (e == null) {
+                    currentUser.setCurrentlyWatching(show);
+
+                    Log.i(TAG, "Saved new show as currently watching!");
+                    Toast.makeText(getActivity(), "Set as currently watching!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
