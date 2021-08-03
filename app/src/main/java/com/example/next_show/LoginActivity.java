@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // go to main activity if already signed in
-        if(User.getCurrentUser() != null){
+        if (User.getCurrentUser() != null) {
             openMainActivity();
         }
 
@@ -92,11 +92,12 @@ public class LoginActivity extends AppCompatActivity {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
-                if(e != null){
+                if (e != null) {
                     Log.e(TAG, "Unable to login with Parse", e);
                     Toast.makeText(LoginActivity.this, "Invalid username/password", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 // navigate to main activity if success
                 Log.i(TAG, "Success! Going to main activity");
                 Toast.makeText(LoginActivity.this, "Logging in...", Toast.LENGTH_SHORT).show();

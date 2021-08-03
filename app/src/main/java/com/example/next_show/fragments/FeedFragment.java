@@ -125,7 +125,7 @@ public class FeedFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // prevent reloading view if not necessary
-        if(currView == null) {
+        if (currView == null) {
             // Inflate the layout for this fragment
             currView = inflater.inflate(R.layout.fragment_feed, container, false);
 
@@ -329,12 +329,12 @@ public class FeedFragment extends Fragment {
     public class TrendingShowCallback implements ResponseCallback {
         @Override
         public void onSuccess(List<Show> shows) {
-            // update adapter declared in FeedFragment
+            // update adapter declared in FeedFragment and filter list
             adapter.addAll(shows);
             showFilter.addAll(shows);
 
             // make API call to grab images
-            for(Show s: shows){
+            for (Show s: shows) {
                 fetchImage(s.getId(), imageCallback);
             }
         }
@@ -348,13 +348,12 @@ public class FeedFragment extends Fragment {
     public class RelatedShowCallback implements ResponseCallback {
         @Override
         public void onSuccess(List<Show> shows) {
-            // update adapter declared in FeedFragment
+            // update adapter declared in FeedFragment and filter list
             adapter.addAll(shows);
             showFilter.addAll(shows);
 
             // make API call to grab images
-            for(Show s: shows){
-                Log.i("RELATED SHOWS!", "Show: " + s.getId() + " " + s.getTitle());
+            for (Show s: shows) {
                 fetchImage(s.getId(), imageCallback);
             }
         }
@@ -374,7 +373,7 @@ public class FeedFragment extends Fragment {
             // retrieve user fave genres
             List<String> favoriteGenres = currentUser.getFaveGenres();
 
-            // do logic to get only fave genre ones
+            // logic to get only fave genre ones
             List<Show> genreMatchedShows = new ArrayList<>();
             Set<String> faveGenres = new HashSet<String>(favoriteGenres);
             faveGenres.addAll(favoriteGenres);
@@ -391,12 +390,12 @@ public class FeedFragment extends Fragment {
                 return;
             }
 
-            // update adapter
+            // update adapter and filter
             adapter.addAll(genreMatchedShows);
             showFilter.addAll(genreMatchedShows);
 
             // make API call to grab images
-            for(Show s: genreMatchedShows){
+            for (Show s: genreMatchedShows) {
                 fetchImage(s.getId(), imageCallback);
             }
         }
@@ -450,7 +449,7 @@ public class FeedFragment extends Fragment {
     public int search(String id){
         for (int index = 0; index < showsList.size(); index++){
             Show s = showsList.get(index);
-            if(s.getId().equals(id)){
+            if (s.getId().equals(id)) {
                 return index;
             }
         }

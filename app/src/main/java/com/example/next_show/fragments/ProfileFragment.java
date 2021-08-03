@@ -95,7 +95,6 @@ public class ProfileFragment extends Fragment {
 
         // add temp image
         Glide.with(getContext()).load(R.drawable.ic_baseline_account_box_24).into(ivProfileImage);
-
     }
 
     private void logout(){

@@ -105,7 +105,7 @@ public class ShowDetailFragment extends Fragment {
         int genreChipCount = 1;
         for (String g: showGenres) {
             // only put 3 genres max (formatting constraint)
-            if (genreChipCount <= MAX_CHIPS){
+            if (genreChipCount <= MAX_CHIPS) {
                 addChip(g);
                 genreChipCount++;
             } else {

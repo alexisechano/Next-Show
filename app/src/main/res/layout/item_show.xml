@@ -69,22 +69,21 @@
 
             </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/ivDismiss"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="@dimen/item_spacing_large"
-                    android:layout_marginBottom="@dimen/item_spacing_large"
-                    android:adjustViewBounds="false"
-                    android:background="#F44336"
-                    android:cropToPadding="false"
-                    android:gravity="center"
-                    android:paddingStart="50dp"
-                    android:paddingEnd="50dp"
-                    android:visibility="invisible"
-                    app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
-
+            <ImageView
+                android:id="@+id/ivDismiss"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/item_spacing_large"
+                android:layout_marginBottom="@dimen/item_spacing_large"
+                android:adjustViewBounds="false"
+                android:background="#F44336"
+                android:cropToPadding="false"
+                android:gravity="center"
+                android:paddingStart="50dp"
+                android:paddingEnd="50dp"
+                android:visibility="invisible"
+                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
         </androidx.cardview.widget.CardView>
     </com.zerobranch.layout.SwipeLayout>

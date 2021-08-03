@@ -66,69 +66,6 @@
 
     </LinearLayout>
 
-    <!--
-    <RadioGroup
-        android:id="@+id/rgGenre"
-        android:layout_below="@+id/filterMenu"
-        android:gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/btnAll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/item_spacing_med"
-            android:allowUndo="true"
-            android:checked="true"
-            android:fontFamily="@font/lato"
-            android:text="All" />
-
-        <RadioButton
-            android:id="@+id/btnAction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Action"
-            android:layout_marginStart="@dimen/item_spacing_med"
-            android:layout_marginEnd="@dimen/item_spacing_med"
-            android:fontFamily="@font/lato"
-            android:allowUndo="true"/>
-
-        <RadioButton
-            android:id="@+id/btnDrama"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Drama"
-            android:layout_marginStart="@dimen/item_spacing_med"
-            android:layout_marginEnd="@dimen/item_spacing_med"
-            android:fontFamily="@font/lato"
-            android:allowUndo="true"/>
-
-        <RadioButton
-            android:id="@+id/btnComedy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Comedy"
-            android:layout_marginStart="@dimen/item_spacing_med"
-            android:layout_marginEnd="@dimen/item_spacing_med"
-            android:fontFamily="@font/lato"
-            android:allowUndo="true"/>
-
-    </RadioGroup>
-
-
-    <ImageButton
-        android:id="@+id/btnDrop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/rgGenre"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="@dimen/item_spacing_large"
-        android:src="@android:drawable/arrow_down_float" />
-
-    -->
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFeed"
         android:layout_width="match_parent"

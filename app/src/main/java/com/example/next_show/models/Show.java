@@ -34,8 +34,8 @@ public class Show extends ParseObject implements Parcelable {
     public static final String KEY_USER = "user";
     public static final String KEY_RATING = "userRating";
     public static final String KEY_SLUG = "slug";
-    public static final String KEY_GENRES = "genres"; // list
-    public static final String KEY_IMAGE = "imageUrl"; // TODO: not used yet until API call is fixed
+    public static final String KEY_GENRES = "genres";
+    public static final String KEY_IMAGE = "imageUrl";
 
     // empty constructor
     public Show() { }
@@ -65,12 +65,12 @@ public class Show extends ParseObject implements Parcelable {
                         showID, trendingShow.show.network, trendingShow.show.first_aired.getYear(),
                         trendingShow.show.genres, showSlug);
 
-                updatedShows.add(currentShow);
-
                 // for labelling on feedfragment
                 if (isSaved(showSlug)) {
                     currentShow.setSavedStatus(true);
                 }
+
+                updatedShows.add(currentShow);
             }
         }
         return updatedShows;
@@ -118,7 +118,7 @@ public class Show extends ParseObject implements Parcelable {
                 currentShow.setSavedStatus(true);
                 currentShow.setImageUrl(parseShow.getParseImage());
 
-                // add to new list
+                // add to updated list
                 updatedShows.add(currentShow);
             }
         }
@@ -193,9 +193,9 @@ public class Show extends ParseObject implements Parcelable {
     public String getImageUrl() { return imageUrl; }
 
     public void setImageUrl(String p) {
-        if(p.contains("https")){
+        if (p.contains("https")) {
             this.imageUrl = p;
-        } else{
+        } else {
             this.imageUrl = String.format("https://image.tmdb.org/t/p/w342/%s", p);
         }
     }
@@ -294,7 +294,7 @@ public class Show extends ParseObject implements Parcelable {
         setParseUser(currUser);
 
         // null check before adding to Parse since Parse does not accept null strings
-        if(liked == null){
+        if (liked == null) {
             Log.e("Show", "No rating available");
             liked = "";
         }

@@ -41,7 +41,7 @@ public class SignupActivity extends AppCompatActivity {
         // username and password persist if not empty
         etUsername = findViewById(R.id.etUsername);
 
-        if(username != null){
+        if (username != null) {
             etUsername.setText(username);
         }
 
@@ -61,7 +61,7 @@ public class SignupActivity extends AppCompatActivity {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(username.isEmpty()){
+                if (username.isEmpty()) {
                     String username = etUsername.getText().toString();
                 }
 

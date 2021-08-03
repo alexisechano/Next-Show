@@ -104,7 +104,7 @@ public class ShowFilter {
         List<Show> filteredShows = new ArrayList<>();
 
         for (Show s : shows) {
-            // check genre, network and year to se if ALL match
+            // check genre, network and year to see if ALL match
             if (matchedNetworkFilter(s, networkQueries) && matchedYearFilter(s, yearQueries) && matchedGenreFilter(s, genreQueries)) {
                 filteredShows.add(s);
             }

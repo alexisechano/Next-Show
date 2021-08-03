@@ -29,41 +29,41 @@
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true">
 
-    <RelativeLayout
-        android:id="@+id/profileTop"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/profile_height"
-        android:background="@color/white">
+        <RelativeLayout
+            android:id="@+id/profileTop"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_height"
+            android:background="@color/white">
 
-        <ImageView
-            android:id="@+id/ivProfileImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
-            tools:src="@tools:sample/avatars" />
+            <ImageView
+                android:id="@+id/ivProfileImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                tools:src="@tools:sample/avatars" />
 
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ivProfileImage"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="3dp"
-            android:fontFamily="@font/roboto_bold"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            tools:text="First Last" />
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivProfileImage"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="3dp"
+                android:fontFamily="@font/roboto_bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                tools:text="First Last" />
 
-        <TextView
-            android:id="@+id/tvUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvName"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="0dp"
-            android:fontFamily="@font/lato"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="username" />
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvName"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="0dp"
+                android:fontFamily="@font/lato"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="username" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

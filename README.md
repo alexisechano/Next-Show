@@ -14,10 +14,10 @@ A TV show recommender app that uses personal ratings and interests to find the u
 ### App Evaluation
 - **Category:** Entertainment, social
 - **Mobile:** Mobile first experience
-- **Story:** Allows users to find their next possibly-life changing TV show and share their review with others
-- **Market:** Anyone who enjoys the entertainment industry and as streaming services increase in popularity and become more prevalent, this is a helpful application to aid in putting the watcher first and helps avoid the endless scrolling of shows on Netflix, Hulu, etc.
-- **Habit:** After they finish a good show, they return to the app to find a new one OR help a friend/family find the new shot show. It is habit forming and as long as a person is interested in filling up their time with TV, the app keeps runnning!
-- **Scope:** In a narrow focus, this app just has a news feed with search/ilter features and a user profile. The news feed will JUST show top tv shows and ones that are similar to the ones the user selects or rates. In the future, we can add sharing and more social-network-y features.
+- **Story:** Allows users to find their next possibly-life changing TV show and share their rating
+- **Market:** Anyone who enjoys the entertainment industry! As streaming services increase in popularity and become more prevalent, this is a helpful application to aid in putting the watcher first and helps avoid the endless scrolling of shows on Netflix, Hulu, etc.
+- **Habit:** After they finish a good show, they return to the app to find a new one OR help a friend/family find the new hot show. It is habit forming and as long as a person is interested in filling up their time with TV, the app keeps running!
+- **Scope:** In a narrow focus, this app just has a news feed with search/filter features and a user profile. The news feed will JUST show top tv shows and ones that are similar to the ones the user selects or rates. In the future, we can add sharing and more social-network-y features.
 
 ## Product Spec
 
@@ -46,7 +46,7 @@ Outlined by FBU App Expectations and Priority
 * **Your app uses at least one gesture**
   * User can swipe to dismiss a show rec on home timeline which counts as a dislike rating but not a save (P2)
 * **Your app uses at least one animation**
-  * Using the Navigation component, user can swith between the RecyclerView and the Detail Fragment through a slide transition animation (P1)
+  * Using the Navigation component, user can switch between the RecyclerView and the Detail Fragment through a slide transition animation (P1)
 * **Your app incorporates at least external library to add visual polish**
   * App utilizes CardView in all RecyclerViews and Material Design elements like Bottom Navigation View (P1)
 * **Your app provides opportunities for you to overcome difficult/ambiguous technical problems**
@@ -62,7 +62,7 @@ Outlined by FBU App Expectations and Priority
 * Add more complicated rating system like numerical rating out of 5.0
 * Add season breakdown for show details and ability to rate per season
 * User's news feed has friend's TV shows
-* User ratings persist and are shown to friends's feeds
+* User ratings persist and are shown to friends' feeds
 * User can customize profile and if they haven't watched shows, use movies as a starting point
 * App might need to do some background fetching and proper data handling to be able to show accurate, fast recommendations
 
@@ -82,7 +82,6 @@ Outlined by FBU App Expectations and Priority
 * TV Show Detail Screen
     * User can view TV show details like season count, ratings, ranking
 * Profile Screen
-    * User can broadcast currently watching show
     * User can view their profile and fave genres
 * Rating/Saved shows Screen
     * User can see a saved list of shows they've watched
@@ -101,7 +100,7 @@ Outlined by FBU App Expectations and Priority
 * Home Activity Feed
    * TV Show details
 * Profile
-   * Login if loggged out
+   * Login if logged out
 * Login screen/registration
     * Home Timeline/Activity Feed if login
     * Profile if register
@@ -154,7 +153,7 @@ Login/Register
 
 Profile
 * (Read/GET) Query profile information from Parse
-* (PUT) Edit profile image, bio and genres + update user saved shows
+* (PUT) Logout of application
 
 Ratings/Saved Shows
 * (Read/GET) Query show details and user rating
