@@ -34,4 +34,8 @@
         android:id="@+id/showDetailFragment"
         android:name="com.example.next_show.fragments.ShowDetailFragment"
         android:label="ShowDetailFragment"></fragment>
+    <fragment
+        android:id="@+id/communityFragment"
+        android:name="com.example.next_show.fragments.CommunityFragment"
+        android:label="CommunityFragment" />
 </navigation>

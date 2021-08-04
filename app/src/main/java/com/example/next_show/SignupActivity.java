@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.next_show.models.User;
 import com.parse.ParseException;
@@ -96,7 +95,7 @@ public class SignupActivity extends AppCompatActivity {
                             openMainActivity();
                         } else {
                             Log.e(TAG, "Unable to sign up with Parse", e);
-                            Toast.makeText(SignupActivity.this, "Error with sign up", Toast.LENGTH_SHORT).show();
+                            ToastUtil.showTopAlignedToast("Error! Please fill out all fields correctly.", SignupActivity.this);
                             return;
                         }
                     }

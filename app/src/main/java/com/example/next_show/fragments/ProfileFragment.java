@@ -119,6 +119,11 @@ public class ProfileFragment extends Fragment {
         // parse object attached to user
         ParseObject pointer = currUser.getParseObject(User.KEY_CURRENTLY_WATCHING);
 
+        // null check just in case user does not have currently watching show
+        if (pointer == null) {
+            return;
+        }
+
         // get the Show object attached to pointer and load into view
         query.getInBackground(pointer.getObjectId(), new GetCallback<Show>() {
             @Override

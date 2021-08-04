@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.next_show.R;
+import com.example.next_show.ToastUtil;
 import com.example.next_show.callbacks.ImageCallback;
 import com.example.next_show.callbacks.ResponseCallback;
 import com.example.next_show.adapters.ShowAdapter;
@@ -386,7 +386,7 @@ public class FeedFragment extends Fragment {
 
             // no matches, let user know and don't add to adapter
             if (genreMatchedShows.isEmpty()) {
-                Toast.makeText(getContext(), "No shows match your genres :(", Toast.LENGTH_LONG).show();
+                ToastUtil.showTopAlignedToast("No shows match your genres :(", getActivity());
                 return;
             }
 
@@ -402,7 +402,7 @@ public class FeedFragment extends Fragment {
 
         @Override
         public void onFailure(int code) {
-            Toast.makeText(getContext(), "No shows available right now :(", Toast.LENGTH_LONG).show();
+            ToastUtil.showTopAlignedToast("No shows available right now :(", getActivity());
             RecommendationClient.determineError(code);
         }
     }
