@@ -14,16 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next_show.R;
 import com.example.next_show.adapters.CommunityAdapter;
-import com.example.next_show.models.Show;
-import com.example.next_show.models.User;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,9 +72,9 @@ public class CommunityFragment extends Fragment {
     private void fetchCommunity() {
         Log.i(TAG, "Grabbing parse information now!");
 
-        // necessary for call
-        HashMap<String, Object> blankParams = new HashMap<String, Object>();
-        ParseCloud.callFunctionInBackground(FETCH_COMMUNITY_FUNC, blankParams, new FunctionCallback<List<HashMap<String, Object>>>() {
+        // params necessary for call
+        HashMap<String, Object> emptyParams = new HashMap<String, Object>();
+        ParseCloud.callFunctionInBackground(FETCH_COMMUNITY_FUNC, emptyParams, new FunctionCallback<List<HashMap<String, Object>>>() {
             @Override
             public void done(List<HashMap<String, Object>> results, ParseException e) {
                 if (e == null) {

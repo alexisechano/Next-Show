@@ -4,23 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.next_show.models.User;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-
-import java.io.File;
 
 public class LoginActivity extends AppCompatActivity {
     // view element variables
@@ -94,13 +89,13 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Unable to login with Parse", e);
-                    Toast.makeText(LoginActivity.this, "Invalid username/password", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showTopAlignedToast("Invalid username/password", LoginActivity.this);
                     return;
                 }
 
                 // navigate to main activity if success
                 Log.i(TAG, "Success! Going to main activity");
-                Toast.makeText(LoginActivity.this, "Logging in...", Toast.LENGTH_SHORT).show();
+                ToastUtil.showTopAlignedToast("Logging in...", LoginActivity.this);
                 openMainActivity();
             }
         });
