@@ -141,9 +141,9 @@ public class Show extends ParseObject implements Parcelable {
         User user = (User) ParseUser.getCurrentUser();
         List<String> savedShows = user.getAllSavedShows();
 
-        // check if user has saved shows -> trivially true
+        // check if user has saved shows
         if (savedShows == null || savedShows.isEmpty()) {
-            return true;
+            return false;
         }
 
         return savedShows.contains(slug);
@@ -152,10 +152,6 @@ public class Show extends ParseObject implements Parcelable {
     // for local instance of Show
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String s) {
-        this.title = s;
     }
 
     public String getOverview() {

@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.next_show.MainActivity;
 import com.example.next_show.R;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
@@ -188,7 +189,7 @@ public class ShowDetailFragment extends Fragment {
                     public void done(ParseException e) {
                         if (e != null) {
                             Log.e(TAG, "Error while saving", e);
-                            Toast.makeText(getActivity(), "Cannot save show!", Toast.LENGTH_SHORT).show();
+                            MainActivity.showToast("Cannot save show!", getActivity());
                         }
 
                         // add show ID to User list
@@ -203,7 +204,7 @@ public class ShowDetailFragment extends Fragment {
 
                         // if no error, let log and user know
                         Log.i(TAG, "Saved post successfully");
-                        Toast.makeText(getActivity(), "Saved show!", Toast.LENGTH_SHORT).show();
+                        MainActivity.showToast("Saved show!", getActivity());
                     }
                 });
             }
@@ -223,7 +224,7 @@ public class ShowDetailFragment extends Fragment {
 
     private void updateRating(String rating, User currentUser) {
         currShow.setUserLiked(rating);
-        Toast.makeText(getActivity(), "You " + rating + " this show!", Toast.LENGTH_SHORT).show();
+        MainActivity.showToast("You " + rating + " this show!", getActivity());
         if (currShow.isSaved()) {
             updateParseRating(rating, currentUser);
         }
@@ -255,7 +256,7 @@ public class ShowDetailFragment extends Fragment {
                     }
 
                     Log.i(TAG, "Saved new rating!");
-                    Toast.makeText(getActivity(), "Updated the rating!", Toast.LENGTH_SHORT).show();
+                    MainActivity.showToast("Updated the rating!", getActivity());
                 }
             }
         });
@@ -277,7 +278,7 @@ public class ShowDetailFragment extends Fragment {
                     currentUser.setCurrentlyWatching(show);
 
                     Log.i(TAG, "Saved new show as currently watching!");
-                    Toast.makeText(getActivity(), "Set as currently watching!", Toast.LENGTH_SHORT).show();
+                    MainActivity.showToast("Set as currently watching!", getActivity());
                 }
             }
         });

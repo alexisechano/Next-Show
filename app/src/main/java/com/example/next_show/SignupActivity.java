@@ -96,7 +96,7 @@ public class SignupActivity extends AppCompatActivity {
                             openMainActivity();
                         } else {
                             Log.e(TAG, "Unable to sign up with Parse", e);
-                            Toast.makeText(SignupActivity.this, "Error with sign up", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignupActivity.this, "Error! Please fill out all fields correctly.", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }

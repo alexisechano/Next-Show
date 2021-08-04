@@ -16,6 +16,13 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/communityFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_people_outline_24"
+        android:title="Community"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/profileFragment"
         android:enabled="true"
         android:icon="@drawable/ic_outline_account_circle_24"
