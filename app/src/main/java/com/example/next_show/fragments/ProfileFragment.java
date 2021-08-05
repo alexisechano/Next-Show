@@ -3,6 +3,7 @@ package com.example.next_show.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import com.example.next_show.LoginActivity;
 import com.example.next_show.R;
 import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -29,13 +32,14 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
     // constants
     public static final String TAG = "ProfileFragment";
+    public static final int MAX_CHIPS = 3;
 
     // view elements
     private Button btnLogout;
     private TextView tvName;
     private TextView tvUsername;
     private TextView tvBio;
-    private TextView tvGenres;
+    private ChipGroup genreChipGroup;
     private ImageView ivProfileImage;
 
     // currently watching
@@ -69,7 +73,7 @@ public class ProfileFragment extends Fragment {
         tvUsername = currView.findViewById(R.id.tvUsername);
         tvBio = currView.findViewById(R.id.tvBio);
         ivProfileImage = currView.findViewById(R.id.ivProfileImage);
-        tvGenres = currView.findViewById(R.id.tvGenres);
+        genreChipGroup = currView.findViewById(R.id.genreChipGroup);
         showCardProfile = currView.findViewById(R.id.showCardProfile);
         tvWatching = currView.findViewById(R.id.tvWatching);
         tvShowTitleProfile = currView.findViewById(R.id.tvShowTitleProfile);
@@ -97,14 +101,18 @@ public class ProfileFragment extends Fragment {
         String bio = currUser.getBio();
         tvBio.setText(bio);
 
+        // load genres into chips
         List<String> faveGenres = currUser.getFaveGenres();
-        String genreText = "";
-
-        for (String g : faveGenres) {
-            genreText += (g + ", ");
+        int genreChipCount = 1;
+        for (String g: faveGenres) {
+            // only put 3 genres max (formatting constraint)
+            if (genreChipCount <= MAX_CHIPS) {
+                addChip(g);
+                genreChipCount++;
+            } else {
+                break;
+            }
         }
-
-        tvGenres.setText("Favorite Genres: " + genreText.substring(0, genreText.length() - 2));
 
         // add temp image
         Glide.with(getContext()).load(R.drawable.ic_baseline_account_box_24).into(ivProfileImage);
@@ -138,6 +146,17 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void addChip(String g) {
+        Chip currentGenre = new Chip(getContext());
+        currentGenre.setText(g);
+        currentGenre.setChipBackgroundColorResource(R.color.theme_color);
+        currentGenre.setTextColor(getResources().getColor(R.color.white));
+        currentGenre.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        // add to chip group
+        genreChipGroup.addView(currentGenre);
     }
 
     private void logout(){

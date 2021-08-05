@@ -35,6 +35,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseUser;
 import com.uwetrottmann.trakt5.services.Shows;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +64,7 @@ public class FeedFragment extends Fragment {
 
     // view element variables
     private RecyclerView rvFeed;
+    private AVLoadingIndicatorView loadingBar;
     private Button btnGenre;
     private Button btnNetwork;
     private Button btnYear;
@@ -129,8 +131,13 @@ public class FeedFragment extends Fragment {
             // Inflate the layout for this fragment
             currView = inflater.inflate(R.layout.fragment_feed, container, false);
 
+            // put loading bar on screen
+            loadingBar = currView.findViewById(R.id.loadingBar);
+            loadingBar.show();
+
             // find Recycler View
             rvFeed = currView.findViewById(R.id.rvFeed);
+            rvFeed.setVisibility(View.GONE);
 
             // set the adapter on the recycler view
             rvFeed.setAdapter(adapter);
@@ -186,6 +193,11 @@ public class FeedFragment extends Fragment {
         selectedGenres = new boolean[]{false, false, false};
         selectedNetworks = new boolean[]{false, false};
         selectedYears = new boolean[]{false, false, false};
+
+        // show loading bar again
+        loadingBar.setVisibility(View.VISIBLE);
+        loadingBar.show();
+        rvFeed.setVisibility(View.GONE);
     }
 
     private void setFilterButtons() {
@@ -226,7 +238,7 @@ public class FeedFragment extends Fragment {
     }
 
     private void showDialog(String[] options, boolean[] checkedItems, String type) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.MyAlertDialogTheme);
         dialogBuilder.setTitle("Add filter(s) for " + type);
         dialogBuilder.setCancelable(true);
 
@@ -337,6 +349,11 @@ public class FeedFragment extends Fragment {
             for (Show s: shows) {
                 fetchImage(s.getId(), imageCallback);
             }
+
+            // hide loading bar and show RV
+            rvFeed.setVisibility(View.VISIBLE);
+            loadingBar.hide();
+            loadingBar.setVisibility(View.GONE);
         }
 
         @Override
@@ -356,6 +373,11 @@ public class FeedFragment extends Fragment {
             for (Show s: shows) {
                 fetchImage(s.getId(), imageCallback);
             }
+
+            // hide loading bar and show RV
+            rvFeed.setVisibility(View.VISIBLE);
+            loadingBar.hide();
+            loadingBar.setVisibility(View.GONE);
         }
 
         @Override
@@ -398,6 +420,11 @@ public class FeedFragment extends Fragment {
             for (Show s: genreMatchedShows) {
                 fetchImage(s.getId(), imageCallback);
             }
+
+            // hide loading bar and show RV
+            rvFeed.setVisibility(View.VISIBLE);
+            loadingBar.hide();
+            loadingBar.setVisibility(View.GONE);
         }
 
         @Override

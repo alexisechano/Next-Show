@@ -17,6 +17,7 @@ import com.example.next_show.adapters.CommunityAdapter;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ public class CommunityFragment extends Fragment {
     private View currView;
     private CommunityAdapter adapter;
     private List<HashMap<String, Object>> showsList;
+    private AVLoadingIndicatorView loadingBar;
     private RecyclerView rvCommunity;
 
     // constants
@@ -48,6 +50,10 @@ public class CommunityFragment extends Fragment {
         // Inflate the layout for this fragment
         currView = inflater.inflate(R.layout.fragment_community, container, false);
 
+        // put loading bar on screen
+        loadingBar = currView.findViewById(R.id.loadingBar);
+        loadingBar.show();
+
         // init showsList
         showsList = new ArrayList<>();
 
@@ -56,6 +62,7 @@ public class CommunityFragment extends Fragment {
 
         // init recycler view
         rvCommunity = currView.findViewById(R.id.rvCommunity);
+        rvCommunity.setVisibility(View.GONE);
 
         // set to adapter
         rvCommunity.setAdapter(adapter);
@@ -83,6 +90,11 @@ public class CommunityFragment extends Fragment {
 
                     // send to adapter to update RV
                     adapter.addAll(results);
+
+                    // hide loading bar and show RV
+                    rvCommunity.setVisibility(View.VISIBLE);
+                    loadingBar.hide();
+                    loadingBar.setVisibility(View.GONE);
                 } else {
                     Log.e(TAG, "Could not retrieve results!", e);
                 }

@@ -66,11 +66,6 @@ public class User extends ParseUser {
         saveInBackground();
     }
 
-    public void addToFaveGenres(String g){
-        add(KEY_FAVE_GENRES, g);
-        saveInBackground();
-    }
-
     public List<String> getLikedSavedShows() {
         return getList(KEY_LIKED_SAVED_SHOWS);
     }
@@ -91,11 +86,6 @@ public class User extends ParseUser {
 
     public List<String> getForbiddenShows() {
         return getList(KEY_FORBIDDEN);
-    }
-
-    public void setForbiddenShows(List<String> shows){
-        addAllUnique(KEY_FORBIDDEN, shows);
-        saveInBackground();
     }
 
     public void addToForbiddenShows(String s){

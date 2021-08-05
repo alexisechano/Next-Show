@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,6 +17,15 @@
         android:text="What's everyone watching?"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/black" />
+
+    <!-- Loading -->
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/loadingBar"
+        android:layout_width="@dimen/header_height"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:indicatorName="BallPulseIndicator"
+        app:indicatorColor="@color/darker_gray"/>
 
     <RelativeLayout
         android:id="@+id/communityShows"

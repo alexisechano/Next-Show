@@ -47,6 +47,7 @@ Outlined by FBU App Expectations and Priority
   * User can swipe to dismiss a show rec on home timeline which counts as a dislike rating but not a save (P2)
 * **Your app uses at least one animation**
   * Using the Navigation component, user can switch between the RecyclerView and the Detail Fragment through a slide transition animation (P1)
+  * (Optional Story) App uses a loading indicator animation for fragments as it may take a bit to load shows
 * **Your app incorporates at least external library to add visual polish**
   * App utilizes CardView in all RecyclerViews and Material Design elements like Bottom Navigation View (P1)
 * **Your app provides opportunities for you to overcome difficult/ambiguous technical problems**
@@ -54,6 +55,7 @@ Outlined by FBU App Expectations and Priority
   * App fetches show data from the Trakt API and image data from the Movie Database through chaining sequential API calls (P1)
   * Uses combination of APIs and logic to create a basic recommendation system based on like/dislike ratings (P1)
     * Randomly chooses a show from the user's liked, saved shows and launches API call to retrieve similar shows and if that request fails (no liked shows or no related shows found), popular shows that match the user's favorite genres are shown
+  * (Optional Story) App uses backend Javascript cloud code to retrieve Parse data and package into usable object
 
 **Optional Nice-to-have Stories**
 
@@ -61,7 +63,7 @@ Outlined by FBU App Expectations and Priority
 * User has a nice UI experience with modern, clean design
 * Add more complicated rating system like numerical rating out of 5.0
 * Add season breakdown for show details and ability to rate per season
-* User's news feed has friend's TV shows
+* User's news feed has other user's TV shows
 * User ratings persist and are shown to friends' feeds
 * User can customize profile and if they haven't watched shows, use movies as a starting point
 * App might need to do some background fetching and proper data handling to be able to show accurate, fast recommendations
@@ -86,14 +88,17 @@ Outlined by FBU App Expectations and Priority
 * Rating/Saved shows Screen
     * User can see a saved list of shows they've watched
     * User can add ratings/liked shows in separate view
+* (Optional Story) Community screen
+    * User can scroll through what shows other NextShow users are currently watching
 
 ### 3. Navigation
 
 **Tab Navigation** (Tab to Screen)
 
 * Home/Timeline
-* Profile
 * Ratings/Saved Shows
+* Community
+* Profile
 
 **Flow Navigation** (Screen to Screen)
 
@@ -141,6 +146,7 @@ Outlined by FBU App Expectations and Priority
 | likedShows   | Array of Strings      | Shows that are already saved  |
 | forbiddenShows   | Array of TMDB IDs      | Shows that are disliked but not saved (gesture)  |
 | faveGenres  | Array of Strings      | List of this User's favorite TV genres |
+| currentlyWatching  | Pointer to Show      | Show that is currently being watched by user |
 
 
 ### Networking
@@ -158,5 +164,8 @@ Profile
 Ratings/Saved Shows
 * (Read/GET) Query show details and user rating
 * (Create/POST) Create a new rating + update user saved shows
+
+Community
+* (GET) Query user and currently watching show information from Parse (through JS code)
 
 [**External API: Trakt**](https://trakt.docs.apiary.io/#reference/shows)

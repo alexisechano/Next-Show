@@ -3,83 +3,74 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/x_light_gray">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp">
+        android:layout_height="match_parent" >
 
         <TextView
             android:id="@+id/tvHeader"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/item_spacing_large"
+            android:textAlignment="center"
+            android:paddingTop="@dimen/item_spacing_large"
+            android:paddingBottom="@dimen/item_spacing_large"
             android:fontFamily="@font/roboto_bold"
             android:text="My Profile"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:background="@color/white"/>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/profileCard"
+        <RelativeLayout
+            android:id="@+id/profileTop"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp"
-            app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="true">
+            android:paddingTop="@dimen/item_spacing_small"
+            android:layout_height="@dimen/profile_height"
+            android:gravity="center"
+            android:background="@color/white">
 
-            <RelativeLayout
-                android:id="@+id/profileTop"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/profile_height"
-                android:gravity="center"
-                android:background="@color/white">
+            <ImageView
+                android:id="@+id/ivProfileImage"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_centerHorizontal="true"
+                tools:src="@tools:sample/avatars" />
 
-                <ImageView
-                    android:id="@+id/ivProfileImage"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:layout_centerHorizontal="true"
-                    tools:src="@tools:sample/avatars" />
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivProfileImage"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="3dp"
+                android:fontFamily="@font/roboto_bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                tools:text="First Last" />
 
-                <TextView
-                    android:id="@+id/tvName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/ivProfileImage"
-                    android:layout_centerInParent="true"
-                    android:layout_marginTop="3dp"
-                    android:fontFamily="@font/roboto_bold"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    tools:text="First Last" />
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvName"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="0dp"
+                android:fontFamily="@font/lato"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="username" />
 
-                <TextView
-                    android:id="@+id/tvUsername"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvName"
-                    android:layout_centerInParent="true"
-                    android:layout_marginTop="0dp"
-                    android:fontFamily="@font/lato"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    tools:text="username" />
-
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tvAboutMe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/item_spacing_med"
+            android:layout_marginTop="@dimen/detail_spacing_large"
             android:fontFamily="@font/roboto_bold"
             android:text="About Me"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -94,11 +85,13 @@
             android:layout_below="@+id/profileCard"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/item_spacing_med"
-            android:layout_marginBottom="@dimen/item_spacing_large"
+            android:layout_marginBottom="@dimen/detail_spacing_large"
             android:fontFamily="@font/lato"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             tools:text="Bio goes here! Hello there!" />
+
+        <View style="@style/Divider"/>
 
         <TextView
             android:id="@+id/tvGenres"
@@ -109,18 +102,32 @@
             android:paddingEnd="@dimen/item_spacing_large"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/item_spacing_small"
-            android:layout_marginBottom="@dimen/item_spacing_large"
-            android:fontFamily="@font/lato"
+            android:layout_marginBottom="@dimen/item_spacing_small"
+            android:fontFamily="@font/roboto_bold"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="My Favorite Genres:" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:text="Favorite Genres" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/genreChipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/tvBio"
+            android:layout_margin="@dimen/item_spacing_small"
+            android:layout_marginBottom="@dimen/item_spacing_large"
+            app:singleLine="true">
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <View style="@style/Divider"/>
 
         <TextView
             android:id="@+id/tvWatching"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/item_spacing_large"
+            android:layout_marginTop="@dimen/item_spacing_small"
             android:fontFamily="@font/roboto_bold"
             android:text="Currently Watching"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
