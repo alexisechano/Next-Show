@@ -71,7 +71,7 @@ public class SignupActivity extends AppCompatActivity {
                 String bio = etBio.getText().toString();
 
                 // process the genre inputs
-                String preGenres = etGenres.getText().toString().replaceAll("\\s+","");
+                String preGenres = etGenres.getText().toString().replaceAll(",\\s+",",");
                 String[] arrayGenres = preGenres.split(",");
                 List<String> genreList = Arrays.asList(arrayGenres);
 

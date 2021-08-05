@@ -58,13 +58,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/item_spacing_large"
+            android:background="@color/x_light_gray"
+            android:elevation="4dp"
             android:fontFamily="@font/lato"
-            android:textStyle="bold"
-            android:padding="@dimen/item_spacing_small"
-            android:background="@color/light_gray"
-            android:src="@drawable/ic_baseline_refresh_24" />
+            android:padding="@dimen/item_spacing_med"
+            android:src="@drawable/ic_baseline_refresh_24"
+            android:textStyle="bold" />
 
     </LinearLayout>
+
+    <!-- Loading -->
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/loadingBar"
+        android:layout_below="@+id/llFilters"
+        android:layout_width="@dimen/header_height"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        app:indicatorName="BallPulseIndicator"
+        app:indicatorColor="@color/darker_gray"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFeed"

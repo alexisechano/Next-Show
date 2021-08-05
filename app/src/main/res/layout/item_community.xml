@@ -13,8 +13,23 @@
         android:layout_marginTop="@dimen/detail_spacing_large"
         android:fontFamily="@font/roboto_bold"
         android:text="username"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvSimilar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/detail_spacing_large"
+        android:layout_marginTop="@dimen/detail_spacing_large"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@id/tvWatcher"
+        android:layout_marginEnd="@dimen/detail_spacing_large"
+        android:fontFamily="@font/lato"
+        android:text="You both like"
+        android:visibility="invisible"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/darker_gray" />
 
     <androidx.cardview.widget.CardView
         android:layout_below="@id/tvWatcher"

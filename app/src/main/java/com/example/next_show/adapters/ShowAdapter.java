@@ -184,7 +184,12 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
         public void bind(Show show) {
             // bind the show data to the view elements
-            tvShowTitle.setText(show.getTitle());
+            if (show.isSaved()) {
+                tvShowTitle.setText(show.getTitle() + " (saved)");
+            } else {
+                tvShowTitle.setText(show.getTitle());
+            }
+
             tvShowBody.setText(show.getOverview());
 
             Glide.with(context).load(show.getImageUrl()).into(ivCardImage);

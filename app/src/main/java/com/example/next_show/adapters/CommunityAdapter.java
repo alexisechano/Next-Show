@@ -17,6 +17,7 @@ import com.example.next_show.models.Show;
 import com.example.next_show.models.User;
 import com.parse.ParseUser;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -67,6 +68,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
         // view elements
         private TextView tvWatcher;
         private TextView tvShowTitle;
+        private TextView tvSimilar;
         private ImageView ivCardImage;
 
         public ViewHolder(@NonNull View itemView) {
@@ -76,6 +78,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
 
             tvWatcher = itemView.findViewById(R.id.tvWatcher);
             tvShowTitle = itemView.findViewById(R.id.tvShowTitle);
+            tvSimilar = itemView.findViewById(R.id.tvSimilar);
             ivCardImage = itemView.findViewById(R.id.ivCardImage);
         }
 
@@ -88,12 +91,18 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             // grab user data
             User user = (User) showItem.get(USER_KEY);
             String username = user.getUsername();
+            List<String> userGenres = user.getFaveGenres();
 
             // mark as self
             if (username.equals(currUser.getUsername())) {
                 tvWatcher.setText("@" + username + " (You)");
             } else {
                 tvWatcher.setText("@" + username);
+                // check if there are genre similarities if diff user
+                if (!Collections.disjoint(userGenres, currUser.getFaveGenres())) {
+                    tvSimilar.setVisibility(View.VISIBLE);
+                    tvSimilar.setText("You share favorite genres!");
+                }
             }
 
             // grab show data

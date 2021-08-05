@@ -37,6 +37,7 @@
         android:ems="10"
         android:hint="first name"
         android:id="@+id/etFirstName"
+        android:inputType="textCapWords"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -44,6 +45,7 @@
         android:layout_weight="1"
         android:ems="10"
         android:hint="last name"
+        android:inputType="textCapWords"
         android:id="@+id/etLastName"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

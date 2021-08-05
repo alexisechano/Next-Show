@@ -1,6 +1,5 @@
 package com.example.next_show.fragments;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -138,12 +137,6 @@ public class ShowDetailFragment extends Fragment {
 
                 tvRatingTitle.setVisibility(View.VISIBLE);
                 tvRatingTitle.setText("You " + status + " this show!");
-            } else {
-                btnLiked.setVisibility(View.GONE);
-                btnDisliked.setVisibility(View.GONE);
-
-                tvRatingTitle.setText("Already saved this show, click Saved tab!");
-                tvRatingTitle.setTypeface(tvRatingTitle.getTypeface(), Typeface.BOLD);
             }
 
             // make currently watching option available
